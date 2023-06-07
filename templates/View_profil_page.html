@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profil Utilisateur</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .user-info {
+      margin-bottom: 20px;
+    }
+
+    .btn-edit {
+      background-color: #003366;
+      color: #FFFFFF;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-edit:hover {
+      background-color: #001F3F;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-4">Profil Utilisateur</h1>
+
+    <?php
+    // Connexion à la base de données
+    $connexion = mysqli_connect("localhost", "utilisateur", "mot_de_passe", "nom_base_de_donnees");
+
+    // Vérification de la connexion
+    if (mysqli_connect_errno()) {
+      echo "Échec de la connexion à la base de données : " . mysqli_connect_error();
+    }
+
+    // Récupération des informations de l'utilisateur à partir de la base de données
+    $requete = "SELECT nom, prenom, adresse, age FROM utilisateurs WHERE id = 1"; // Remplacez "1" par l'ID de l'utilisateur connecté
+    $resultat = mysqli_query($connexion, $requete);
+
+    // Vérification du résultat de la requête
+    if ($resultat && mysqli_num_rows($resultat) > 0) {
+      $row = mysqli_fetch_assoc($resultat);
+      $nom = $row['nom'];
+      $prenom = $row['prenom'];
+      $adresse = $row['adresse'];
+      $age = $row['age'];
+
+      // Affichage des informations de l'utilisateur
+      echo '<div class="user-info">';
+      echo '<div class="row">';
+      echo '<div class="col-md-6">';
+      echo '<p><strong>Nom :</strong> ' . $nom . '</p>';
+      echo '<p><strong>Prénom :</strong> ' . $prenom . '</p>';
+      echo '</div>';
+      echo '<div class="col-md-6">';
+      echo '<p><strong>Adresse :</strong> ' . $adresse . '</p>';
+      echo '<p><strong>Âge :</strong> ' . $age . ' ans</p>';
+      // Ajoutez d'autres informations personnelles ici
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
+
+      // Fermeture de la connexion à la base de données
+      mysqli_close($connexion);
+    } else {
+      echo "Aucune information d'utilisateur trouvée.";
+    }
+    ?>
+
+    <a class="btn btn-primary" href="modifier_profil.html">Modifier</a>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
