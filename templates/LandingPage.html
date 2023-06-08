@@ -1,89 +1,82 @@
 {% extends "base.html" %}
 
 {% block content %}
-            <div class="row">
-                <div class="col">
-                    <h1 class="bs-primary-text-emphasis"> <b>Volez</b></h1>
-                </div>
-                <h2> Entre copains</h2>
+
+   <!-- <div id="map" class="map-container"></div> -->
+   <form method="POST">
+        <div>
+            <div class="input-group">
+                <input type="text" class="form-control" class="fa fa-calendar-o" style="width: 55%;" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="piloteAerodrome">
+                <input type="date" class="form-control" name="dateVolSouhaite">
+                <input type="number" class="form-control" placeholder="Pax" date="nombrePax">
             </div>
-            <div id="map" class="mw-100 mh-100"></div>
-        <!-- Inclure la bibliothèque Leaflet -->
-        <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-        <script>
-            // Fonction d'initialisation de la carte
-            function initMap() {
-                // Coordonnées du centre de la carte
-                var center = [43.581487, 3.964916]; // coordonées de mtpl
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+   </form>
 
-                // Création de la carte
-                var map = L.map('map').setView(center, 12);
+    <div>
+        <h1 class="bs-primary-text-emphasis"> <b>Volez</b></h1>
+        <h2> Entre copains</h2>
+    </div>
 
-                // Ajout de la tuile Mapbox
-                var accessToken = 'pk.eyJ1IjoibGFib3J5bWEiLCJhIjoiY2xpaXRmdm5mMDFrcDNmc2FxbmxrMDV4ZyJ9.O2zrjLTj-wms-axtY6uSDQ'; // Votre clé d'accès aux tuiles de Mapbox
-                L.tileLayer('https://api.mapbox.com/styles/v1/laboryma/cliitzmn400be01pf0awm3mkz/draft/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
-                    attribution: '© Mapbox',
-                    tileSize: 512,
-                    zoomOffset: -1
-                }).addTo(map);
-            }
-
-            // Appel de la fonction d'initialisation lorsque la page a fini de charger
-            window.addEventListener('load', initMap);
-        </script>
-        <script>
-            // Fonction d'initialisation de la carte
-            function initMap() {
-                // Coordonnées du centre de la carte
-                var center = [51.5074, -0.1278];
+    <!-- Inclure la bibliothèque Leaflet -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+        // Fonction d'initialisation de la carte
+        function initMap() {
+            // Coordonnées du centre de la carte
+            var center = [51.5074, -0.1278];
     
-                // Création de la carte
-                var map = L.map('map').setView(center, 12);
+            // Création de la carte
+            var map = L.map('map').setView(center, 12);
     
-                // Ajout de la tuile Mapbox
-                var accessToken = 'pk.eyJ1IjoibGFib3J5bWEiLCJhIjoiY2xpaXRmdm5mMDFrcDNmc2FxbmxrMDV4ZyJ9.O2zrjLTj-wms-axtY6uSDQ'; // Votre clé d'accès aux tuiles de Mapbox
-                L.tileLayer('https://api.mapbox.com/styles/v1/laboryma/cliitzmn400be01pf0awm3mkz/draft/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
-                    attribution: '© Mapbox',
-                    tileSize: 512,
-                    zoomOffset: -1
-                }).addTo(map);
+            // Ajout de la tuile Mapbox
+            var accessToken = 'pk.eyJ1IjoibGFib3J5bWEiLCJhIjoiY2xpaXRmdm5mMDFrcDNmc2FxbmxrMDV4ZyJ9.O2zrjLTj-wms-axtY6uSDQ'; // Votre clé d'accès aux tuiles de Mapbox
+            L.tileLayer('https://api.mapbox.com/styles/v1/laboryma/cliitzmn400be01pf0awm3mkz/draft/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
+            attribution: '© Mapbox',
+            tileSize: 512,
+            zoomOffset: -1
+            }).addTo(map);
     
-                // Coordonnées et informations des marqueurs
-                var markers = [
-                    {
-                        coordinates: [51.5074, -0.1278],
-                        title: "Londres",
-                        description: "La capitale de l'Angleterre"
-                    },
-                    {
-                        coordinates: [48.8566, 2.3522],
-                        title: "Paris",
-                        description: "La capitale de la France"
-                    },
-                    {
-                        coordinates: [40.7128, -74.0060],
-                        title: "New York",
-                        description: "La ville qui ne dort jamais"
-                    }
-                ];
+            // Coordonnées et informations des marqueurs
+            var markers = [
+                {
+                    coordinates: [51.5074, -0.1278],
+                    title: "Londres",
+                    description: "La capitale de l'Angleterre"
+                },
+                {
+                    coordinates: [48.8566, 2.3522],
+                    title: "Paris",
+                    description: "La capitale de la France"
+                },
+                {
+                    coordinates: [40.7128, -74.0060],
+                    title: "New York",
+                    description: "La ville qui ne dort jamais"
+                }
+            ];
     
-                // Ajout des marqueurs avec les cards personnalisées
-                markers.forEach(function (markerInfo) {
-                    var marker = L.marker(markerInfo.coordinates);
-                    var popupContent = `
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
+            // Ajout des marqueurs avec les cards personnalisées
+            markers.forEach(function (markerInfo) {
+            var marker = L.marker(markerInfo.coordinates);
+            var popupContent = `
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
-                    `;
-                    marker.bindPopup(popupContent);
-                    marker.addTo(map);
+                </div>
+                `;
+                marker.bindPopup(popupContent);
+                marker.addTo(map);
                 });
             }
     
@@ -91,5 +84,5 @@
             document.addEventListener("DOMContentLoaded", function () {
                 initMap();
             });
-        </script>
+    </script>
 {% endblock %}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Bootstrap All in One Navbar</title>
+<title>Base</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merienda+One">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -122,6 +122,21 @@ body {
 .navbar .active a, .navbar .active a:hover, .navbar .active a:focus {
 	background: transparent !important;
 }
+@media (min-width: 1200px){
+	.form-inline .input-group {
+		width: 300px;
+		margin-left: 30px;
+	}
+}
+@media (max-width: 1199px){
+	.form-inline {
+		display: block;
+		margin-bottom: 10px;
+	}
+	.input-group {
+		width: 100%;
+	}
+}
 .container {
             display: flex;
             justify-content: center;
@@ -140,7 +155,7 @@ body {
         <nav class="navbar navbar-expand-xl navbar-light bg-light">
             <a class="navbar-brand" href="#">
                 <img src="/static/images/tanguy.png" width="45" height="45">
-                <span class="bg-primary bg-gradient p-1 rounded-3 text-light"><b>Tang</b></span>'Air
+                <span style="color: rgba(0, 0, 255, 0.719);"><b>Tang</b></span>'Air
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
