@@ -19,16 +19,28 @@ app.teardown_appcontext(close_db)
 def LandingPage():
     return render_template("LandingPage.html",isLogged=True)
 
+@app.route('/logIn', methods=["GET","POST"])
+def logIn():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if(request.method == "POST") :
+        eMail = request.form["email"] # à modifier en fonction de l'attribut name du formulaire
+        mdp = request.form["motDePasse"]    #idem
+        
+
+    return render_template()
+
 @app.route('/test')
 def Test():
     return render_template("TEST.html",isLogged=False)
 
 @app.route('/test/Gueric')
-def Test():
+def TestGuegs():
     return render_template("Add_flight_page.html")
 
 @app.route('/test/Baptiste')
-def Test():
+def TestBaptiste():
     return render_template("TEST.html")
 
 
