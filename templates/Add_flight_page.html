@@ -1,15 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <form>
-        <div class="form-group">
-          <label for="departure">Départ :</label>
-          <input type="text" class="form-control" id="departure" placeholder="Lieu de départ">
+<div class="container">
+  <div class="row" style="margin-top:150px;">
+    <div class="row" style="margin-bottom:50px;">
+      <div class="col-12">
+        <h1 class="text-center">ADD YOUR FLIGHT</h1>
+
+        <div class="mb-3">
+          <label for="departure-airport" class="form-label">Departure</label>
+          <input type="text" class="form-control" id="departure" placeholder="Place of departure">
+          <div id="passwordHelpBlock" class="form-text">
+            Departure airport ICAO code
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="arrival-airport" class="form-label">Destination</label>
+          <input type="text" class="form-control" id="destination" placeholder="Place of destination">
+          <div id="passwordHelpBlock" class="form-text">
+            Destination airport ICAO code
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="destination">Destination :</label>
-          <input type="text" class="form-control" id="destination" placeholder="Lieu de destination">
+          <label for="Pax">Number of passagers, excluding pilot :</label>
+          <input type="number" class="form-control" id="Pax">
         </div>
 
         <div class="form-group">
@@ -18,17 +34,26 @@
         </div>
 
         <div class="form-group">
-          <label for="time">Heure :</label>
+          <label for="destination">Departure time :</label>
           <input type="time" class="form-control" id="time">
         </div>
 
         <div class="form-group">
-          <label for="price">Prix :</label>
-          <input type="number" class="form-control" id="price" placeholder="Prix du vol">
+          <label for="duree">Flight duration :</label>
+          <input type="time" class="form-control" id="duree">
         </div>
 
-        <button type="submit" class="btn btn-primary">Créer le Vol</button>
-      </form>
+        <div class="form-group">
+          <label for="price">Price :</label>
+          <input type="number" class="form-control" id="price" placeholder="Flight price">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Create your flight</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
