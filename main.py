@@ -23,5 +23,15 @@ def LandingPage():
 def Test():
     return render_template("TEST.html",isLogged=False)
 
+@app.route('/test/Gueric')
+def Test():
+    return render_template("Add_flight_page.html")
+
+@app.route('/test/Baptiste')
+def Test():
+    return render_template("TEST.html")
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
