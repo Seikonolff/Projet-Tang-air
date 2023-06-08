@@ -39,9 +39,13 @@ def Test():
 def TestGuegs():
     return render_template("Add_flight_page.html")
 
-@app.route('/test/Baptiste')
-def TestBaptiste():
-    return render_template("TEST.html")
+@app.route('/test/Baptiste/sign in')
+def TestBaptiste1():
+    return render_template("sign in.html")
+
+@app.route('/test/Baptiste/login')
+def TestBaptiste2():
+    return render_template("log in.html")
 
 
 
