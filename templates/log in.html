@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if wrongcredentials == True %}
+  <div class="alert alert-danger" role="alert">
+    You entered the wrong credentials ! Please try again.
+  </div>
+{% endif %}
+
   <form method="POST" action="">
     <!-- Email input -->
     <div class="form-group mb-4">
