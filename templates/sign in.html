@@ -9,56 +9,144 @@
   {% endif %}
 
 
-  <div class="my-10">
   <form method="POST">
-    <div class="form-group mb-4">
-      <label for="nom">Nom :</label>
-      <input type="text" class="form-control form-control-lg" id="nom" placeholder="Labory" name="nom">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="nom">Last name</label>
+        <input type="text" class="form-control form-control-lg" id="nom" placeholder="Labory">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="prenom">First Name</label>
+        <input type="text" class="form-control form-control-lg" id="prenom" placeholder="Guéric">
+      </div>
+    </div>  
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="dateNaissance">Date of birth</label>
+        <input type="date" class="form-control form-control-lg" id="dateNaissance" placeholder="25/02/2001">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="adresse">Mail adress</label>
+        <input type="email" class="form-control form-control-lg" id="adresse" placeholder="loveTanguy@gmail.com">
+      </div>
+    </div>
+    
+<!-- I am a pilot -->
+    <div class="form-group">
+      <label for="showAdditionalFields">I am a pilot</label>
+      <input type="checkbox" id="showAdditionalFields">
+    </div>
+  
+    <div id="additionalFields" style="display: none;">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="numeroLicense">License Number</label>
+          <input type="text" class="form-control form-control-lg" id="numeroLicense" >
+        </div>
+  
+        <div class="form-group col-md-6">
+          <label for="nbHeuteVolTotals">Total flying hours</label>
+          <input type="number" class="form-control form-control-lg" id="nbHeuteVolTotals" placeholder="145" min=0>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for=description>Profile Description</label>
+        <textarea class="form-control form-control-lg" id="description" rows="3"></textarea>
+      </div>
+
+      </div>
+  
+    <div class="form-group">
+      <label for="motdepasse">Password</label>
+      <input type="password" class="form-control form-control-lg" id="motdepasse" placeholder="Lacatapulte-Irlandaise3">
     </div>
 
-    <div class="form-group mb-4">
-      <label for="prenom">Prénom :</label>
-      <input type="text" class="form-control form-control-lg" id="prenom" placeholder="Guéric" name="prenom">
+    <div class="form-group">
+      <label for="motdepasse2">Confirm Password</label>
+      <input type="password" class="form-control form-control-lg" id="motdepasse2" placeholder="Lacatapulte-Irlandaise3">
+      <small class="text-danger" id="passwordError" style="display: none;">Different password, please try again.</small>
     </div>
-
-    <div class="form-group mb-4">
-      <label for="dateNaissance">Date de naissance :</label>
-      <input type="date" class="form-control form-control-lg" id="dateNaissance">
-    </div>
-
-    <div class="form-group mb-4">
-      <label for="adresse">Adresse :</label>
-      <input type="text" class="form-control form-control-lg" id="adresse" placeholder="25 la pinède du Boulard" name="adresse">
-    </div>
-
-    <div class="form-group mb-4">
-      <label for="Pax">Nombre de passagers, hors pilote :</label>
-      <input type="number" class="form-control form-control-lg" id="Pax">
-    </div>
-
+    
     
 
-    <div class="form-group mb-4">
-      <label for="destination">Heure de départ :</label>
-      <input type="time" class="form-control form-control-lg" id="time">
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="idPromo">Id Promo</label>
+        <select id="idPromo" class="form-control form-control-lg">
+          <option selected>Choose...</option>
+          <option>...</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-4">
+        <label for="idCampus">idCampus</label>
+        <select id="idCampus" class="form-control form-control-lg">
+          <option selected>Choose...</option>
+          <option>...</option>
+        </select>
+      </div>
+      
+        <div class="form-group col-md-4">
+        <label class="form-label" for="customFile">Profile Picture</label>
+        <input type="file" class="form-control form-control-lg" id="customFile" accept=".jpg, .png" />
+
+        <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
+        </div>
+
     </div>
 
-    <div class="form-group mb-4">
-      <label for="duree">Durée du vol :</label>
-      <input type="time" class="form-control form-control-lg" id="duree">
-    </div>
-
-    <div class="form-group mb-4">
-      <label for="price">Prix :</label>
-      <input type="number" class="form-control form-control-lg" id="price" placeholder="Prix du vol">
-    </div>
-
-    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+  <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
   </form> 
-
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <body class="bottom-space">
   </body>
-  </div>
+
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+  // Récupérer les références aux éléments de formulaire
+  const passwordInput = document.getElementById('motdepasse');
+  const confirmPasswordInput = document.getElementById('motdepasse2');
+  const passwordError = document.getElementById('passwordError');
+  
+  // Ajouter un gestionnaire d'événements pour vérifier les mots de passe
+    confirmPasswordInput.addEventListener('input', function() {
+        if (confirmPasswordInput.value !== passwordInput.value) {
+          passwordError.style.display = 'block';
+        } else {
+          passwordError.style.display = 'none';
+        }
+      });
+  </script>
+<!-- Alerte l'utilisateur que la pp doit être .png ou .jpg -->
+  <script>
+      const fileInput = document.getElementById('customFile');
+      const fileError = document.getElementById('fileError');
+
+      fileInput.addEventListener('change', function() {
+        const fileName = fileInput.value;
+        const validExtensions = ['.jpg', '.jpeg', '.png'];
+
+        if (!validExtensions.some(ext => fileName.toLowerCase().endsWith(ext))) {
+          fileInput.value = ''; // Clear the selected file
+          fileError.style.display = 'block';
+        } else {
+          fileError.style.display = 'none';
+        }
+      });
+  </script>
+    <!-- Permet d'afficher plus de zones de saisies si user est pilote -->
+  <script>
+    const checkbox = document.getElementById('showAdditionalFields');
+    const additionalFields = document.getElementById('additionalFields');
+
+    checkbox.addEventListener('change', function() {
+      additionalFields.style.display = checkbox.checked ? 'block' : 'none';
+    });
+  </script>
 {% endblock %}
