@@ -1,7 +1,7 @@
 import sqlite3
 
 # Création de la base de données
-conn = sqlite3.connect('tangair.db')
+conn = sqlite3.connect('tanair.db')
 cursor = conn.cursor()
 
 # Création de la table "User"
@@ -11,14 +11,14 @@ cursor.execute('''
         nom TEXT,
         prenom TEXT,
         dateNaissance DATE,
-        adresse TEXT,
-        identification TEXT,
+        adresseMail TEXT,
         motDePasse TEXT,
-        idPromo TEXT,
+        description TEXT,
+        idPromo INTEGER,
         moyNotePassager REAL,
         imageProfile TEXT,
-        idCampus INTEGER,
-        FOREIGN KEY (idCampus) REFERENCES Campus(idCampus)
+        numeroTelephone TEXT,
+        FOREIGN KEY (idPromo) REFERENCES Promo(idPromo)
     )
 ''')
 
@@ -27,7 +27,6 @@ cursor.execute('''
     CREATE TABLE Pilote (
         idUser INTEGER PRIMARY KEY,
         numeroLicense INTEGER,
-        description TEXT,
         nbHeureVolTotal REAL,
         moyNotePilote REAL,
         FOREIGN KEY (idUser) REFERENCES User(idUser)
@@ -51,6 +50,7 @@ cursor.execute('''
 cursor.execute('''
     CREATE TABLE Aeroclub (
         idAeroclub INTEGER PRIMARY KEY,
+        nomAeroclub TEXT,
         prixHeureVol REAL,
         idAerodrome INTEGER,
         FOREIGN KEY (idAerodrome) REFERENCES Aerodrome(idAerodrome)
@@ -62,6 +62,7 @@ cursor.execute('''
 cursor.execute('''
     CREATE TABLE Aerodrome (
         idAerodrome INTEGER PRIMARY KEY,
+        nom TEXT,
         nbPiste INTEGER,
         latitude INTEGER,
         longitude INTEGER
@@ -72,24 +73,46 @@ cursor.execute('''
 cursor.execute('''
     CREATE TABLE Vol (
         idVol INTEGER PRIMARY KEY,
-        aerodromeDepart TEXT,
-        aerodromeArrive TEXT,
-        nombreReservations INTEGER,
+        idUser INTEGER,
+        idAerodromeDepart INTEGER,
+        idAerodromeArrive INTEGER,
+        idAvion INTEGER,
+        nombreReservationsActuelles INTEGER,
         passagerMax INTEGER,
-        piloteMax INTEGER,
         prixTotalIndicatif REAL,
+        prixTotalReel REAL,
         prixParPassagers REAL,
         prixTotalFinal REAL,
         dureeVol REAL,
-        dateDuVol DATE
+        dateDuVol DATE,
+        FOREIGN KEY (idUser) REFERENCES Pilote(idUser),
+        FOREIGN KEY (idAerodromeDepart) REFERENCES Aerodrome(idAerodrome),
+        FOREIGN KEY (idAerodromeArrive) REFERENCES Aerodrome(idAerodrome),
+        FOREIGN KEY (idAvion) REFERENCES Avion(idAvion)
     )
 ''')
 
-# Création de la table "Campus"
+# Création de la table "Notation"
 cursor.execute('''
-    CREATE TABLE Campus (
-        idCampus INTEGER PRIMARY KEY,
-        nomCampus TEXT,
+    CREATE TABLE Notation (
+        noteur INTEGER,
+        noté INTEGER,
+        idVol INTEGER,
+        note REAL,
+        commentaire TEXT,
+        statutDuNoté TEXT,
+        FOREIGN KEY (noteur) REFERENCES User(idUser),
+        FOREIGN KEY (noté) REFERENCES User(idUser),
+        FOREIGN KEY (idVol) REFERENCES Vol(idVol)
+    )
+''')
+
+# Création de la table "Promo"
+cursor.execute('''
+    CREATE TABLE Promo (
+        idPromo INTEGER PRIMARY KEY,
+        nomPromo TEXT,
+        nomCampus Text,
         latitude INTEGER,
         longitude INTEGER
     )
@@ -111,27 +134,8 @@ cursor.execute('''
     CREATE TABLE EtrePassager (
         idUser INTEGER,
         idVol INTEGER,
+        prixPayé REAL,
         FOREIGN KEY (idUser) REFERENCES User(idUser),
-        FOREIGN KEY (idVol) REFERENCES Vol(idVol)
-    )
-''')
-
-# Création de la relation entre Vol et Pilote
-cursor.execute('''
-    CREATE TABLE Fly (
-        idUser INTEGER,
-        idVol INTEGER,
-        FOREIGN KEY (idUser) REFERENCES Pilote(idUser),
-        FOREIGN KEY (idVol) REFERENCES Vol(idVol)
-    )
-''')
-
-# Création de la relation entre Avion et Vol
-cursor.execute('''
-    CREATE TABLE OpererAvec (
-        idAvion INTEGER,
-        idVol INTEGER,
-        FOREIGN KEY (idAvion) REFERENCES Avion(idAvion),
         FOREIGN KEY (idVol) REFERENCES Vol(idVol)
     )
 ''')
