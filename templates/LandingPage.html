@@ -1,12 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<header class="h1">
-    Volez avec les copains
-</header>
 
+<div class="wrapper">
+    <div class = "card-body">
+        <form action="./search" method="POST">
+            <div class="form-row">
+                <label class="label"> Aéroport Départ/Arrivée, Pilote... </label>
+                <input class="form-control form-control-lg" type="text" placeholder="Aéroport, Pilote..." name="inputUser"></input>
 
-</form>
+                <label class="label"> date </label>
+                <input class="form-control form-control-lg" type="date" placeholder="date" name="date"></input>
+
+                <label class="label"> passenger(s) </label>
+                <input class="form-control form-control-lg" type="number" placeholder="nombre passager" name="passager"></input>
+        
+                <button type="submit" class="btn btn-primary btn-lg btn-block">search</button>
+        </form>
+    </div>
+</div>
+
+    
     <!--
         <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="piloteAerodrome">

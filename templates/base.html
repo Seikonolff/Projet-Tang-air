@@ -218,45 +218,49 @@ body {
     
 }
 /*Profile Pic End*/
-/*Responsive Search bar Start*/
-.searchbar{
-margin-bottom: auto;
-margin-top: auto;
-height: 60px;
-background-color: #353b48;
-border-radius: 30px;
-padding: 10px;
-}
 
-.search_input{
-color: white;
-border: 0;
-outline: 0;
-background: none;
-width: 0;
-caret-color:transparent;
-line-height: 40px;
-transition: width 0.4s linear;
-}
+/* Flight card Begin*/
+.flight-card {
+		background-color:  #ffffff;
+      	border: 1px solid #ccc;
+      	border-radius: 20px;
+      	padding: 20px;
+      	width: 700px;
+      	position: relative;
+    }
 
-.searchbar:hover > .search_icon{
-background: white;
-color: #e74c3c;
-}
+    .flight-card h2 {
+      margin-top: 0;
+    }
 
-.search_icon{
-height: 40px;
-width: 40px;
-float: right;
-display: flex;
-justify-content: center;
-align-items: center;
-border-radius: 50%;
-color:white;
-text-decoration:none;
-}
+    .pilot-info {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+    }
 
-/*Responsive Search bar End*/
+    .pilot-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .reservation-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+    }
+	.price {
+      position: absolute;
+      bottom: 10px;
+      right: 100px;
+      margin-right: 10px;
+    }
+/*Flight Card End*/
+
 </style>
 </head> 
     <body>

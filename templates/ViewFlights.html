@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <div class="flight-card">
+        <p><strong>Aéroport de départ:</strong></p>
+        <p><strong>Aéroport d'arrivée:</strong> New York JFK</p>
+        <p><strong>Temps de vol:</strong> 8 heures</p>
+        <div class="pilot-info">
+          <img src="pilot-avatar.jpg" alt="Photo de profil du pilote">
+          <div>
+            <p><strong>Pilote:</strong> John Doe</p>
+          </div>
+        </div>
+        <div style="clear: both;">
+            <h2 class="price">60 €/pax</h2>
+            <button class="reservation-btn btn-outline-primary" type="button">Réserver</button>
+        </div>
+    </div>
+</div>
+  
+{% endblock %}

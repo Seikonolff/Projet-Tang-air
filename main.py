@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+'''
+Début définition des fonctions 
+'''
+
 def get_db():
     if "db" not in g:
         g.db = sqlite3.connect("./tanair.db")
@@ -56,7 +60,7 @@ def fill_db_signup(request):
     motDePasse = request.form["motdepasse"]
     description = request.form ["description"]
     imageProfil = request.files['profilePicture']
-    idpromotion = request.form["promo"]    
+    idpromotion = request.form["promo"] 
 
     if 'isPilot' in request.form :
         #L'user se déclare comme étant pilote
@@ -150,17 +154,39 @@ def get_flights(request):
     conn = get_db()
     cursor = conn.cursor()
 
-    idAerodromeDepart = request.form["aerodromeDepart"]
-    idAerodromeArrive = request.form["aerodromeArrive"]
-    pilote = request.form["pilote"]
+    inputUser = request.form["inputUser"] # à mettre dans des if pour voir si c'est un pilote ou un aéroport
     date = request.form["date"]
     passager = request.form["passager"]
 
     #recup les vols qui correspondent à la recherche -- ! CETTE REQUETE EST COMPLETEMENT FAUSSE IL FAUT TROUVER UN MOYEN DE FAIRE LA RECHERCHE QU'AVEC CE QUE L'USER A RENTRE ! -- 
-    query = "SELECT idVol,idUser,idAerodromeDepart,idAerodromeArrive,idAvion,nombreReservationsActuelles, passagerMax, prixTotalIndicatif,duréeVol,dateDuVol FROM Vol Where idAerodrome "
-    flights = cursor.execute(query,(idAerodromeDepart,idAerodromeArrive,pilote,date,passager))
+    query = "SELECT idVol,idUser,idAerodromeDepart,idAerodromeArrive,idAvion,nombreReservationsActuelles, passagerMax, prixTotalIndicatif,duréeVol,dateDuVol FROM Vol WHERE idAerodrome = ? date = ? passager = ?"
+    flights = cursor.execute(query,(inputUser,date,passager))
 
     return flights
+
+def fill_db_newflight(request) :
+    conn = get_db()
+    cursor = conn.cursor()
+
+    idUser = request.form["idUser"] #comment récupérer l'idUser ?
+    idAerodromeDepart = request.form["aerodromeDepart"]
+    idAerodromeArrive = request.form["aerodromeArrive"]
+    pilote = request.form["pilote"]
+    passagerMax = request.form["passagerMax"]
+    prixTotalIndicatif = request.form["prixTotalIndicatif"]
+    prixParPassagers = request.form["prixParPassagers"]
+    dureeVol = request.form["dureeVol"]
+    date = request.form["date"]
+
+    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,pilote,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date) VALUES (?,?,?,?,?,?,?,?,?)"
+    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,pilote,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date))
+
+    return 
+
+
+'''
+Fin définition des fonctions 
+'''
 
 '''
 Début de la gestion des routes
@@ -212,7 +238,8 @@ def logout():
 @app.route('/search', methods=["GET", "POST"])
 def search():
     if request.method == "POST" :
-        return get_flights(request)
+        flights = get_flights(request)
+        return render_template("ViewFlights.html", flights = flights)
     else :
         return redirect(url_for("LandingPage"))
     
@@ -234,7 +261,9 @@ def chat() :
 def addflight():
     if request.method == "POST" :
         #le pilote propose un vol, on récupère les données du formulaire
-        return
+        fill_db_newflight(request)
+
+        return redirect(url_for(LandingPage))
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
         return("AddFlightPage.html", session)

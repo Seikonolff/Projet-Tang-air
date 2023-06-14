@@ -107,6 +107,17 @@ cursor.execute('''
     )
 ''')
 
+# Création de la table "Message"
+cursor.execute('''
+    CREATE TABLE Message (
+        envoyeur INTEGER,
+        destinataire INTEGER,
+        corpsMessage TEXT,
+        FOREIGN KEY (envoyeur) REFERENCES User(idUser),
+        FOREIGN KEY (destinataire) REFERENCES User(idUser)
+    )
+''')
+
 # Création de la table "Promo"
 cursor.execute('''
     CREATE TABLE Promo (
@@ -139,6 +150,15 @@ cursor.execute('''
         FOREIGN KEY (idVol) REFERENCES Vol(idVol)
     )
 ''')
+
+# Création de la vue "User_Pilote_vol" entre Vol et User et Pilote
+cursor.execute('''
+    CREATE VIEW User_Pilote_vol AS
+    SELECT User.nom, User.prenom, User.imageProfile, Pilote.moyNotePilote, Vol.idAerodromeDepart, Vol.idAerodromeArrive, Vol.idAvion, Vol.nombreReservationsActuelles, Vol.passagerMax, Vol.prixTotalIndicatif, Vol.prixParPassagers, Vol.dureeVol, Vol.dateDuVol
+    FROM User
+    JOIN Pilote ON User.idUser = Pilote.idUser
+    JOIN Vol ON User.idUser = Vol.idUser
+    ''')
 
 # Enregistrement des modifications et fermeture de la connexion
 conn.commit()
