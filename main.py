@@ -2,7 +2,7 @@ from flask import Flask, g, render_template, request, redirect, url_for, abort,s
 import sqlite3
 import os
 
-UPLOAD_FOLDER = "C:\Projet Tang'air\static\images\profil"
+UPLOAD_FOLDER = "C:\Projet-Tang-air\static\images\profil"
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
