@@ -8,18 +8,15 @@
     </div>
   {% endif %}
 
+  <div class="my-10" >
+    <style>
+      h1 {
+        text-align: center;
+      }
+    </style>
+  <h1><span style="color: rgb(59, 129, 250);"><b>Sign-up</b></span></h1>
 
   <form method="POST" enctype="multipart/form-data">
-    <div class="picture-container">
-      <div class="picture">
-          <img src="https://lh3.googleusercontent.com/LfmMVU71g-HKXTCP_QWlDOemmWg4Dn1rJjxeEsZKMNaQprgunDTtEuzmcwUBgupKQVTuP0vczT9bH32ywaF7h68mF-osUSBAeM6MxyhvJhG6HKZMTYjgEv3WkWCfLB7czfODidNQPdja99HMb4qhCY1uFS8X0OQOVGeuhdHy8ln7eyr-6MnkCcy64wl6S_S6ep9j7aJIIopZ9wxk7Iqm-gFjmBtg6KJVkBD0IA6BnS-XlIVpbqL5LYi62elCrbDgiaD6Oe8uluucbYeL1i9kgr4c1b_NBSNe6zFwj7vrju4Zdbax-GPHmiuirf2h86eKdRl7A5h8PXGrCDNIYMID-J7_KuHKqaM-I7W5yI00QDpG9x5q5xOQMgCy1bbu3St1paqt9KHrvNS_SCx-QJgBTOIWW6T0DHVlvV_9YF5UZpN7aV5a79xvN1Gdrc7spvSs82v6gta8AJHCgzNSWQw5QUR8EN_-cTPF6S-vifLa2KtRdRAV7q-CQvhMrbBCaEYY73bQcPZFd9XE7HIbHXwXYA=s200-no" class="picture-src" id="wizardPicturePreview" title="">
-          <input type="file" id="wizard-picture" class="" name="oui" accept=".jpg, .png">
-          <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
-      </div>
-       <h6 class="">Choose Picture</h6>
-
-    </div>
-
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="nom">Last name</label>
@@ -41,6 +38,13 @@
       <div class="form-group col-md-6">
         <label for="adresse">Mail adress</label>
         <input type="email" class="form-control form-control-lg" id="adresse" name="adresseMail" placeholder="loveTanguy@gmail.com">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="numeroTelephone">Phone Number</label>
+        <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69">
       </div>
     </div>
 
@@ -90,13 +94,19 @@
         <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" />
         <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
       </div>
+
+      <div class="form-group col-md-4">
+        <label class="form-label" for="customFile">School certificate</label>
+        <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" />
+        <small id="fileError" class="text-danger" style="display: none;">Please choose a .pdf file.</small>
+      </div>
       </div>
         <div class="form-group">
           <label for=description>Profile Description</label>
           <textarea class="form-control form-control-lg" id="description" name ="description" rows="3"></textarea>
         </div>
 
-    
+    <div class="bottom-space">
 
   <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
   </form> 
@@ -138,6 +148,27 @@
           fileError.style.display = 'none';
         }
       });
+
+      
+      
+const fileInput2 = document.getElementById('customFile');
+const fileError2 = document.getElementById('fileError');
+
+fileInput.addEventListener('change', function() {
+  const fileName = fileInput.value;
+  const validExtensions = ['.jpg', '.jpeg', '.png'];
+
+  if (!validExtensions.some(ext => fileName.toLowerCase().endsWith(ext))) {
+    const certificatInput = document.getElementById('certificat');
+    const certificatError = document.getElementById('certificatError');
+    
+    certificatInput.value = ''; // Efface le fichier sélectionné
+    certificatError.style.display = 'block';
+  } else {
+    fileError.style.display = 'none';
+  }
+});
+    
   </script>
     <!-- Permet d'afficher plus de zones de saisies si user est pilote -->
   <script>
