@@ -59,26 +59,33 @@ def fill_db_signup(request):
     idpromotion = request.form["promo"]    
 
     if 'isPilot' in request.form :
+        #L'user se déclare comme étant pilote
         numeroLicense = request.form["numeroLicense"]
         nbHeureVolTotal = request.form["nbHeureVolTotal"]
+
         imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
         lienImage = './static/images/profil/'+ adresseMail
-        #voir la solution du prof pour lier un menu deroulant à l'id direct
+    
         query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
         cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
+
         query = "SELECT idUser FROM User WHERE adresseMail = ?"
         result = cursor.execute(query,(adresseMail,)).fetchone()
+
         query = "INSERT INTO Pilote (idUser,numeroLicense,nbHeureVolTotal) VALUES (?,?,?)"
         cursor.execute(query,(result[0],numeroLicense,nbHeureVolTotal))
+
         conn.commit()
+
         return
 
     
     imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
     lienImage = './static/images/profil/'+ adresseMail
-    #voir la solution du prof pour lier un menu deroulant à l'id direct
+
     query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
     cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
+
     conn.commit()
 
     return
@@ -89,6 +96,7 @@ def open_session(eMail):
 
     query = "SELECT * FROM User WHERE adresseMail = ?"
     result1 = cursor.execute(query,(eMail,)).fetchone()
+
     idUser = result1[0]
     session['nom'] = result1[1]
     session['prenom'] = result1[2]
@@ -101,8 +109,9 @@ def open_session(eMail):
 
     query = "SELECT * FROM Pilote WHERE idUser = ?"
     result2 = cursor.execute(query,(idUser,)).fetchone()
+
     if result2 is not None :
-        #Le user qui est en train de se log est pilote
+        #Le user qui est en train de se log est pilote, on remplit session en conséquence
         session['isPilot'] = True
         session['numeroLicense'] = result2[1]
         session['nbHeureTotal'] = result2[2]
@@ -137,6 +146,22 @@ def get_promo():
 
     return result
 
+def get_flights(request):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    idAerodromeDepart = request.form["aerodromeDepart"]
+    idAerodromeArrive = request.form["aerodromeArrive"]
+    pilote = request.form["pilote"]
+    date = request.form["date"]
+    passager = request.form["passager"]
+
+    #recup les vols qui correspondent à la recherche -- ! CETTE REQUETE EST COMPLETEMENT FAUSSE IL FAUT TROUVER UN MOYEN DE FAIRE LA RECHERCHE QU'AVEC CE QUE L'USER A RENTRE ! -- 
+    query = "SELECT idVol,idUser,idAerodromeDepart,idAerodromeArrive,idAvion,nombreReservationsActuelles, passagerMax, prixTotalIndicatif,duréeVol,dateDuVol FROM Vol Where idAerodrome "
+    flights = cursor.execute(query,(idAerodromeDepart,idAerodromeArrive,pilote,date,passager))
+
+    return flights
+
 '''
 Début de la gestion des routes
 '''
@@ -167,11 +192,14 @@ def Login():
     if(request.method == "POST") :
         eMail = request.form["email"] # à modifier en fonction de l'attribut name du formulaire
         password = request.form["password"]    #idem
+
         if check_credentials(eMail,password) :
             session = open_session(eMail)
             return render_template("LandingPage.html",session=session) #name n'est pas l'identifiant, à changer
+        
         else :
             return render_template("Login.html",wrongcredentials = True)
+        
     else :
         return render_template("Login.html")
 
@@ -181,21 +209,26 @@ def logout():
     session.clear()
     return redirect(url_for('LandingPage'))
 
-@app.route('/test')
-def Test():
-    return render_template("TEST.html",isLogged=False)
+@app.route('/search', methods=["GET", "POST"])
+def search():
+    if request.method == "POST" :
+        return get_flights(request)
+    else :
+        return redirect(url_for("LandingPage"))
+    
+@app.route('/profile', methods = ["GET", "POST"])
+def profile():
+    if request.method == "POST" :
+        #le user tente de modifier son profil
+        return
+    else :
+        return("ViewProfilePage.html", session)
+    
+@app.route('/chat')
+def chat() :
+    # C'est possible ?
 
-@app.route('/test/Gueric')
-def TestGuegs():
-    return render_template("AddFlightPage.html")
-
-@app.route('/test/Baptiste/signup')
-def TestBaptiste1():
-    return render_template("signup.html")
-
-@app.route('/test/Baptiste/login')
-def TestBaptiste2():
-    return render_template("Login.html")
+    return
 
 '''
 Fin de la gestion des routes
