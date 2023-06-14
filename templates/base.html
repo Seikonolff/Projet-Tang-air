@@ -272,6 +272,9 @@ text-decoration:none;
             <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
                 <div class="navbar-nav ml-auto">
                 {% if session['adresseMail'] is defined %}
+					{% if isPilot == True %}
+					<a href="./addflight" ><i class="fa-regular fa-circle-plus"></i><span class="badge"></a>
+					{% endif %}
 					<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
                     <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>
                     <div class="nav-item dropdown">

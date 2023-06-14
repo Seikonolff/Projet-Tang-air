@@ -230,6 +230,15 @@ def chat() :
 
     return
 
+@app.route('/addflight', methods = ["GET", "POST"])
+def addflight():
+    if request.method == "POST" :
+        #le pilote propose un vol, on récupère les données du formulaire
+        return
+    else :
+        #le pilote a cliqué sur le btn, on retourne l'html
+        return("AddFlightPage.html", session)
+
 '''
 Fin de la gestion des routes
 '''
