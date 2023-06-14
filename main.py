@@ -237,7 +237,7 @@ def addflight():
         return
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
-        return("AddFlightPage.html", session)
+        return render_template("AddFlightPage.html", session = session)
 
 '''
 Fin de la gestion des routes
