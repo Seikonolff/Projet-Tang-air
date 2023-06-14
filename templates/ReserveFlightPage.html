@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- quoi mettre? departure, destination, nb pax, date départ, masse estimée de tout les bagages,  -->
+
+<div class="container">
+    <div class="row" style="margin-top:0px;">
+      <div class="row" style="margin-bottom:50px;">
+        <div class="col-12">
+          <h1 class="text-center">RESERVE YOUR FLIGHT</h1>
+
+          <div class="summary">
+            <p><strong>Airport of departure:</strong> Paris</p>
+            <p><strong>Airport of destination:</strong> New York</p>
+            <p><strong>Date of departure:</strong> 01/07/2023</p>
+            <p><strong>Flight duration:</strong> 3 hours</p>
+          </div>
+
+          <div class="form-group">
+            <label for="Pax">Number of passagers:</label>
+            <input type="number" class="form-control" id="Pax">
+          </div>
+  
+          <div class="form-group">
+            <label for="Pax">Estimated mass of all baggage :</label>
+            <input type="number" class="form-control" id="Pax">
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Reserve your flight</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
