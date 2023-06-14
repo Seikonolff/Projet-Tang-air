@@ -5,22 +5,32 @@
   <div class="row" style="margin-top:150px;">
     <div class="row" style="margin-bottom:50px;">
       <div class="col-12">
-        <h1 class="text-center">ADD YOUR FLIGHT</h1>
+        <h1 class="text-center"><style>
+          h1 {
+            text-align: center;
+          }
+      </style>
+      <h1><span style="color: rgb(59, 129, 250);"><b>Add your FLight</b></span></h1></h1></h1>
 
-        <div class="mb-3">
-          <label for="departure-airport" class="form-label">Departure</label>
-          <input type="text" class="form-control" id="departure" placeholder="Place of departure">
-          <div id="passwordHelpBlock" class="form-text">
-            Departure airport ICAO code
-          </div>
+        <div class="mb-3" style="padding-top: 30px;">
+          <label for="idAirport" class="form-label">Departure</label>
+          <select id="idAirport" name="airport" class="form-control form-control-sm">
+            <option selected>Departure airport ICAO code</option>
+            {% for airport in airports %}
+              <option value ="{{airport[0]}}">{{airport[1]}} - {{airport[2]}}</option>
+            {% endfor %}
+          </select>
         </div>
 
+
         <div class="mb-3">
-          <label for="arrival-airport" class="form-label">Destination</label>
-          <input type="text" class="form-control" id="destination" placeholder="Place of destination">
-          <div id="passwordHelpBlock" class="form-text">
-            Destination airport ICAO code
-          </div>
+          <label for="idAirport" class="form-label">Destination</label>
+          <select id="idAirport" name="airport" class="form-control form-control-sm">
+            <option selected>Destination airport ICAO code</option>
+            {% for airport in airports %}
+              <option value ="{{airport[0]}}">{{airport[1]}} - {{airport[2]}}</option>
+            {% endfor %}
+          </select>
         </div>
 
         <div class="form-group">

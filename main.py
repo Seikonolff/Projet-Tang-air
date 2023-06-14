@@ -266,8 +266,17 @@ def addflight():
         return redirect(url_for(LandingPage))
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
-        return("AddFlightPage.html", session)
-
+        return render_template("AddFlightPage.html", session = session)
+    
+@app.route('/reserveflight', methods = ["GET", "POST"])
+def reserveflight():
+    if request.method == "POST" :
+        #le pilote propose un vol, on récupère les données du formulaire
+        return
+    else :
+        #le pilote a cliqué sur le btn, on retourne l'html
+        return render_template("ReserveFlightPage.html", session = session)
+    
 '''
 Fin de la gestion des routes
 '''
