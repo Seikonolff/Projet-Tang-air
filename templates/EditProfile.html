@@ -3,14 +3,17 @@
 {% block content %}
 
 <style>
+  h1 {
+  text-align: center;
+  }
   .edit-profile-form {
     margin: 20px;
     width: 600px;
   }
 </style>
+<h1><span style="color: rgb(59, 129, 250);"><b>Edit profile</b></span></h1>
 
 <div class="container">
-  <h5>Edit Profile</h5>
   <form class="edit-profile-form" action="/update_profile" method="POST">
     <div class="form-group">
       <label for="last_name">Last Name:</label>

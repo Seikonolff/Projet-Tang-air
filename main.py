@@ -294,7 +294,7 @@ def profile():
     
 @app.route('/edit_profile', methods=["GET"])
 def edit_profile():
-    return render_template("EditProfil.html")
+    return render_template("EditProfile.html")
     
 @app.route('/chat')
 def chat() :
