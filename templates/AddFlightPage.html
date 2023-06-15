@@ -34,6 +34,16 @@
               {% endfor %}
             </select>
           </div>
+
+          <div class="mb-3">
+            <label for="idAircraft" class="form-label">Aircraft</label>
+            <select id="idAircraft" name="typeaircraft" class="form-control form-control-sm">
+              <option selected></option>
+              {% for aircraft in aircrafts %}
+                <option value ="{{aircraft[0]}}">{{aircraft[1]}}</option>
+              {% endfor %}
+            </select>
+          </div>
   
           <div class="form-group">
             <label for="Pax">Number of passagers, excluding pilot :</label>
