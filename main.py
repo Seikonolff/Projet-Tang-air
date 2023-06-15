@@ -175,8 +175,10 @@ def get_flights(request):
             params.append(airport[0])
         else :
             #Il faut déterminer si un prénom ou un nom de pilote a été rentré
-            oui = "oui" #reqUETE SQL ICI
+            #mais c'est dur zebi
 
+            return []
+                    
     if date :
         flights_query += " AND dateDuVol = ?"
         params.append(date)
@@ -324,6 +326,7 @@ def reserveflight():
 '''
 Fin de la gestion des routes
 '''
+
 
 if __name__ == '__main__':
     app.run(debug=True)
