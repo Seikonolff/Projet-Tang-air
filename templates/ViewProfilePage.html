@@ -1,82 +1,98 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Profil Utilisateur</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
+{% extends "base.html" %}
 
-    .user-info {
-      margin-bottom: 20px;
-    }
+{% block content %}
 
-    .btn-edit {
-      background-color: #003366;
-      color: #FFFFFF;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+<style>
+  .profile-card {
+    margin: 20px;
+    width: 600px; /* Largeur de la carte utilisateur */
+  }
+  .profile-card .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .profile-card .user-info img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  .profile-card .settings-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .reservations {
+    margin-top: 20px;
+  }
+  .reservation-card {
+    width: 300px; /* Largeur de chaque carte de réservation */
+    margin-bottom: 20px;
+  }
+</style>
 
-    .btn-edit:hover {
-      background-color: #001F3F;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1 class="mt-4">Profil Utilisateur</h1>
-
-    <?php
-    // Connexion à la base de données
-    $connexion = mysqli_connect("localhost", "utilisateur", "mot_de_passe", "nom_base_de_donnees");
-
-    // Vérification de la connexion
-    if (mysqli_connect_errno()) {
-      echo "Échec de la connexion à la base de données : " . mysqli_connect_error();
-    }
-
-    // Récupération des informations de l'utilisateur à partir de la base de données
-    $requete = "SELECT nom, prenom, adresse, age FROM utilisateurs WHERE id = 1"; // Remplacez "1" par l'ID de l'utilisateur connecté
-    $resultat = mysqli_query($connexion, $requete);
-
-    // Vérification du résultat de la requête
-    if ($resultat && mysqli_num_rows($resultat) > 0) {
-      $row = mysqli_fetch_assoc($resultat);
-      $nom = $row['nom'];
-      $prenom = $row['prenom'];
-      $adresse = $row['adresse'];
-      $age = $row['age'];
-
-      // Affichage des informations de l'utilisateur
-      echo '<div class="user-info">';
-      echo '<div class="row">';
-      echo '<div class="col-md-6">';
-      echo '<p><strong>Nom :</strong> ' . $nom . '</p>';
-      echo '<p><strong>Prénom :</strong> ' . $prenom . '</p>';
-      echo '</div>';
-      echo '<div class="col-md-6">';
-      echo '<p><strong>Adresse :</strong> ' . $adresse . '</p>';
-      echo '<p><strong>Âge :</strong> ' . $age . ' ans</p>';
-      // Ajoutez d'autres informations personnelles ici
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
-
-      // Fermeture de la connexion à la base de données
-      mysqli_close($connexion);
-    } else {
-      echo "Aucune information d'utilisateur trouvée.";
-    }
-    ?>
-
-    <a class="btn btn-primary" href="modifier_profil.html">Modifier</a>
+<div class="container">
+  <div class="profile-card">
+    <h5>User Profile</h5>
+    <div class="card">
+      <div class="card-body">
+        <span class="settings-icon">
+          <a href="edit_profile.html"> <!-- Remplacez par le lien vers la page de modification du profil -->
+            <i class="fas fa-cog"></i> <!-- Remplacez par l'icône d'engrenage souhaitée -->
+          </a>
+        </span>
+        <div class="user-info">
+          <img src="path_to_profile_picture.jpg" alt="Profile Picture"> <!-- Remplacez par le chemin vers la photo de profil de l'utilisateur -->
+          <div>
+            <p><strong>Last name:</strong> Labory</p>
+            <p><strong>First Name:</strong> Mathis</p>
+            <p><strong>Date of birth:</strong> 16/04/2000</p>
+            <p><strong>Mail adresse:</strong> jtebaise@mangetesmorts.com</p>
+            <p><strong>Phone number:</strong> 06 69 69 69 69</p>
+            <!-- Ajoutez plus d'informations utilisateur ici -->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+  <div class="reservations">
+    <h5>Flight Reservations</h5>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card reservation-card">
+          <div class="card-body">
+            <h6 class="card-title">Flight Reservation 1</h6>
+            <p class="card-text"><strong>Departure:</strong> Montpellier</p>
+            <p class="card-text"><strong>Destination:</strong> Bezier</p>
+            <p class="card-text"><strong>Pilot:</strong> Guais Tanguy</p>
+            <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+            <p class="card-text"><strong>Date:</strong> 21/06/2023</p>
+            <!-- Ajoutez plus d'informations de réservation ici -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card reservation-card">
+          <div class="card-body">
+            <h6 class="card-title">Flight Reservation 2</h6>
+            <p class="card-text"><strong>Departure:</strong> Montpellier</p>
+            <p class="card-text"><strong>Destination:</strong> Bezier</p>
+            <p class="card-text"><strong>Pilot:</strong> Guais Tanguy</p>
+            <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+            <p class="card-text"><strong>Date:</strong> 21/06/2023</p>
+            <!-- Ajoutez plus d'informations de réservation ici -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- Importation de la bibliothèque Font Awesome -->
+
+{% endblock %}

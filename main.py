@@ -175,8 +175,10 @@ def get_flights(request):
             params.append(airport[0])
         else :
             #Il faut déterminer si un prénom ou un nom de pilote a été rentré
-            oui = "oui" #reqUETE SQL ICI
+            #mais c'est dur zebi
 
+            return []
+                    
     if date :
         flights_query += " AND dateDuVol = ?"
         params.append(date)
@@ -288,7 +290,11 @@ def profile():
         #le user tente de modifier son profil
         return
     else :
-        return("ViewProfilePage.html", session)
+        return render_template("ViewProfilePage.html", session=session)
+    
+@app.route('/edit_profile', methods=["GET"])
+def edit_profile():
+    return render_template("EditProfil.html")
     
 @app.route('/chat')
 def chat() :
