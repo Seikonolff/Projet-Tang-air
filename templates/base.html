@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+<script src="https://kit.fontawesome.com/4f5a2d4adf.js" crossorigin="anonymous"></script>
 <style>
 body {
 	background: #eeeeee;
@@ -43,28 +44,6 @@ body {
 .navbar .navbar-brand i {
 	font-size: 20px;
 	margin-right: 5px;
-}
-.search-box {
-	position: relative;
-}	
-.search-box input {
-	box-shadow: none;
-	padding-right: 35px;
-	border-radius: 3px !important;
-}
-.search-box .input-group-addon {
-	min-width: 35px;
-	border: none;
-	background: transparent;
-	position: absolute;
-	right: 0;
-	z-index: 9;
-	padding: 7px;
-	height: 100%;
-}
-.search-box i {
-	color: #a0a5b1;
-	font-size: 19px;
 }
 .navbar .nav-item i {
 	font-size: 18px;
@@ -277,11 +256,10 @@ body {
                 <div class="navbar-nav ml-auto">
                 {% if session['adresseMail'] is defined %}
 					{% if session['isPilot'] == True %}
-						<a href="./addflight" ><i class="fa-regular fa-circle-plus"></i><span class="badge"></a>
-						<a href="./addflight" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
+						<a href="./addflight" class="nav-item nav-link notifications"><i class="fas fa-light fa-circle-plus"></i> Add flight  </a>
 					{% endif %}
-					<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
-                    <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>
+					<!--<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>-->
+                    <!--<a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>-->
                     <div class="nav-item dropdown">
                         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="{{session['photoDeProfil']}}" class="avatar" alt="Avatar">{{session['prenom']}} {{session['nom']}}<b class="caret"></b></a>
                         <div class="dropdown-menu">
