@@ -14,9 +14,6 @@
 body {
 	background: #eeeeee;
 }
-.form-inline {
-	display: inline-block;
-}
 .navbar-header.col {
 	padding: 0 !important;
 }
@@ -101,21 +98,6 @@ body {
 .navbar .active a, .navbar .active a:hover, .navbar .active a:focus {
 	background: transparent !important;
 }
-@media (min-width: 1200px){
-	.form-inline .input-group {
-		width: 300px;
-		margin-left: 30px;
-	}
-}
-@media (max-width: 1199px){
-	.form-inline {
-		display: block;
-		margin-bottom: 10px;
-	}
-	.input-group {
-		width: 100%;
-	}
-}
 .alert { 
       position: fixed;
       bottom: 0;
@@ -125,16 +107,7 @@ body {
       background-color: #d35d5d;
       padding: 20px;
 	  color: black;
-    } 
-
-.bottom-space {
-    margin-bottom: 150px;
-	}
-
-.my-10 {
-  margin-top: 35rem;
-
-}
+    }
 .container {
             display: flex;
             justify-content: center;
@@ -239,7 +212,21 @@ body {
       margin-right: 10px;
     }
 /*Flight Card End*/
+/*View flight Begin*/
+.flight-item {
+	display: inline-block;
+	margin-right: 20px;
+	margin-left: 20px;
+	margin-top: 60px;
+}
 
+.flight-list {
+	display: inline-block;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+
+/*View flight End*/
 </style>
 </head> 
     <body>
@@ -278,11 +265,9 @@ body {
                 {% endif %}
             </div>
         </nav>
-            <div class="container" >
-                {% block content %}
+        {% block content %}
 				
-                {% endblock %}
-            </div>
+        {% endblock %}
         </div>
     </body>
 </html>
