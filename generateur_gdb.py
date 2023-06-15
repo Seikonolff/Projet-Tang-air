@@ -77,7 +77,7 @@ cursor.execute('''
         idAerodromeDepart INTEGER,
         idAerodromeArrive INTEGER,
         idAvion INTEGER,
-        nombreReservationsActuelles INTEGER,
+        placesRestantes INTEGER,
         passagerMax INTEGER,
         prixTotalIndicatif REAL,
         prixTotalReel REAL,
@@ -85,6 +85,7 @@ cursor.execute('''
         prixTotalFinal REAL,
         dureeVol REAL,
         dateDuVol DATE,
+        heureDecollage REAL,
         FOREIGN KEY (idUser) REFERENCES Pilote(idUser),
         FOREIGN KEY (idAerodromeDepart) REFERENCES Aerodrome(idAerodrome),
         FOREIGN KEY (idAerodromeArrive) REFERENCES Aerodrome(idAerodrome),
@@ -104,6 +105,17 @@ cursor.execute('''
         FOREIGN KEY (noteur) REFERENCES User(idUser),
         FOREIGN KEY (noté) REFERENCES User(idUser),
         FOREIGN KEY (idVol) REFERENCES Vol(idVol)
+    )
+''')
+
+# Création de la table "Message"
+cursor.execute('''
+    CREATE TABLE Message (
+        envoyeur INTEGER,
+        destinataire INTEGER,
+        corpsMessage TEXT,
+        FOREIGN KEY (envoyeur) REFERENCES User(idUser),
+        FOREIGN KEY (destinataire) REFERENCES User(idUser)
     )
 ''')
 
@@ -139,6 +151,15 @@ cursor.execute('''
         FOREIGN KEY (idVol) REFERENCES Vol(idVol)
     )
 ''')
+
+# Création de la vue "User_Pilote_vol" entre Vol et User et Pilote
+cursor.execute('''
+    CREATE VIEW User_Pilote_Vol AS
+    SELECT User.nom, User.prenom, User.imageProfile, Pilote.moyNotePilote, Vol.idAerodromeDepart, Vol.idAerodromeArrive, Vol.idAvion, Vol.PlacesRestantes, Vol.passagerMax, Vol.prixTotalIndicatif, Vol.prixParPassagers, Vol.dureeVol, Vol.dateDuVol
+    FROM User
+    JOIN Pilote ON User.idUser = Pilote.idUser
+    JOIN Vol ON User.idUser = Vol.idUser
+    ''')
 
 # Enregistrement des modifications et fermeture de la connexion
 conn.commit()

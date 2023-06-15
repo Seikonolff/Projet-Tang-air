@@ -2,9 +2,6 @@
 
 {% block content %}
 
-<!-- quoi mettre? departure, destination, nb pax, date départ, masse estimée de tout les bagages,  -->
-
-
 <div class="container">
     <div class="row" style="margin-top:0px;">
       <div class="row" style="margin-bottom:50px;">
@@ -14,7 +11,7 @@
       text-align: center;
     }
 </style>
-<h1><span style="color: rgb(59, 129, 250);"><b>Reserve your FLight</b></span></h1></h1>
+<h1><span style="color: rgb(59, 129, 250);"><b>Reserve your Flight</b></span></h1></h1>
 
           <div class="summary" style="padding-top: 30px;">
             <p><strong>Airport of departure:</strong> Paris</p>
@@ -24,23 +21,115 @@
           </div>
 
           <div class="form-group">
-            <label for="Pax">Number of passagers:</label>
-            <input type="number" class="form-control" id="Pax">
-          </div>
-  
-          <div class="form-group">
-            <label for="Pax">Estimated mass of all baggage :</label>
-            <input type="number" class="form-control" id="Pax">
-          </div>
-
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Reserve your flight</button>
+            <label for="passengers">Number of Additional Passengers:</label>
+            <select id="passengers" class="form-control">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
           </div>
 
+<!-- I am not alone -->
+
+<div id="passenger-info" style="display: none;">
+    <h3>Passenger Information</h3>
+    <div id="additionalFields">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="nom">Last name</label>
+                <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="prenom">First Name</label>
+                <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="dateNaissance">Date of birth</label>
+                <input type="date" class="form-control form-control-lg" id="dateNaissance" name= "dateNaissance" placeholder="25/02/2001">
+            </div>
+          
+            <div class="form-group col-md-6">
+                <label for="adresse">Mail adress</label>
+                <input type="email" class="form-control form-control-lg" id="adresse" name="adresseMail" placeholder="loveTanguy@gmail.com">
+            </div>
+          
+            <div class="form-group col-md-6">
+                <label for="numeroTelephone">Phone Number</label>
+                <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69">
+            </div>
         </div>
-      </div>
     </div>
+</div>
+  
+    <div class="form-group">
+        <label for="Pax">Estimated mass of all baggage:</label>
+        <input type="number" class="form-control" id="Pax">
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Reserve your flight</button>
+    </div>
+</div>
+</div>
+</div>
 </div>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    document.getElementById('passengers').addEventListener('change', function() {
+      var numPassengers = parseInt(this.value);
+  
+      var additionalFields = document.getElementById('additionalFields');
+      additionalFields.innerHTML = '';
+  
+      if (numPassengers > 0) {
+        document.getElementById('passenger-info').style.display = 'block';
+  
+        for (var i = 1; i <= numPassengers; i++) {
+          var passengerField = document.createElement('div');
+          passengerField.classList.add('form-row');
+  
+          var lastNameGroup = document.createElement('div');
+          lastNameGroup.classList.add('form-group', 'col-md-6');
+  
+          var lastNameLabel = document.createElement('label');
+          lastNameLabel.innerText = 'Last Name';
+  
+          var lastNameInput = document.createElement('input');
+          lastNameInput.type = 'text';
+          lastNameInput.classList.add('form-control');
+          lastNameInput.placeholder = 'Enter last name';
+  
+          lastNameGroup.appendChild(lastNameLabel);
+          lastNameGroup.appendChild(lastNameInput);
+          passengerField.appendChild(lastNameGroup);
+  
+          var firstNameGroup = document.createElement('div');
+          firstNameGroup.classList.add('form-group', 'col-md-6');
+  
+          var firstNameLabel = document.createElement('label');
+          firstNameLabel.innerText = 'First Name';
+  
+          var firstNameInput = document.createElement('input');
+          firstNameInput.type = 'text';
+          firstNameInput.classList.add('form-control');
+          firstNameInput.placeholder = 'Enter first name';
+  
+          firstNameGroup.appendChild(firstNameLabel);
+          firstNameGroup.appendChild(firstNameInput);
+          passengerField.appendChild(firstNameGroup);
+  
+          additionalFields.appendChild(passengerField);
+        }
+      } else {
+        document.getElementById('passenger-info').style.display = 'none';
+      }
+    });
+  </script>
+
 {% endblock %}

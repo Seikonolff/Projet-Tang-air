@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+'''
+Début définition des fonctions 
+'''
+
 def get_db():
     if "db" not in g:
         g.db = sqlite3.connect("./tanair.db")
@@ -56,7 +60,7 @@ def fill_db_signup(request):
     motDePasse = request.form["motdepasse"]
     description = request.form ["description"]
     imageProfil = request.files['profilePicture']
-    idpromotion = request.form["promo"]    
+    idpromotion = request.form["promo"] 
 
     if 'isPilot' in request.form :
         #L'user se déclare comme étant pilote
@@ -98,6 +102,7 @@ def open_session(eMail):
     result1 = cursor.execute(query,(eMail,)).fetchone()
 
     idUser = result1[0]
+    session['idUser'] = idUser
     session['nom'] = result1[1]
     session['prenom'] = result1[2]
     session['dateDeNaissance'] = result1[3]
@@ -150,17 +155,76 @@ def get_flights(request):
     conn = get_db()
     cursor = conn.cursor()
 
-    idAerodromeDepart = request.form["aerodromeDepart"]
-    idAerodromeArrive = request.form["aerodromeArrive"]
-    pilote = request.form["pilote"]
+    inputUser = request.form["inputUser"] # à mettre dans des if pour voir si c'est un pilote ou un aéroport
     date = request.form["date"]
-    passager = request.form["passager"]
+    placesRestantes = request.form["passager"]
 
-    #recup les vols qui correspondent à la recherche -- ! CETTE REQUETE EST COMPLETEMENT FAUSSE IL FAUT TROUVER UN MOYEN DE FAIRE LA RECHERCHE QU'AVEC CE QUE L'USER A RENTRE ! -- 
-    query = "SELECT idVol,idUser,idAerodromeDepart,idAerodromeArrive,idAvion,nombreReservationsActuelles, passagerMax, prixTotalIndicatif,duréeVol,dateDuVol FROM Vol Where idAerodrome "
-    flights = cursor.execute(query,(idAerodromeDepart,idAerodromeArrive,pilote,date,passager))
+    airport_query = "SELECT idAerodrome,nom FROM Aerodrome WHERE nom = ?" #On regarde dans la table ce qui a été rentré
+    airport = cursor.execute(airport_query,(inputUser,)).fetchone()
+
+    flights_query = "SELECT * FROM User_Pilote_Vol WHERE"
+    params = []
+
+    if inputUser :
+        #Il faut déterminer si un aéroport à été rentré, un nom ou prénom de pilote
+        airport_query = "SELECT idAerodrome,nom FROM Aerodrome WHERE nom = ?" #On regarde dans la table ce qui a été rentré
+        airport = cursor.execute(airport_query,(inputUser,)).fetchone()
+
+        if airport :
+            flights_query += " idAerodromeDepart = ?"
+            params.append(airport[0])
+        else :
+            #Il faut déterminer si un prénom ou un nom de pilote a été rentré
+            oui = "oui" #reqUETE SQL ICI
+
+    if date :
+        flights_query += " AND dateDuVol = ?"
+        params.append(date)
+
+    if placesRestantes :
+        flights_query += " AND placesRestantes >= ?"
+        params.append(placesRestantes)
+
+    flights = cursor.execute(flights_query,tuple(params)).fetchall()
+
+    print(flights)
 
     return flights
+
+def get_airports():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query = "SELECT idAerodrome, nom FROM Aerodrome"
+    airports = cursor.execute(query).fetchall()
+
+    return airports
+
+def fill_db_newflight(request) :
+    conn = get_db()
+    cursor = conn.cursor()
+
+    idAerodromeDepart = request.form["aerodromeDepart"]
+    idAerodromeArrive = request.form["aerodromeArrive"]
+    idUser = request.form["idUser"]
+    passagerMax = request.form["passagerMax"]
+    placesRestantes = passagerMax
+    prixTotalIndicatif = request.form["prixTotalIndicatif"]
+    prixParPassagers = round(float(prixTotalIndicatif)/(int(passagerMax) + 1),2)
+    dureeVol = request.form["dureeVol"]
+    date = request.form["date"]
+
+    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol) VALUES (?,?,?,?,?,?,?,?,?)"
+    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date))
+
+    conn.commit()
+
+    return 
+
+
+'''
+Fin définition des fonctions 
+'''
 
 '''
 Début de la gestion des routes
@@ -212,7 +276,9 @@ def logout():
 @app.route('/search', methods=["GET", "POST"])
 def search():
     if request.method == "POST" :
-        return get_flights(request)
+        airports = get_airports()
+        flights = get_flights(request)
+        return render_template("ViewFlights.html", flights = flights, airports = airports)
     else :
         return redirect(url_for("LandingPage"))
     
@@ -234,10 +300,13 @@ def chat() :
 def addflight():
     if request.method == "POST" :
         #le pilote propose un vol, on récupère les données du formulaire
-        return
+        fill_db_newflight(request)
+
+        return redirect(url_for("LandingPage"))
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
-        return render_template("AddFlightPage.html", session = session)
+        airports = get_airports()
+        return render_template("AddFlightPage.html", session = session, airports = airports)
     
 @app.route('/reserveflight', methods = ["GET", "POST"])
 def reserveflight():

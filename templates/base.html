@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+<script src="https://kit.fontawesome.com/4f5a2d4adf.js" crossorigin="anonymous"></script>
 <style>
 body {
 	background: #eeeeee;
@@ -43,28 +44,6 @@ body {
 .navbar .navbar-brand i {
 	font-size: 20px;
 	margin-right: 5px;
-}
-.search-box {
-	position: relative;
-}	
-.search-box input {
-	box-shadow: none;
-	padding-right: 35px;
-	border-radius: 3px !important;
-}
-.search-box .input-group-addon {
-	min-width: 35px;
-	border: none;
-	background: transparent;
-	position: absolute;
-	right: 0;
-	z-index: 9;
-	padding: 7px;
-	height: 100%;
-}
-.search-box i {
-	color: #a0a5b1;
-	font-size: 19px;
 }
 .navbar .nav-item i {
 	font-size: 18px;
@@ -218,52 +197,49 @@ body {
     
 }
 /*Profile Pic End*/
-/*Responsive Search bar Start*/
-.searchbar{
-margin-bottom: auto;
-margin-top: auto;
-height: 60px;
-background-color: #353b48;
-border-radius: 30px;
-padding: 10px;
-}
 
-.search_input{
-color: white;
-border: 0;
-outline: 0;
-background: none;
-width: 0;
-caret-color:transparent;
-line-height: 40px;
-transition: width 0.4s linear;
-}
+/* Flight card Begin*/
+.flight-card {
+		background-color:  #ffffff;
+      	border: 1px solid #ccc;
+      	border-radius: 20px;
+      	padding: 20px;
+      	width: 700px;
+      	position: relative;
+    }
 
-.searchbar:hover > .search_icon{
-background: white;
-color: #e74c3c;
-}
+    .flight-card h2 {
+      margin-top: 0;
+    }
 
-.search_icon{
-height: 40px;
-width: 40px;
-float: right;
-display: flex;
-justify-content: center;
-align-items: center;
-border-radius: 50%;
-color:white;
-text-decoration:none;
-}
+    .pilot-info {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+    }
 
-.fondd {
-background-image: url(https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive-960x540.jpg);
-background-repeat: no-repeat;
-background-position: center;
-background-size: cover
-}
+    .pilot-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
 
-/*Responsive Search bar End*/
+    .reservation-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+    }
+	.price {
+      position: absolute;
+      bottom: 10px;
+      right: 100px;
+      margin-right: 10px;
+    }
+/*Flight Card End*/
+
 </style>
 </head> 
     <body>
@@ -280,11 +256,10 @@ background-size: cover
                 <div class="navbar-nav ml-auto">
                 {% if session['adresseMail'] is defined %}
 					{% if session['isPilot'] == True %}
-						<a href="./addflight" ><i class="fa-regular fa-circle-plus"></i><span class="badge"></a>
-						<a href="./addflight" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
+						<a href="./addflight" class="nav-item nav-link notifications"><i class="fas fa-light fa-circle-plus"></i> Add flight  </a>
 					{% endif %}
-					<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>
-                    <a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>
+					<!--<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>-->
+                    <!--<a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>-->
                     <div class="nav-item dropdown">
                         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="{{session['photoDeProfil']}}" class="avatar" alt="Avatar">{{session['prenom']}} {{session['nom']}}<b class="caret"></b></a>
                         <div class="dropdown-menu">
