@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+  .edit-profile-form {
+    margin: 20px;
+    width: 600px;
+  }
+</style>
+
+<div class="container">
+  <h5>Edit Profile</h5>
+  <form class="edit-profile-form" action="/update_profile" method="POST">
+    <div class="form-group">
+      <label for="last_name">Last Name:</label>
+      <input type="text" class="form-control" id="last_name" name="last_name" value="Labory">
+    </div>
+    <div class="form-group">
+      <label for="first_name">First Name:</label>
+      <input type="text" class="form-control" id="first_name" name="first_name" value="Mathis">
+    </div>
+    <div class="form-group">
+      <label for="date_of_birth">Date of Birth:</label>
+      <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="2000-04-16">
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" name="email" value="jtebaise@mangetesmorts.com">
+    </div>
+    <div class="form-group">
+      <label for="phone_number">Phone Number:</label>
+      <input type="tel" class="form-control" id="phone_number" name="phone_number" value="06 69 69 69 69">
+    </div>
+    <!-- Ajoutez d'autres champs de modification ici -->
+    <button type="submit" class="btn btn-primary">Confirmer</button>
+  </form>
+</div>
+
+{% endblock %}
