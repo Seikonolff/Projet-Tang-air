@@ -290,7 +290,11 @@ def profile():
         #le user tente de modifier son profil
         return
     else :
-        return("ViewProfilePage.html", session)
+        return render_template("ViewProfilePage.html", session=session)
+    
+@app.route('/edit_profile', methods=["GET"])
+def edit_profile():
+    return render_template("EditProfile.html")
     
 @app.route('/chat')
 def chat() :
