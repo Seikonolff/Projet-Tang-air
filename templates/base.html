@@ -256,6 +256,13 @@ color:white;
 text-decoration:none;
 }
 
+.fondd {
+background-image: url(https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive-960x540.jpg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover
+}
+
 /*Responsive Search bar End*/
 </style>
 </head> 
@@ -296,11 +303,9 @@ text-decoration:none;
                 {% endif %}
             </div>
         </nav>
-            <div class="container" >
-                {% block content %}
+        {% block content %}
 				
-                {% endblock %}
-            </div>
+        {% endblock %}
         </div>
     </body>
 </html>

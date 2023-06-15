@@ -7,147 +7,147 @@
       This email is already used. Are you trying to login ? <a href="./login" class="mr-2"> login here</a>
     </div>
   {% endif %}
+<div class="container" >
+    <div class="my-10" >
+      <style>
+        h1 {
+          text-align: center;
+        }
+      </style>
+    <h1><span style="color: rgb(59, 129, 250);"><b>Sign-up</b></span></h1>
 
-  <div class="my-10" >
-    <style>
-      h1 {
-        text-align: center;
-      }
-    </style>
-  <h1><span style="color: rgb(59, 129, 250);"><b>Sign-up</b></span></h1>
-
-  <form method="POST" enctype="multipart/form-data">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="nom">Last name</label>
-        <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory">
-      </div>
-
-      <div class="form-group col-md-6">
-        <label for="prenom">First Name</label>
-        <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric">
-      </div>
-    </div>  
-
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="dateNaissance">Date of birth</label>
-        <input type="date" class="form-control form-control-lg" id="dateNaissance" name= "dateNaissance" placeholder="25/02/2001">
-      </div>
-
-      <div class="form-group col-md-6">
-        <label for="adresse">Mail adress</label>
-        <input type="email" class="form-control form-control-lg" id="adresse" name="adresseMail" placeholder="loveTanguy@gmail.com">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="numeroTelephone">Phone Number</label>
-        <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69">
-      </div>
-    </div>
-
-<!-- I am a pilot -->
-    <div class="form-group">
-      <label for="showAdditionalFields">I am a pilot</label>
-      <input type="checkbox" id="showAdditionalFields" name="isPilot">
-    </div>
-  
-    <div id="additionalFields" style="display: none;">
+    <form method="POST" enctype="multipart/form-data">
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="numeroLicense">License Number</label>
-          <input type="text" class="form-control form-control-lg" id="numeroLicense" name="numeroLicense">
+          <label for="nom">Last name</label>
+          <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory">
         </div>
+
         <div class="form-group col-md-6">
-          <label for="nbHeureVolTotals">Total flying hours</label>
-          <input type="number" class="form-control form-control-lg" id="nbHeureVolTotal" name="nbHeureVolTotal" placeholder="145 h" min=0>
+          <label for="prenom">First Name</label>
+          <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric">
+        </div>
+      </div>  
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="dateNaissance">Date of birth</label>
+          <input type="date" class="form-control form-control-lg" id="dateNaissance" name= "dateNaissance" placeholder="25/02/2001">
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="adresse">Mail adress</label>
+          <input type="email" class="form-control form-control-lg" id="adresse" name="adresseMail" placeholder="loveTanguy@gmail.com">
         </div>
       </div>
-    </div>
-<!-- I am a pilot -->
-  
-    <div class="form-group">
-      <label for="motdepasse">Password</label>
-      <input type="password" class="form-control form-control-lg" id="motdepasse" name="motdepasse" placeholder="Lacatapulte-Irlandaise3">
-    </div>
 
-    <div class="form-group">
-      <label for="motdepasse2">Confirm Password</label>
-      <input type="password" class="form-control form-control-lg" id="motdepasse2" placeholder="Lacatapulte-Irlandaise3">
-      <small class="text-danger" id="passwordError" style="display: none;">Different password, please try again.</small>
-    </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="numeroTelephone">Phone Number</label>
+          <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69">
+        </div>
+      </div>
+
+  <!-- I am a pilot -->
+      <div class="form-group">
+        <label for="showAdditionalFields">I am a pilot</label>
+        <input type="checkbox" id="showAdditionalFields" name="isPilot">
+      </div>
     
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="idPromo">Promotion</label>
-        <select id="idPromo" name="promo" class="form-control form-control-lg">
-          <option selected>Choose...</option>
-          {% for promo in promos %}
-            <option value ="{{promo[0]}}">{{promo[1]}} - {{promo[2]}}</option>
-          {% endfor %}
-        </select>
+      <div id="additionalFields" style="display: none;">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="numeroLicense">License Number</label>
+            <input type="text" class="form-control form-control-lg" id="numeroLicense" name="numeroLicense">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="nbHeureVolTotals">Total flying hours</label>
+            <input type="number" class="form-control form-control-lg" id="nbHeureVolTotal" name="nbHeureVolTotal" placeholder="145 h" min=0>
+          </div>
+        </div>
       </div>
-      <div class="form-group col-md-4">
-        <label class="form-label" for="customFile">Profile Picture</label>
-        <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" />
-        <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
+  <!-- I am a pilot -->
+    
+      <div class="form-group">
+        <label for="motdepasse">Password</label>
+        <input type="password" class="form-control form-control-lg" id="motdepasse" name="motdepasse" placeholder="Lacatapulte-Irlandaise3">
       </div>
 
-      <div class="form-group col-md-4">
-        <label class="form-label" for="customFile">School certificate</label>
-        <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" />
-        <small id="fileError" class="text-danger" style="display: none;">Please choose a .pdf file.</small>
+      <div class="form-group">
+        <label for="motdepasse2">Confirm Password</label>
+        <input type="password" class="form-control form-control-lg" id="motdepasse2" placeholder="Lacatapulte-Irlandaise3">
+        <small class="text-danger" id="passwordError" style="display: none;">Different password, please try again.</small>
       </div>
-      </div>
-        <div class="form-group">
-          <label for=description>Profile Description</label>
-          <textarea class="form-control form-control-lg" id="description" name ="description" rows="3"></textarea>
+      
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="idPromo">Promotion</label>
+          <select id="idPromo" name="promo" class="form-control form-control-lg">
+            <option selected>Choose...</option>
+            {% for promo in promos %}
+              <option value ="{{promo[0]}}">{{promo[1]}} - {{promo[2]}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="form-label" for="customFile">Profile Picture</label>
+          <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" />
+          <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
         </div>
 
-    <div class="bottom-space">
+        <div class="form-group col-md-4">
+          <label class="form-label" for="customFile">School certificate</label>
+          <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" />
+          <small id="fileError" class="text-danger" style="display: none;">Please choose a .pdf file.</small>
+        </div>
+        </div>
+          <div class="form-group">
+            <label for=description>Profile Description</label>
+            <textarea class="form-control form-control-lg" id="description" name ="description" rows="3"></textarea>
+          </div>
 
-  <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
-  </form> 
+      <div class="bottom-space">
 
-  <body class="bottom-space">
-  </body>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+    </form> 
+
+    <body class="bottom-space">
+    </body>
 
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-  <script>
-  // Récupérer les références aux éléments de formulaire
-  const passwordInput = document.getElementById('motdepasse');
-  const confirmPasswordInput = document.getElementById('motdepasse2');
-  const passwordError = document.getElementById('passwordError');
-  
-  // Ajouter un gestionnaire d'événements pour vérifier les mots de passe
-    confirmPasswordInput.addEventListener('input', function() {
-        if (confirmPasswordInput.value !== passwordInput.value) {
-          passwordError.style.display = 'block';
-        } else {
-          passwordError.style.display = 'none';
-        }
-      });
-  </script>
-<!-- Alerte l'utilisateur que la pp doit être .png ou .jpg -->
-  <script>
-      const fileInput = document.getElementById('customFile');
-      const fileError = document.getElementById('fileError');
+    <script>
+    // Récupérer les références aux éléments de formulaire
+    const passwordInput = document.getElementById('motdepasse');
+    const confirmPasswordInput = document.getElementById('motdepasse2');
+    const passwordError = document.getElementById('passwordError');
+    
+    // Ajouter un gestionnaire d'événements pour vérifier les mots de passe
+      confirmPasswordInput.addEventListener('input', function() {
+          if (confirmPasswordInput.value !== passwordInput.value) {
+            passwordError.style.display = 'block';
+          } else {
+            passwordError.style.display = 'none';
+          }
+        });
+    </script>
+  <!-- Alerte l'utilisateur que la pp doit être .png ou .jpg -->
+    <script>
+        const fileInput = document.getElementById('customFile');
+        const fileError = document.getElementById('fileError');
 
-      fileInput.addEventListener('change', function() {
-        const fileName = fileInput.value;
-        const validExtensions = ['.jpg', '.jpeg', '.png'];
+        fileInput.addEventListener('change', function() {
+          const fileName = fileInput.value;
+          const validExtensions = ['.jpg', '.jpeg', '.png'];
 
-        if (!validExtensions.some(ext => fileName.toLowerCase().endsWith(ext))) {
-          fileInput.value = ''; // Clear the selected file
-          fileError.style.display = 'block';
-        } else {
-          fileError.style.display = 'none';
-        }
-      });
+          if (!validExtensions.some(ext => fileName.toLowerCase().endsWith(ext))) {
+            fileInput.value = ''; // Clear the selected file
+            fileError.style.display = 'block';
+          } else {
+            fileError.style.display = 'none';
+          }
+        });
 
       
       
