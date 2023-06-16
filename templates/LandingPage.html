@@ -2,49 +2,49 @@
 
 {% block content %}
 
-<div class="fondd" >
-
-
-<div class="text-center d-flex flex-column">
-    <style>
-      h1 {
-        margin-left: auto;
-        margin-right: auto;
-      }
-    </style>
-    <h1><span style="color: rgb(59, 129, 250);"><b>Volez entre copains</b></span></h1>
-</div>
-
-<div class="section">
-    <img src="https://www.enac.fr/sites/default/files/tb20_0.jpg" alt="Image 1">
-    <div class="form-overlay">
-        <p>Description de la section 1</p>
-        <div class="col-md-8 mx-auto text-center mt-6">
-            <form method="POST" action="./search">
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="inputUser">
-                    <input type="date" class="form-control form-control-sm" name="date">
-                    <input type="number" class="form-control form-control-sm" placeholder="Pax" name="passager">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
+    <div class="text-center d-flex flex-column">
+        <style>
+          h1 {
+            margin-left: auto;
+            margin-right: auto;
+          }
+        </style>
+        <h1><span style="color: rgb(59, 129, 250);"><b>Volez entre copains</b></span></h1>
+    </div>
+    
+    <div class="section">
+        <img src="https://www.enac.fr/sites/default/files/tb20_0.jpg" alt="Image 1">
+        <div class="form-overlay">
+            <p>Description de la section 1</p>
+            <div class="col-md-8 mx-auto text-center mt-6">
+                <form method="POST" action="./search">
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="inputUser">
+                        <input type="date" class="form-control form-control-sm" name="date">
+                        <input type="number" class="form-control form-control-sm" placeholder="Pax" name="passager">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+    
+    <div class="section">
+        <h2>Section 2</h2>
+        <img src="https://www.shutterstock.com/image-photo/surreal-image-african-elephant-wearing-260nw-1365289022.jpg" alt="Image 2">
+        <p>Description de la section 2</p>
+    </div>
+    
+    <div class="section">
+        <h2>Section 3</h2>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png" alt="Image 3">
+        <p>Description de la section 3</p>
+    </div>
 
-<div class="section">
-    <h2>Section 2</h2>
-    <img src="https://www.shutterstock.com/image-photo/surreal-image-african-elephant-wearing-260nw-1365289022.jpg" alt="Image 2">
-    <p>Description de la section 2</p>
-</div>
+    <div id="map"></div>
 
-<div class="section">
-    <h2>Section 3</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png" alt="Image 3">
-    <p>Description de la section 3</p>
-</div>
     
 
 
@@ -56,7 +56,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>-->
     <script>
         // Fonction d'initialisation de la carte
         function initMap() {
