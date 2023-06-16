@@ -13,26 +13,23 @@
       }
     </style>
     <h1><span style="color: rgb(59, 129, 250);"><b>Volez entre copains</b></span></h1>
-  </div>
 </div>
-</div>
-
-
-</div>
-</form>
 
 <div class="section">
     <img src="https://www.enac.fr/sites/default/files/tb20_0.jpg" alt="Image 1">
     <div class="form-overlay">
-    <p>Description de la section 1</p>
-    <div class="col-md-8 mx-auto text-center mt-6">
-        <div class="input-group">
-            <input type="text" class="form-control form-control-sm" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="piloteAerodrome">
-            <input type="date" class="form-control form-control-sm" name="dateVolSouhaite">
-            <input type="number" class="form-control form-control-sm" placeholder="Pax" name="nombrePax">
-            <div class="input-group-append">
-                <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
-            </div>
+        <p>Description de la section 1</p>
+        <div class="col-md-8 mx-auto text-center mt-6">
+            <form method="POST" action="./search">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="inputUser">
+                    <input type="date" class="form-control form-control-sm" name="date">
+                    <input type="number" class="form-control form-control-sm" placeholder="Pax" name="passager">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
