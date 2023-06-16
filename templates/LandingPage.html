@@ -16,15 +16,15 @@
 </div>
 
 <div class="section">
-    <img src="https://www.enac.fr/sites/default/files/tb20_0.jpg" alt="Image 1">
+    <img src="https://www.enac.fr/sites/default/files/tb20_0.jpg" alt="Image 1" >
+    <div id="map"></div>
     <div class="form-overlay">
-        <p>Description de la section 1</p>
-        <div class="col-md-8 mx-auto text-center mt-6">
+        <div class="col-md-14 mx-auto text-center mt-6">
             <form method="POST" action="./search">
                 <div class="input-group">
                     <input type="text" class="form-control form-control-sm" placeholder="Rechercher un pilote ou un aérodrome" id="searchInput" name="inputUser">
                     <input type="date" class="form-control form-control-sm" name="date">
-                    <input type="number" class="form-control form-control-sm" placeholder="Pax" name="passager">
+                    <input type="number" class="form-control form-control-sm" placeholder="Pax" name="passager" min="1" max="3">
                     <div class="input-group-append">
                         <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
                     </div>
@@ -35,17 +35,13 @@
 </div>
 
 <div class="section">
-    <h2>Section 2</h2>
-    <img src="https://www.shutterstock.com/image-photo/surreal-image-african-elephant-wearing-260nw-1365289022.jpg" alt="Image 2">
-    <p>Description de la section 2</p>
+    <img src="https://www.enac.fr/sites/default/files/da42.jpg" alt="Image 2">
 </div>
 
 <div class="section">
-    <h2>Section 3</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png" alt="Image 3">
-    <p>Description de la section 3</p>
+    <img src="https://www.pilote-pro.com/wp-content/uploads/2020/04/20200204_090347_resized-620x264.jpg" alt="Image 3">
 </div>
-    
+<div id="map"></div>
 
 
 
@@ -64,8 +60,7 @@
             var center = [51.5074, -0.1278];
     
             // Création de la carte
-            var map = L.map('map').setView(center, 12);
-    
+            var map = L.map('map', { center: center, zoom: 12 });
             // Ajout de la tuile Mapbox
             var accessToken = 'pk.eyJ1IjoibGFib3J5bWEiLCJhIjoiY2xpaXRmdm5mMDFrcDNmc2FxbmxrMDV4ZyJ9.O2zrjLTj-wms-axtY6uSDQ'; // Votre clé d'accès aux tuiles de Mapbox
             L.tileLayer('https://api.mapbox.com/styles/v1/laboryma/cliitzmn400be01pf0awm3mkz/draft/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
@@ -115,5 +110,4 @@
                 initMap();
             });
     </script>
-
 {% endblock %}
