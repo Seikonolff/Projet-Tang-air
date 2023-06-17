@@ -2,7 +2,186 @@
 
 {% block content %}
 
-<div class="fondd" >
+<style>
+.container {
+  max-width: 960px;
+}
+
+/*
+ * Custom translucent site header
+ */
+
+.site-header {
+  background-color: rgba(0, 0, 0, .85);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+.site-header a {
+  color: #999;
+  transition: ease-in-out color .15s;
+}
+.site-header a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/*
+ * Dummy devices (replace them with your own or something else entirely!)
+ */
+
+.product-device {
+  position: absolute;
+  right: 10%;
+  bottom: -30%;
+  width: 300px;
+  height: 540px;
+  background-color: #333;
+  border-radius: 21px;
+  -webkit-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+
+.product-device::before {
+  position: absolute;
+  top: 10%;
+  right: 10px;
+  bottom: 10%;
+  left: 10px;
+  content: "";
+  background-color: rgba(255, 255, 255, .1);
+  border-radius: 5px;
+}
+
+.product-device-2 {
+  top: -25%;
+  right: auto;
+  bottom: 0;
+  left: 5%;
+  background-color: #e5e5e5;
+}
+
+
+/*
+ * Extra utilities
+ */
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+.flex-equal > * {
+  -ms-flex: 1;
+  -webkit-box-flex: 1;
+  flex: 1;
+}
+@media (min-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1;
+    -webkit-box-flex: 1;
+    flex: 1;
+  }
+}
+
+.overflow-hidden { overflow: hidden; }
+
+/* Photo TB20 assombrie */
+.bg-photo {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bg-photo::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://www.enac.fr/sites/default/files/tb20_0.jpg");
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+    }
+/* Photo TB20 assombrie */
+#map {
+      border-radius: 10px; /* Bords arrondis */
+      width: 100%; /* Prend toute la largeur de la div */
+      height: 400px; /* Hauteur fixe de la carte */
+    }
+</style>
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-photo">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal"><span style="color: rgb(255, 255, 255);"><b>Volez entre copains</b></h1>
+        <p class="lead font-weight-normal"><span style="color:#fff">Volez avec des pilotes détenteurs de leur PPL et découvrez le ciel d'une nouvelle manière.</span></p>
+        <div class="form-overlay">
+            <div class="col-md-14 mx-auto text-center mt-6">
+                <form method="POST" action="./search">
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" placeholder="Recherchez un aérodrome" id="searchInput" name="inputUser">
+                        <input type="date" class="form-control form-control-sm" name="date">
+                        <input type="number" class="form-control form-control-sm" placeholder="Pax" name="passager" min="1" max="3">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+    <h2>Regardez dès maintenant qui vole autour de vous</h2>
+    <div id="map"></div>
+</div>
+
+  <footer class="container py-5">
+    <div class="row">
+      <div class="col-12 col-md">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+        <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Features</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Cool stuff</a></li>
+          <li><a class="text-muted" href="#">Random feature</a></li>
+          <li><a class="text-muted" href="#">Team feature</a></li>
+          <li><a class="text-muted" href="#">Stuff for developers</a></li>
+          <li><a class="text-muted" href="#">Another one</a></li>
+          <li><a class="text-muted" href="#">Last time</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Resource</a></li>
+          <li><a class="text-muted" href="#">Resource name</a></li>
+          <li><a class="text-muted" href="#">Another resource</a></li>
+          <li><a class="text-muted" href="#">Final resource</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Business</a></li>
+          <li><a class="text-muted" href="#">Education</a></li>
+          <li><a class="text-muted" href="#">Government</a></li>
+          <li><a class="text-muted" href="#">Gaming</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>About</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Team</a></li>
+          <li><a class="text-muted" href="#">Locations</a></li>
+          <li><a class="text-muted" href="#">Privacy</a></li>
+          <li><a class="text-muted" href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
 
 <div class="text-center d-flex flex-column">
@@ -17,7 +196,7 @@
 
 <div class="section">
     <img src="https://www.enac.fr/sites/default/files/tb20_0.jpg" alt="Image 1" >
-    <div id="map"></div>
+    <!--<div id="map"></div>-->
     <div class="form-overlay">
         <div class="col-md-14 mx-auto text-center mt-6">
             <form method="POST" action="./search">
@@ -41,73 +220,57 @@
 <div class="section">
     <img src="https://www.pilote-pro.com/wp-content/uploads/2020/04/20200204_090347_resized-620x264.jpg" alt="Image 3">
 </div>
-<div id="map"></div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
 
-     <!--{% print(session) %} <!-- Pour débug le dictionnaire magique-->
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGFib3J5bWEiLCJhIjoiY2xpaXRmdm5mMDFrcDNmc2FxbmxrMDV4ZyJ9.O2zrjLTj-wms-axtY6uSDQ';
 
-    <!-- Inclure la bibliothèque Leaflet -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>-->
-    <script>
-        // Fonction d'initialisation de la carte
-        function initMap() {
-            // Coordonnées du centre de la carte
-            var center = [51.5074, -0.1278];
-    
-            // Création de la carte
-            var map = L.map('map', { center: center, zoom: 12 });
-            // Ajout de la tuile Mapbox
-            var accessToken = 'pk.eyJ1IjoibGFib3J5bWEiLCJhIjoiY2xpaXRmdm5mMDFrcDNmc2FxbmxrMDV4ZyJ9.O2zrjLTj-wms-axtY6uSDQ'; // Votre clé d'accès aux tuiles de Mapbox
-            L.tileLayer('https://api.mapbox.com/styles/v1/laboryma/cliitzmn400be01pf0awm3mkz/draft/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
-            attribution: '© Mapbox',
-            tileSize: 512,
-            zoomOffset: -1
-            }).addTo(map);
-    
-            // Coordonnées et informations des marqueurs
-            var markers = [
-                {
-                    coordinates: [51.5074, -0.1278],
-                    title: "Londres",
-                    description: "La capitale de l'Angleterre"
-                },
-                {
-                    coordinates: [48.8566, 2.3522],
-                    title: "Paris",
-                    description: "La capitale de la France"
-                },
-                {
-                    coordinates: [40.7128, -74.0060],
-                    title: "New York",
-                    description: "La ville qui ne dort jamais"
-                }
-            ];
-    
-            // Ajout des marqueurs avec les cards personnalisées
-            markers.forEach(function (markerInfo) {
-            var marker = L.marker(markerInfo.coordinates);
-            var popupContent = `
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                `;
-                marker.bindPopup(popupContent);
-                marker.addTo(map);
-                });
-            }
-    
-            // Appel de la fonction d'initialisation lorsque la page a fini de charger
-            document.addEventListener("DOMContentLoaded", function () {
-                initMap();
-            });
-    </script>
+    // Créer la carte
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11', // Style par défaut, tu peux changer selon tes besoins
+      center: [3.876716,43.610769], // Coordonnées du centre de la carte (longitude, latitude)
+      zoom: 12 // Niveau de zoom initial
+    });
+
+    // Ajouter des contrôles de navigation (zoom et rotation)
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // Ajouter un marqueur avec un événement de clic
+    var marker = new mapboxgl.Marker()
+      .setLngLat([3.959863, 43.580159])
+      .addTo(map)
+      .getElement()
+      .addEventListener('click', function () {
+        afficherCarteInteractive();
+      });
+
+    function afficherCarteInteractive() {
+        // Créer un élément de div pour contenir la carte détaillée
+        var detailContainer = document.createElement('div');
+        detailContainer.className = 'card';
+        detailContainer.style = 'width: 18rem;';
+
+        // Créer le contenu de la carte détaillée
+        var cardContent = `
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+            <h5 class="card-title">Carte détaillée</h5>
+            <p class="card-text">Ceci est une carte détaillée générée dynamiquement.</p>
+            <a href="#" class="btn btn-primary">Button</a>
+            </div>
+        `;
+
+        // Ajouter le contenu à l'élément de la carte détaillée
+        detailContainer.innerHTML = cardContent;
+
+        // Afficher la carte détaillée dans la page
+        document.body.appendChild(detailContainer);
+    }
+
+  </script>
 {% endblock %}

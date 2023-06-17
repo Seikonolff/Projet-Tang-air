@@ -193,6 +193,15 @@ def get_flights(request):
 
     return flights
 
+def get_flight_info(idVol):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM User_Pilote_Vol WHERE idVol = ?"
+    flight = cursor.execute(query,(idVol,)).fetchone()
+
+    return flight
+
 def get_airports():
     conn = get_db()
     cursor = conn.cursor()
@@ -314,14 +323,13 @@ def addflight():
         airports = get_airports()
         return render_template("AddFlightPage.html", session = session, airports = airports)
     
-@app.route('/reserveflight', methods = ["GET", "POST"])
-def reserveflight():
+@app.route('/reserveflight/<idVol>', methods = ["GET", "POST"])
+def reserveflight(idVol):
     if request.method == "POST" :
-        #le pilote propose un vol, on récupère les données du formulaire
+        #on récupère les données du formulaire pour réserver un vol
         return
     else :
-        #le pilote a cliqué sur le btn, on retourne l'html
-        return render_template("ReserveFlightPage.html", session = session)
+        return render_template("ReserveFlightPage.html", session = session, flight = get_flight_info(idVol), airports = get_airports() )
     
 '''
 Fin de la gestion des routes
