@@ -1,134 +1,145 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="container">
-    <div class="row" style="margin-top:0px;">
-      <div class="row" style="margin-bottom:50px;">
-        <div class="col-12">
-          <h1 class="text-center"><style>
-    h1 {
-      text-align: center;
-    }
-</style>
-<h1><span style="color: rgb(59, 129, 250);"><b>Reserve your Flight</b></span></h1></h1>
-
-          <div class="summary" style="padding-top: 30px;">
-            <p><strong>Airport of departure : </strong> {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p><strong>Airport of destination : </strong> {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p><strong>Date of departure : </strong>{{flight[12]}}</p>
-            <p><strong>Flight duration : </strong> {{flight[11]}}</p>
-          </div>
-
-          <div class="form-group">
-            <label for="passengers">Number of Additional Passengers:</label>
-            <select id="passengers" class="form-control">
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-          </div>
-<!-- I am not alone -->
-
-<div id="passenger-info" style="display: none;">
-    <h3>Passenger Information</h3>
-    <div id="additionalFields">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="nom">Last name</label>
-                <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="prenom">First Name</label>
-                <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric">
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="dateNaissance">Date of birth</label>
-                <input type="date" class="form-control form-control-lg" id="dateNaissance" name= "dateNaissance" placeholder="25/02/2001">
-            </div>
-          
-            <div class="form-group col-md-6">
-                <label for="adresse">Mail adress</label>
-                <input type="email" class="form-control form-control-lg" id="adresse" name="adresseMail" placeholder="loveTanguy@gmail.com">
-            </div>
-          
-            <div class="form-group col-md-6">
-                <label for="numeroTelephone">Phone Number</label>
-                <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69">
-            </div>
-        </div>
-    </div>
-</div>
+<style>
+  /* Flight card Begin*/
+  .flight-card {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 20px;
+    padding: 20px;
+    width: 700px;
+    position: relative;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
   
-    <div class="form-group">
-        <label for="Pax">Estimated mass of all baggage:</label>
-        <input type="number" class="form-control" id="Pax">
+  .flight-card h2 {
+    margin-top: 0;
+  }
+  
+  .pilot-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .pilot-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .reservation-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    border-radius: 7px;
+  }
+  
+  .price {
+    position: absolute;
+    bottom: 10px;
+    right: 100px;
+    margin-right: 10px;
+  }
+  
+  /* Add styles for the reservation form */
+  .reservation-form {
+    background-color: #f9f9f9;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    margin-bottom: 10px;
+  }
+  /* Flight Card End*/
+</style>
+
+<h1 class="text-center"><span style="color: rgb(59, 129, 250);"><b>Reserve your Flight</b></span></h1>
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-photo"></div>
+
+<div class="container text-center">
+  <div class="row">
+    <div class="col mb-4">
+      <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+      <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+      <p><strong>Date :</strong> {{flight[12]}}</p>
+      <p><strong>Heure de décollage :</strong> x</p>
+      <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+      <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+      <h3>{{flight[10]}}€/pax</h3>
     </div>
-
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Reserve your flight</button>
+    <div class="col mb-4">
+      <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+      <div>
+        <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+        <p><strong>Note :</strong> {{flight[3]}}</p>
+      </div>
     </div>
+    <div class="col mb-4">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Socata_TB_20_Trinidad_01.jpg/280px-Socata_TB_20_Trinidad_01.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Avion</h5>
+        <p class="card-text">TB20</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mb-4">
+      <!-- Reservation Form -->
+      <div class="reservation-form" id="reservationForm">
+        <form>
+          <div class="mb-3">
+            <label for="name" class="form-label">Prénom</label>
+            <input type="text" class="form-control" id="name" placeholder="prénom">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Nom</label>
+            <input type="email" class="form-control" id="email" placeholder="Nom">
+          </div>
+          <div class="mb-3">
+            <label for="passengers" class="form-label">Age</label>
+            <input type="number" class="form-control" id="passengers" placeholder="Âge">
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col mb-4"></div>
+      <div class="reservation-btn">
+      <button class="btn btn-primary" onclick="addPassenger()">Add Passenger</button>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
 
 <script>
-    document.getElementById('passengers').addEventListener('change', function() {
-      var numPassengers = parseInt(this.value);
-  
-      var additionalFields = document.getElementById('additionalFields');
-      additionalFields.innerHTML = '';
-  
-      if (numPassengers > 0) {
-        document.getElementById('passenger-info').style.display = 'block';
-  
-        for (var i = 1; i <= numPassengers; i++) {
-          var passengerField = document.createElement('div');
-          passengerField.classList.add('form-row');
-  
-          var lastNameGroup = document.createElement('div');
-          lastNameGroup.classList.add('form-group', 'col-md-6');
-  
-          var lastNameLabel = document.createElement('label');
-          lastNameLabel.innerText = 'Last Name';
-  
-          var lastNameInput = document.createElement('input');
-          lastNameInput.type = 'text';
-          lastNameInput.classList.add('form-control');
-          lastNameInput.placeholder = 'Enter last name';
-  
-          lastNameGroup.appendChild(lastNameLabel);
-          lastNameGroup.appendChild(lastNameInput);
-          passengerField.appendChild(lastNameGroup);
-  
-          var firstNameGroup = document.createElement('div');
-          firstNameGroup.classList.add('form-group', 'col-md-6');
-  
-          var firstNameLabel = document.createElement('label');
-          firstNameLabel.innerText = 'First Name';
-  
-          var firstNameInput = document.createElement('input');
-          firstNameInput.type = 'text';
-          firstNameInput.classList.add('form-control');
-          firstNameInput.placeholder = 'Enter first name';
-  
-          firstNameGroup.appendChild(firstNameLabel);
-          firstNameGroup.appendChild(firstNameInput);
-          passengerField.appendChild(firstNameGroup);
-  
-          additionalFields.appendChild(passengerField);
-        }
-      } else {
-        document.getElementById('passenger-info').style.display = 'none';
-      }
-    });
-  </script>
+  var passengerCount = 1;
 
+  function addPassenger() {
+    var form = document.getElementById("reservationForm");
+    var clone = form.cloneNode(true);
+    clone.querySelectorAll("input").forEach(function(input) {
+      input.value = "";
+    });
+    document.querySelector(".row").appendChild(clone);
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 {% endblock %}
+

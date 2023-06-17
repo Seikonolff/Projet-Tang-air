@@ -15,7 +15,7 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="./">
                     <img src="/static/images/tanguy.png" width="45" height="45">
                     <span style="color: rgba(0, 0, 255, 0.719);"><b>Tang</b></span>'Air
                 </a>
@@ -27,7 +27,7 @@
                         <ul class="navbar-nav">
                             {% if session['adresseMail'] is defined %}
 					        {% if session['isPilot'] == True %}
-						        <li><a href="./addflight" class="nav-item nav-link notifications"><i class="fas fa-light fa-circle-plus"></i> Add flight  </a></li>
+						        <li><a href="./addflight" class="nav-item nav-link notifications"><i class="fas fa-light fa-circle-plus"></i> Add flight</a></li>
 					        {% endif %}
                             <!--<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>-->
                             <!--<a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>-->
@@ -43,7 +43,7 @@
                             </li>
                             {% else %}
                             <li class="nav-item"><a class="nav-link" href="./login"><button class="btn">Log-in</button></a></li>
-                            <li class="nav-item"><a class="nav-link" href="./signup"><button class="btn btn-outline-primary">Sign_up</button></a></li>
+                            <li class="nav-item"><a class="nav-link" href="./signup"><button class="btn btn-outline-primary">Sign-up</button></a></li>
                             {% endif %}
                         </ul>
                     </div>
