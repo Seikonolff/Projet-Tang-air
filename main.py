@@ -193,7 +193,16 @@ def get_flights(request):
 
     flights = cursor.execute(flights_query,tuple(params)).fetchall()
 
-    print(flights)
+    #print(flights)
+
+    return flights
+
+def get_flights_frommap(airport):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    flights_query = "SELECT * FROM User_Pilote_Vol WHERE idAerodromeDepart = ?"
+    flights = cursor.execute(flights_query,(airport,)).fetchall()
 
     return flights
 
@@ -455,14 +464,16 @@ def logout():
     session.clear()
     return redirect(url_for('LandingPage'))
 
-@app.route('/search', methods=["GET", "POST"])
-def search():
+@app.route('/search/<airport>', methods=["GET", "POST"])
+def search(airport):
     if request.method == "POST" :
         airports = get_airports()
         flights = get_flights(request)
         return render_template("ViewFlights.html", flights = flights, airports = airports)
     else :
-        return redirect(url_for("LandingPage"))
+        airports = get_airports()
+        flights = get_flights_frommap(airport)
+        return render_template("ViewFlights.html", flights = flights, airports = airports)
     
 @app.route('/profile', methods = ["GET"])
 def profile():
