@@ -112,6 +112,7 @@ def open_session(eMail):
     session['moyenneNotePassager'] = calcul_note(idUser, "passager")
     session['photoDeProfil'] = result1[9]
     session['flights'] = get_user_flights(idUser, pilot = False)
+    session['isPilot'] = False
 
     query = "SELECT * FROM Pilote WHERE idUser = ?"
     result2 = cursor.execute(query,(idUser,)).fetchone()
@@ -232,6 +233,18 @@ def get_user_flights(idUser,pilot):
             flights.append(flight)
 
         return flights
+    
+def get_user_fellowpassenger(flights):
+    conn = get_db()
+    cursor = conn.cursor()
+    passagers = []
+
+    for flight in flights :
+
+        query = "SELECT * FROM Passagers WHERE idVol = ? "
+        passagers = cursor.execute(query,(flight[13],)).fetchall()
+    
+    return passagers
         
 def get_airports():
     conn = get_db()
@@ -255,9 +268,10 @@ def fill_db_newflight(request) :
     prixParPassagers = round(float(prixTotalIndicatif)/(int(passagerMax) + 1),2)
     dureeVol = request.form["dureeVol"]
     date = request.form["date"]
+    statutVol = "planing"
 
-    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol) VALUES (?,?,?,?,?,?,?,?,?)"
-    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date))
+    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol,statutVol) VALUES (?,?,?,?,?,?,?,?,?,?)"
+    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date,statutVol))
 
     conn.commit()
 
@@ -267,8 +281,13 @@ def fill_db_reserveflight(request):
     conn = get_db()
     cursor = conn.cursor()
 
-    query = "INSERT INTO EtrePassager (idUser,idVol,prixPayé) VALUES (?,?,?)"
-    cursor.execute(query,(request.form['idUser'],request.form['idVol'],request.form['prixPayé']))
+    #on rempli la relation entre User et vol
+    query = "INSERT INTO EtrePassager (idUser,idVol,prixPayé, statutReservation) VALUES (?,?,?,?)"
+    cursor.execute(query,(request.form['idUser'],request.form['idVol'],request.form['prixPayé'],'pending'))
+
+    #on décrémente les place restantes dans la table Vol
+    query = "UPDATE Vol SET placesRestantes =  passagerMax - 1"
+    cursor.execute(query)
 
     conn.commit()
 
@@ -303,11 +322,18 @@ def user_editflight(request):
     dateDuVol = request.form['date']
     heureDecollage = request.form['heureDecollage']
     dureeVol = request.form['dureeVol']
-    prixTotalindicatif = request.form['prixTotalIndicatif']
+    prixTotalIndicatif = request.form['prixTotalIndicatif']
+    prixParPassagers = round(float(prixTotalIndicatif)/(int(passagerMax) + 1),2)
+    placesRestantesBefore = request.form['placesRestantesBefore']
+    passagerMaxBefore = request.form['passagermaxBefore']
+    print(placesRestantesBefore)
+    placesRestantes = int(placesRestantesBefore) + (int(passagerMax) - int(passagerMaxBefore))
+    if(placesRestantes < 0) :
+        placesRestantes = 0
     idVol = request.form['idVol']
 
-    query = "UPDATE Vol SET idAerodromeDepart = ?, idAerodromeArrive = ?, idAvion = ?, passagerMax = ?, dateDuVol = ?, heureDecollage = ?, dureeVol = ?, prixTotalindicatif = ? WHERE idVol = ?"
-    cursor.execute(query,(idAerodromeDepart,idAerodromeArrive,idAvion,passagerMax,dateDuVol,heureDecollage,dureeVol,prixTotalindicatif,idVol))
+    query = "UPDATE Vol SET idAerodromeDepart = ?, idAerodromeArrive = ?, idAvion = ?, passagerMax = ?, dateDuVol = ?, heureDecollage = ?, dureeVol = ?, prixTotalindicatif = ?, prixParPassagers = ?, placesRestantes = ? WHERE idVol = ?"
+    cursor.execute(query,(idAerodromeDepart,idAerodromeArrive,idAvion,passagerMax,dateDuVol,heureDecollage,dureeVol,prixTotalIndicatif,prixParPassagers,placesRestantes,idVol))
 
     conn.commit()
 
@@ -316,7 +342,7 @@ def user_editflight(request):
 def user_cancelflight(idUser,idVol) :
     conn = get_db()
     cursor = conn.cursor()
-    if session['isPilot'] :
+    if session['isPilot'] and not user_notflying(idUser,idVol):
         #le pilote suprime son vol
         query = "DELETE FROM Vol Where idUser = ? AND idVol = ?"
         cursor.execute(query,(idUser,idVol))
@@ -355,6 +381,28 @@ def user_notflying(idUser,idVol) :
     else :
         #l'utilisateur est le pilote du vol qu'il tente de réserver. Bizarre non ? 
         return False
+    
+def confirm_passenger(idVol,idPassager) :
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query ="UPDATE EtrePassager SET statutReservation = 'confirmed' WHERE idVol = ? and idUser = ?"
+    cursor.execute(query,(idVol,idPassager))
+
+    conn.commit()
+
+    return
+
+def cancel_passenger(idVol,idPassager) :
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query ="DELETE FROM EtrePassager WHERE idVol = ? and idUser = ?"
+    cursor.execute(query,(idVol,idPassager))
+
+    conn.commit()
+
+    return
 
 '''
 Fin définition des fonctions 
@@ -416,15 +464,18 @@ def search():
     else :
         return redirect(url_for("LandingPage"))
     
-@app.route('/profile', methods = ["GET", "POST"])
+@app.route('/profile', methods = ["GET"])
 def profile():
-    if request.method == "POST" :
-        #le user tente de modifier son profil
-        return
-    else :
-        session['flights'] = get_user_flights(session['idUser'],pilot=False)
-        session['flightsPilot'] = get_user_flights(session['idUser'],pilot=True)
-        return render_template("ViewProfilePage.html", session = session, airports = get_airports())
+    #On (re)récupère les vols qui sont liés à l'utilisateur.
+    session['flights'] = get_user_flights(session['idUser'],pilot=False)
+    session['flightsPilot'] = get_user_flights(session['idUser'],pilot=True)
+
+    #A l'aide des infos on récupère les Passagers avec qui on voyage
+    session['Passengers'] = get_user_fellowpassenger(session['flights'])
+    session['passengersPilot'] = get_user_fellowpassenger(session['flightsPilot'])
+
+
+    return render_template("ViewProfilePage.html", session = session, airports = get_airports())
     
 @app.route('/edit_profile', methods=["POST"])
 def edit_profile():
@@ -452,17 +503,30 @@ def addflight():
 @app.route('/reserveflight/<idVol>', methods = ["GET", "POST"])
 def reserveflight(idVol):
     if request.method == "POST" :
-        if user_not_listed(session['idUser'],idVol) and user_notflying(session['idUser'],idVol) :
-            #l'utilisateur n'est pas déjà listé sur le vol et n'est pas le pilote
-            fill_db_reserveflight(request)
-
+        if user_not_listed(session['idUser'],idVol) :
+            #l'utilisateur n'est pas déjà listé sur le vol
+            if user_notflying(session['idUser'],idVol) :
+                #l'utilisateur n'est pas le pilote non plus.
+                fill_db_reserveflight(request)
         else :
             #l'utilisateur est déjà listé sur le vol
             return render_template("Viewflights.html", userListedAlready = True)
 
-        return redirect(url_for("LandingPage"))
+        return redirect(url_for("profile"))
     else :
         return render_template("ReserveFlightPage.html", session = session, flight = get_flight_info(idVol), airports = get_airports() )
+    
+@app.route('/resaconfirm/<idVol>/<idPassager>', methods = ["GET"])
+def resaconfirm(idVol,idPassager):
+    confirm_passenger(idVol,idPassager)
+
+    return redirect(url_for('profile'))
+
+@app.route('/cancelresa/<idVol>/<idPassager>', methods = ["GET"])
+def resacancel(idVol,idPassager):
+    cancel_passenger(idVol,idPassager)
+
+    return redirect(url_for('profile'))
 
 @app.route('/editflight', methods = ["POST"])
 def editflight():
@@ -478,7 +542,6 @@ def cancelflight(idVol,idUser):
 '''
 Fin de la gestion des routes
 '''
-
 
 if __name__ == '__main__':
     app.run(debug=True)

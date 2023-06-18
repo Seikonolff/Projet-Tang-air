@@ -86,6 +86,7 @@ cursor.execute('''
         dureeVol REAL,
         dateDuVol DATE,
         heureDecollage REAL,
+        statutVol TEXT,
         FOREIGN KEY (idUser) REFERENCES Pilote(idUser),
         FOREIGN KEY (idAerodromeDepart) REFERENCES Aerodrome(idAerodrome),
         FOREIGN KEY (idAerodromeArrive) REFERENCES Aerodrome(idAerodrome),
@@ -147,6 +148,7 @@ cursor.execute('''
         idUser INTEGER,
         idVol INTEGER,
         prixPayé REAL,
+        statutReservation TEXT,
         FOREIGN KEY (idUser) REFERENCES User(idUser),
         FOREIGN KEY (idVol) REFERENCES Vol(idVol)
     )
@@ -159,6 +161,15 @@ cursor.execute('''
     FROM User
     JOIN Pilote ON User.idUser = Pilote.idUser
     JOIN Vol ON User.idUser = Vol.idUser
+    ''')
+
+# Création de la vue "Passagers" entre User et Vol grâce à la table EtrePassager
+cursor.execute('''
+    CREATE VIEW Passagers AS
+    SELECT User.idUser, User.nom, User.prenom, User.imageProfile, Vol.idVol, EtrePassager.prixPayé, EtrePassager.statutReservation
+    FROM EtrePassager
+    JOIN User ON User.idUser = EtrePassager.idUser
+    JOIN Vol ON EtrePassager.idVol = Vol.idVol
     ''')
 
 # Enregistrement des modifications et fermeture de la connexion

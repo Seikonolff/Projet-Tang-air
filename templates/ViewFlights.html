@@ -51,31 +51,58 @@
   <div class="row">
     {% for flight in flights %}
       <div class="col-md-6">
-        <div class="flight-card">
-          <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-          <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-          <p><strong>Date :</strong> {{flight[12]}}</p>
-          <p><strong>Heure de décollage :</strong> x</p>
-          <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
-          <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
-          <div class="pilot-info">
-            <img src="{{flight[2]}}" alt="Photo de profil du pilote">
-            <div>
-              <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
-              <p><strong>Note :</strong> {{flight[3]}}</p>
+        {% if flight[7] == 0 %} <!-- Le vol est complet-->
+          <div class="flight-card">
+            <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+            <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+            <p><strong>Date :</strong> {{flight[12]}}</p>
+            <p><strong>Heure de décollage :</strong> x</p>
+            <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+            <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+            <div class="pilot-info">
+              <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+              <div>
+                <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+                <p><strong>Note :</strong> {{flight[3]}}</p>
+              </div>
+            </div>
+            <div style="clear: both;">
+              <h2 class="price">Complet</h2>
+              <form method="POST" action="./reserveflight/{{flight[13]}}">
+                <input type="hidden" name="idUser" value = "{{session['idUser']}}">
+                <input type="hidden" name="idVol" value = "{{flight[13]}}">
+                <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
+                <button type="submit" class="reservation-btn" disabled> Réserver </button>
+              </form>
             </div>
           </div>
-          <div style="clear: both;">
-            <h2 class="price">{{flight[10]}}€/pax</h2>
-            <form method="POST" action="./reserveflight/{{flight[13]}}">
-              <input type="hidden" name="idUser" value = "{{session['idUser']}}">
-              <input type="hidden" name="idVol" value = "{{flight[13]}}">
-              <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
-              <button type="submit" class="reservation-btn"> Réserver </button>
-            </form>
+        {% else %} <!-- Le vol n'est pas complet-->
+          <div class="flight-card">
+            <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+            <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+            <p><strong>Date :</strong> {{flight[12]}}</p>
+            <p><strong>Heure de décollage :</strong> x</p>
+            <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+            <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+            <div class="pilot-info">
+              <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+              <div>
+                <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+                <p><strong>Note :</strong> {{flight[3]}}</p>
+              </div>
+            </div>
+            <div style="clear: both;">
+              <h2 class="price">{{flight[10]}}€/pax</h2>
+              <form method="POST" action="./reserveflight/{{flight[13]}}">
+                <input type="hidden" name="idUser" value = "{{session['idUser']}}">
+                <input type="hidden" name="idVol" value = "{{flight[13]}}">
+                <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
+                <button type="submit" class="reservation-btn"> Réserver </button>
+              </form>
+            </div>
           </div>
-        </div>
       </div>
+      {% endif %}
     {% endfor %}
   </div>
 </div>
