@@ -16,7 +16,7 @@
           <input type="hidden" name="idUser" value="{{session['idUser']}}">
           <div class="mb-3" style="padding-top: 30px;">
             <label for="idAirport" class="form-label">Departure</label>
-            <select id="idAirport" name="aerodromeDepart" class="form-control form-control-sm">
+            <select id="idAirport" name="aerodromeDepart" class="form-control form-control-sm" required>
               <option selected></option>
               {% for airport in airports %}
                 <option value ="{{airport[0]}}">{{airport[1]}}</option>
@@ -27,7 +27,7 @@
   
           <div class="mb-3">
             <label for="idAirport" class="form-label">Destination</label>
-            <select id="idAirport" name="aerodromeArrive" class="form-control form-control-sm">
+            <select id="idAirport" name="aerodromeArrive" class="form-control form-control-sm" required> 
               <option selected></option>
               {% for airport in airports %}
                 <option value ="{{airport[0]}}">{{airport[1]}}</option>
@@ -47,17 +47,17 @@
   
           <div class="form-group">
             <label for="Pax">Number of passagers, excluding pilot :</label>
-            <input type="number" name="passagerMax" class="form-control" id="Pax">
+            <input type="number" name="passagerMax" class="form-control" id="Pax" min = 1 max = 3 required>
           </div>
   
           <div class="form-group">
             <label for="date">Date :</label>
-            <input type="date" name="date" class="form-control" id="date">
+            <input type="date" name="date" class="form-control" id="date-input" required>
           </div>
   
           <div class="form-group">
             <label for="destination">Departure time :</label>
-            <input type="time" class="form-control" id="time">
+            <input type="time" class="form-control" id="time" required>
           </div>
   
           <div class="form-group">
@@ -67,7 +67,7 @@
   
           <div class="form-group">
             <label for="price">Price :</label>
-            <input type="number" name="prixTotalIndicatif" class="form-control" id="price" placeholder="Flight price">
+            <input type="number" name="prixTotalIndicatif" class="form-control" id="price" placeholder="Flight price" required>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary btn-lg btn-block">Create your flight</button>
@@ -78,5 +78,13 @@
     </div>
   </div>
 
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script>
+    // Récupérer la date d'aujourd'hui
+    var today = new Date().toISOString().split('T')[0];
+
+    // Définir la valeur de l'attribut min de l'élément input
+    document.getElementById('date-input').setAttribute('min', today);
+</script>
+
+  {% endblock %}

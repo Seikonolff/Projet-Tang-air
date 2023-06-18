@@ -20,31 +20,31 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="nom">Last name</label>
-          <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory">
+          <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory" required>
         </div>
 
         <div class="form-group col-md-6">
           <label for="prenom">First Name</label>
-          <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric">
+          <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric" required>
         </div>
       </div>  
 
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="dateNaissance">Date of birth</label>
-          <input type="date" class="form-control form-control-lg" id="dateNaissance" name= "dateNaissance" placeholder="25/02/2001">
+          <input type="date" class="form-control form-control-lg" id="dateDeNaissance" name= "dateDeNaissance" placeholder="25/02/2001" required>
         </div>
 
         <div class="form-group col-md-6">
           <label for="adresse">Mail adress</label>
-          <input type="email" class="form-control form-control-lg" id="adresse" name="adresseMail" placeholder="loveTanguy@gmail.com">
+          <input type="email" class="form-control form-control-lg" id="adresseMail" name="adresseMail" placeholder="loveTanguy@gmail.com" required>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="numeroTelephone">Phone Number</label>
-          <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69">
+          <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69" required>
         </div>
       </div>
 
@@ -70,12 +70,12 @@
     
       <div class="form-group">
         <label for="motdepasse">Password</label>
-        <input type="password" class="form-control form-control-lg" id="motdepasse" name="motdepasse" placeholder="Lacatapulte-Irlandaise3">
+        <input type="password" class="form-control form-control-lg" id="motdepasse" name="motdepasse" placeholder="Lacatapulte-Irlandaise3" required>
       </div>
 
       <div class="form-group">
         <label for="motdepasse2">Confirm Password</label>
-        <input type="password" class="form-control form-control-lg" id="motdepasse2" placeholder="Lacatapulte-Irlandaise3">
+        <input type="password" class="form-control form-control-lg" id="motdepasse2" placeholder="Lacatapulte-Irlandaise3" required>
         <small class="text-danger" id="passwordError" style="display: none;">Different password, please try again.</small>
       </div>
       
@@ -91,47 +91,83 @@
         </div>
         <div class="form-group col-md-4">
           <label class="form-label" for="customFile">Profile Picture</label>
-          <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" />
+          <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" required />
           <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
         </div>
 
         <div class="form-group col-md-4">
           <label class="form-label" for="customFile">School certificate</label>
-          <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" />
+          <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" required />
           <small id="fileError" class="text-danger" style="display: none;">Please choose a .pdf file.</small>
         </div>
+        <div class="form-group">
+          <label for=description>Profile Description</label>
+          <textarea class="form-control form-control-lg" id="description" name ="description" rows="3"></textarea>
         </div>
-          <div class="form-group">
-            <label for=description>Profile Description</label>
-            <textarea class="form-control form-control-lg" id="description" name ="description" rows="3"></textarea>
-          </div>
+        <div class ="form-group col-md-4">
+          <input class="form-check-input" type="checkbox" value="" id="agreeConditions" required>
+          <label class="form-check-label" for="flexCheckDefault">
+            Agree to conditions
+          </label>
+        </div>
 
       <div class="bottom-space">
 
-    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
-    </form> 
+    <button type="submit" class="btn btn-primary btn-lg btn-block" id="signup-button" disabled>Sign-up</button>
+  </form> 
+</div>
 
-    <body class="bottom-space">
-    </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+<script>
+  // Récupérer les références aux éléments des inputs mot de passe
+  const passwordInput = document.getElementById('motdepasse');
+  const confirmPasswordInput = document.getElementById('motdepasse2');
+  const passwordError = document.getElementById('passwordError');
+  // Fonction pour vérifier l'état des champs et activer/désactiver le bouton
+  function checkFormValidity() {
+    var nom = document.getElementById('nom').value;
+    var prenom = document.getElementById('prenom').value;
+    var dateDeNaissance = document.getElementById('dateDeNaissance').value;
+    var adresseMail = document.getElementById('adresseMail').value;
+    var numeroTelephone = document.getElementById('numeroTelephone').value;
+    var motdepasse = document.getElementById('motdepasse').value;
+    var motdepasse = document.getElementById('motdepasse2').value;
+    var profilePicture = document.getElementById('profilePicture').value;
+    var certificat = document.getElementById('certificat').value;
+    var agreeConditions = document.getElementById('agreeConditions').checked;
+    var signupButton = document.getElementById('signup-button');
+
+  // Ajouter un gestionnaire d'événements pour vérifier les mots de passe et afficher l'information à l'utilisateur
+  confirmPasswordInput.addEventListener('input', function() {
+    if (confirmPasswordInput.value !== passwordInput.value) {
+      passwordError.style.display = 'block';
+      } else {
+      passwordError.style.display = 'none';
+      }
+    });
 
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    if (nom && prenom && dateDeNaissance && adresseMail && numeroTelephone && motdepasse && profilePicture && certificat && agreeConditions && (confirmPasswordInput.value == passwordInput.value)) {
+      signupButton.disabled = false;
+    } else {
+      signupButton.disabled = true;
+    }
+  }
 
-    <script>
-    // Récupérer les références aux éléments de formulaire
-    const passwordInput = document.getElementById('motdepasse');
-    const confirmPasswordInput = document.getElementById('motdepasse2');
-    const passwordError = document.getElementById('passwordError');
+  // Écouteurs d'événements pour vérifier l'état des champs à chaque modification
+  document.getElementById('nom').addEventListener('input', checkFormValidity);
+  document.getElementById('prenom').addEventListener('input', checkFormValidity);
+  document.getElementById('dateDeNaissance').addEventListener('input', checkFormValidity);
+  document.getElementById('adresseMail').addEventListener('input', checkFormValidity);
+  document.getElementById('numeroTelephone').addEventListener('input', checkFormValidity);
+  document.getElementById('motdepasse').addEventListener('input', checkFormValidity);
+  document.getElementById('motdepasse2').addEventListener('input', checkFormValidity);
+  document.getElementById('profilePicture').addEventListener('input', checkFormValidity);
+  document.getElementById('certificat').addEventListener('input', checkFormValidity);
+  document.getElementById('agreeConditions').addEventListener('change', checkFormValidity);
+</script>
     
-    // Ajouter un gestionnaire d'événements pour vérifier les mots de passe
-      confirmPasswordInput.addEventListener('input', function() {
-          if (confirmPasswordInput.value !== passwordInput.value) {
-            passwordError.style.display = 'block';
-          } else {
-            passwordError.style.display = 'none';
-          }
-        });
-    </script>
   <!-- Alerte l'utilisateur que la pp doit être .png ou .jpg -->
     <script>
         const fileInput = document.getElementById('customFile');
@@ -198,5 +234,3 @@ fileInput.addEventListener('change', function() {
     }
   </script>
 {% endblock %}
-
-

@@ -464,13 +464,18 @@ def logout():
     session.clear()
     return redirect(url_for('LandingPage'))
 
-@app.route('/search/<airport>', methods=["GET", "POST"])
-def search(airport):
+@app.route('/search', methods=["GET", "POST"])
+def search():
     if request.method == "POST" :
         airports = get_airports()
         flights = get_flights(request)
         return render_template("ViewFlights.html", flights = flights, airports = airports)
     else :
+
+        return render_template("LandingPage.html")
+    
+@app.route('/searchmap/<airport>', methods=["GET"])
+def searchmap(airport):
         airports = get_airports()
         flights = get_flights_frommap(airport)
         return render_template("ViewFlights.html", flights = flights, airports = airports)
