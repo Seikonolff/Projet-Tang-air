@@ -250,7 +250,7 @@ def get_airports():
     conn = get_db()
     cursor = conn.cursor()
 
-    query = "SELECT idAerodrome, nom FROM Aerodrome"
+    query = "SELECT * FROM Aerodrome"
     airports = cursor.execute(query).fetchall()
 
     return airports
@@ -415,9 +415,9 @@ Début de la gestion des routes
 @app.route('/')
 def LandingPage():
     if 'identifiant' in session :
-        return render_template("LandingPage.html", session=session)
+        return render_template("LandingPage.html", session=session, airports = get_airports())
     else :
-        return render_template("LandingPage.html")
+        return render_template("LandingPage.html", airports = get_airports())
 
 @app.route('/signup', methods=['GET','POST'])
 def signup():
@@ -539,6 +539,7 @@ def cancelflight(idVol,idUser):
     user_cancelflight(idUser,idVol)
 
     return redirect(url_for("profile"))
+
 '''
 Fin de la gestion des routes
 '''
