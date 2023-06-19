@@ -284,7 +284,7 @@ h3 {
     <hr>
     <h5> Archived flights</h5>
     <hr>
-    <!-- Ici sont créées les cartes des vols archivés ou le user était passager et/ou pilote-->
+    <!-- Ici sont créées les cartes des vols archivés ou le user était passager-->
     <div class="row">
       {% for flight in session['flights'] %}
         {% if flight[15] == 'archived' %}
@@ -363,8 +363,85 @@ h3 {
           </div>
         {% endif %}
       {% endfor %}
+      <!-- Ici sont créées les cartes des vols archivés ou le user était pilote-->
+      {% for flight in session['flightsPilot'] %}
+        {% if flight[15] == 'archived' %}
+          <div class="col-md-6">
+            <div class="card reservation-card">
+              <div class="card-body">
+                <span class="settings-icon">
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#infovol-{{flight[13]}}">
+                    <i class="fas fa-circle-info"></i>
+                  </a>
+                </span>
+                <h6 class="card-title">Vol n°{{flight[13]}}</h6>
+                <div class = "row text-center">
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-departure"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-arrival"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col text-center">
+                    {{flight[11]}}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong> Pilote : </strong> {{flight[0]}} {{flight[1]}}</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><i class="fa-solid fa-calendar"></i> {{flight[12]}}</p>
+                  </div>
+                </div>
+                <div class="container text-center">
+                  <div class="row passenger-images">
+                    {% for subpassager in session['passengersPilot'] %}
+                      {% for passager in subpassager %}
+                        {% if passager[4] == flight[13] %}
+                          <div class="col">
+                            <a data-bs-toggle="modal" data-bs-target="#noter-{{passager[0]}}"><img src="{{passager[3]}}" class = "passenger-img"></img></a>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                    <div class="col">
+                      <a><img src="{{flight[2]}}" class = "passenger-img-pilot"></img></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
-    {{session['flights']}}
 
   </div>
 </div>
@@ -621,6 +698,43 @@ h3 {
                 <div class="modal-footer">
                   {% if passager[0] == session['idUser'] %}<h4> Désolé... Vous ne pouvez pas voter pour vous même. Mais c'est tentant.</h4>{% endif %}
                   <button type="submit" class = "btn btn-primary" {% if passager[0] == session['idUser'] %} disabled {% endif %}</button> Envoyer </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+{% for flight in session['flightsPilot'] %}
+  {% if flight[15] == 'archived' %}
+  <!-- On créer le modal pour noter les passagers lorsqu'on est pilote-->
+    {% for subpassager in session['passengersPilot'] %}
+      {% for passager in subpassager %}
+          <div class="modal fade" id="noter-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Notation du copain <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form method="POST" action="/note">
+                    <div class="mb-3">
+                      <label for="note" class="form-label">Note :</label>
+                      <input type="number" class="form-control" min="0" max = "5" name="note">
+                    </div>
+                    <div class="form-group">
+                      <label for=commentaire>Commentaire : </label>
+                      <textarea class="form-control form-control-lg" id="description" name ="commentaire" rows="2"></textarea>
+                    </div>
+                    <input type="hidden" value="{{passager[0]}}" name="noté">
+                    <input type="hidden" value="{{flight[13]}}" name="idVol">
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class = "btn btn-primary">Envoyer</button>
                   </form>
                 </div>
               </div>
