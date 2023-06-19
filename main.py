@@ -152,9 +152,12 @@ def open_session(eMail):
 def calcul_note(idUser,statut):
     conn = get_db()
     cursor = conn.cursor()
+    print(idUser)
 
     query = "SELECT note FROM Notation WHERE noté = ? AND statutDuNoté = ?"
     results = cursor.execute(query,(idUser,statut)).fetchall()
+
+    moyenne = None
     
     if results != [] :
         # Extraction des notes individuelles
@@ -162,9 +165,18 @@ def calcul_note(idUser,statut):
 
         # Calcul de la moyenne
         moyenne = sum(notes) / len(notes)
-        return moyenne
+
+    #On rentre la note dans la base de donnée
+    if statut == 'passager':
+        query = "UPDATE User SET moyNotePassager = ? WHERE idUser = ?"
     
-    return
+    else :
+        query = "UPDATE Pilote SET moyNotePilote = ? WHERE idUser = ?"
+
+    cursor.execute(query,(moyenne,idUser))
+    conn.commit()
+
+    return moyenne
 
 def get_promo():
     conn = get_db()
@@ -210,16 +222,15 @@ def get_flights(request):
     
     else :
         # On prend par défaut la date d'aujourd'hui
-        flights_query += " AND dateDuVol > ?"
+        flights_query += " AND dateDuVol >= ?"
         params.append(datetime.now().date())
 
     if placesRestantes :
         flights_query += " AND placesRestantes >= ?"
         params.append(placesRestantes)
 
+    flights_query += " ORDER BY dateDuVol"
     flights = cursor.execute(flights_query,tuple(params)).fetchall()
-
-    print(flights)
 
     return flights
 
@@ -247,7 +258,7 @@ def get_user_flights(idUser,pilot):
 
     if pilot :
         #On récupère les infos des vols du pilote
-        query = "SELECT * FROM User_Pilote_Vol WHERE idUser = ?" 
+        query = "SELECT * FROM User_Pilote_Vol WHERE idUser = ? ORDER BY dateDuVol" 
         flights = cursor.execute(query, (idUser,)).fetchall()
 
         return  flights
@@ -274,13 +285,12 @@ def get_user_fellowpassenger(flights):
     cursor = conn.cursor()
     passagers = []
 
-    print(flights)
 
     for flight in flights :
         query = "SELECT * FROM Passagers WHERE idVol = ? "
         temp = cursor.execute(query,(flight[13],)).fetchall()
         passagers.append(temp)
-        print(passagers)
+        #print(passagers)
     
     return passagers
         
@@ -307,6 +317,8 @@ def fill_db_newflight(request) :
     dureeVol = request.form["dureeVol"]
     date = request.form["date"]
     statutVol = "planing"
+
+    print(date)
 
     query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol,statutVol) VALUES (?,?,?,?,?,?,?,?,?,?)"
     cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date,statutVol))
@@ -364,7 +376,6 @@ def user_editflight(request):
     prixParPassagers = round(float(prixTotalIndicatif)/(int(passagerMax) + 1),2)
     placesRestantesBefore = request.form['placesRestantesBefore']
     passagerMaxBefore = request.form['passagermaxBefore']
-    print(placesRestantesBefore)
     placesRestantes = int(placesRestantesBefore) + (int(passagerMax) - int(passagerMaxBefore))
     if(placesRestantes < 0) :
         placesRestantes = 0
