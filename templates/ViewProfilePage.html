@@ -133,13 +133,57 @@ h3 {
                   </a>
                 </span>
                 <h6 class="card-title">Vol n°{{flight[13]}}</h6>
-                <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-                <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-                <p class="card-text"><strong>Pilot:</strong> {{flight[0]}} {{flight[1]}}</p>
-                <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
-                <p class="card-text"><strong>Date:</strong> {{flight[12]}}</p>
-                <p class ="card-text"><strong>Statut de la réservation : </strong>{% for subpassager in session['passengers'] %}{% for passager in subpassager %} {% if passager[0] == session['idUser'] and passager[4] == flight[13] %} {% if passager[6] == 'confirmed' %}<span style="color: darkgreen;">Confirmée </span> {%else%} <span style="color: rgb(255, 166, 0);">En attente</span>{%endif%}{%endif%}{%endfor%}{%endfor%}</p>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpassager-{{flight[13]}}">
+                <div class = "row text-center">
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-departure"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-arrival"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col text-center">
+                    {{flight[11]}}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong> Pilote : </strong> {{flight[0]}} {{flight[1]}}</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><i class="fa-solid fa-calendar"></i> {{flight[12]}}</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class ="card-text"><strong>Statut de la réservation : </strong>{% for subpassager in session['passengers'] %}{% for passager in subpassager %} {% if passager[0] == session['idUser'] and passager[4] == flight[13] %} {% if passager[6] == 'confirmed' %}<span style="color: darkgreen;">Confirmée </span><i class="fa-solid fa-square-check" style="color: darkgreen;"></i> {%else%} <span style="color: rgb(255, 166, 0);">En attente  </span><i class="fa-solid fa-clock"></i>{%endif%}{%endif%}{%endfor%}{%endfor%}</p>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#annulervolpassager-{{flight[13]}}">
                   Annuler
                 </button>
               </div>
@@ -147,9 +191,9 @@ h3 {
           </div>
         {% endif %}
       {% endfor %}
-      {% if not session['flights'] %}
-        <h3><span style = "color:  rgb(59, 129, 250);"> Vous n'êtes enregistré sur aucun vols...</span></h3>  <!-- le dico flight n'est plus vide avec les vols archivés... A voir comment je pourrais le faire revenir-->
-      {% endif %}
+        {% if not session['flights'] %}
+          <h3><span style = "color:  rgb(59, 129, 250);"> Vous n'êtes enregistré sur aucun vols...</span></h3>  <!-- le dico flight n'est plus vide avec les vols archivés... A voir comment je pourrais le faire revenir-->
+        {% endif %}
     </div>
     
     {%  if session['isPilot'] %}
@@ -157,24 +201,64 @@ h3 {
     <h5> Flights Management</h5>
     <hr>
     <div class="row">
-      {% for flightPilot in session['flightsPilot'] %}
-        {% if flightPilot[15] != 'archived' %}
+      {% for flight in session['flightsPilot'] %}
+        {% if flight[15] != 'archived' %}
           <div class="col-md-6">
             <div class="card reservation-card">
               <div class="card-body">
-                <h6 class="card-title">Vol n°{{flightPilot[13]}}</h6>
-                <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flightPilot[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-                <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flightPilot[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-                <p class="card-text"><strong>Pilot:</strong> {{flightPilot[0]}} {{flightPilot[1]}}</p>
-                <p class="card-text"><strong>Aircraft:</strong> DR-400</p><!-- A remplacer en dynamique-->
-                <p class="card-text"><strong>Date:</strong> {{flightPilot[12]}}</p>
+                <h6 class="card-title">Vol n°{{flight[13]}}</h6>
+                <div class = "row text-center">
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-departure"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-arrival"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col text-center">
+                    {{flight[11]}}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong> Pilote : </strong> {{flight[0]}} {{flight[1]}}</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><i class="fa-solid fa-calendar"></i> {{flight[12]}}</p>
+                  </div>
+                </div>
                   <div class="container text-center">
                     <div class="row passenger-images">
                       {% for subpassager in session['passengersPilot'] %}
                         {% for passager in subpassager %}
-                          {% if passager[4] == flightPilot[13] %}
+                          {% if passager[4] == flight[13] %}
                             <div class="col">
-                              <a data-bs-toggle="modal" data-bs-target="#confirmerpassager-{{flightPilot[13]}}-{{passager[0]}}"><img src="{{passager[3]}}" {% if passager[6] =='pending' %} class = "passenger-img-pending" {% else %} class = "passenger-img" {% endif %}></img></a>
+                              <a data-bs-toggle="modal" data-bs-target="#confirmerpassager-{{flight[13]}}-{{passager[0]}}"><img src="{{passager[3]}}" {% if passager[6] =='pending' %} class = "passenger-img-pending" {% else %} class = "passenger-img" {% endif %}></img></a>
                             </div>
                           {% endif %}
                         {% endfor %}
@@ -182,10 +266,10 @@ h3 {
                     </div>
                   </div>
                 <div class = "management-actions">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifiervol-{{flightPilot[13]}}">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifiervol-{{flight[13]}}">
                     Modifier
                   </button>
-                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpilote-{{flightPilot[13]}}">
+                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpilote-{{flight[13]}}">
                     Annuler
                   </button>
                 </div>
@@ -213,11 +297,51 @@ h3 {
                   </a>
                 </span>
                 <h6 class="card-title">Vol n°{{flight[13]}}</h6>
-                <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-                <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-                <p class="card-text"><strong>Pilot:</strong> {{flight[0]}} {{flight[1]}}</p>
-                <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
-                <p class="card-text"><strong>Date:</strong> {{flight[12]}}</p>
+                <div class = "row text-center">
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-departure"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-solid fa-plane-arrival"></i>
+                  </div>
+                  <div class = "col">
+                    <i class="fa-sharp fa-solid fa-circle"></i>
+                  </div>
+                </div>
+                <div class="row text-center">
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col text-center">
+                    {{flight[11]}}
+                  </div>
+                  <div class = "col"></div>
+                  <div class = "col">
+                    {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong> Pilote : </strong> {{flight[0]}} {{flight[1]}}</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class ="col">
+                    <p class="card-text"><i class="fa-solid fa-calendar"></i> {{flight[12]}}</p>
+                  </div>
+                </div>
                 <div class="container text-center">
                   <div class="row passenger-images">
                     {% for subpassager in session['passengers'] %}
@@ -240,6 +364,7 @@ h3 {
         {% endif %}
       {% endfor %}
     </div>
+    {{session['flights']}}
 
   </div>
 </div>

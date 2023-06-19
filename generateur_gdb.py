@@ -157,7 +157,7 @@ cursor.execute('''
 # Création de la vue "User_Pilote_vol" entre Vol et User et Pilote
 cursor.execute('''
     CREATE VIEW User_Pilote_Vol AS
-    SELECT User.nom, User.prenom, User.imageProfile, Pilote.moyNotePilote, Vol.idAerodromeDepart, Vol.idAerodromeArrive, Vol.idAvion, Vol.PlacesRestantes, Vol.passagerMax, Vol.prixTotalIndicatif, Vol.prixParPassagers, Vol.dureeVol, Vol.dateDuVol, Vol.idVol, User.idUser, vol.statutVol
+    SELECT User.nom, User.prenom, User.imageProfile, Pilote.moyNotePilote, Vol.idAerodromeDepart, Vol.idAerodromeArrive, Vol.idAvion, Vol.PlacesRestantes, Vol.passagerMax, Vol.prixTotalIndicatif, Vol.prixParPassagers, Vol.dureeVol, Vol.dateDuVol, Vol.idVol, User.idUser, vol.statutVol, vol.heureDecollage
     FROM User
     JOIN Pilote ON User.idUser = Pilote.idUser
     JOIN Vol ON User.idUser = Vol.idUser

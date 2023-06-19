@@ -233,4 +233,17 @@ fileInput.addEventListener('change', function() {
         }
     }
   </script>
+  <script>
+    // Récupérer la date d'aujourd'hui
+    var today = new Date();
+
+    // Soustraire 18 ans à la date d'aujourd'hui
+    var minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+    // Formater la date dans le format ISO
+    var minDateISO = minDate.toISOString().split('T')[0];
+
+    // Définir la valeur de l'attribut min de l'élément input
+    document.getElementById('dateDeNaissance').setAttribute('max', minDateISO);
+  </script>
 {% endblock %}

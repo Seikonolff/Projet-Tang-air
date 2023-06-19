@@ -106,7 +106,7 @@ def fill_db_signup(request):
 
     
     imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
-    lienImage = './static/images/profil/'+ adresseMail
+    lienImage = '/static/images/profil/'+ adresseMail
 
     query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
     cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
@@ -191,7 +191,7 @@ def get_flights(request):
     conn = get_db()
     cursor = conn.cursor()
 
-    inputUser = request.form["inputUser"] # à mettre dans des if pour voir si c'est un pilote ou un aéroport
+    inputUser = request.form["inputUser"]
     date = request.form["date"]
     #placesRestantes = request.form["passager"]
     placesRestantes = 0
@@ -229,9 +229,10 @@ def get_flights(request):
         flights_query += " AND placesRestantes >= ?"
         params.append(placesRestantes)
 
-    flights_query += " ORDER BY dateDuVol"
+    flights_query += " AND statutVol != 'archived' ORDER BY dateDuVol"
     flights = cursor.execute(flights_query,tuple(params)).fetchall()
 
+    print(flights)
     return flights
 
 def get_flights_frommap(airport):
@@ -314,14 +315,13 @@ def fill_db_newflight(request) :
     placesRestantes = passagerMax
     prixTotalIndicatif = request.form["prixTotalIndicatif"]
     prixParPassagers = round(float(prixTotalIndicatif)/(int(passagerMax) + 1),2)
+    heureDecollage = request.form['heureDecollage']
     dureeVol = request.form["dureeVol"]
     date = request.form["date"]
     statutVol = "planing"
 
-    print(date)
-
-    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol,statutVol) VALUES (?,?,?,?,?,?,?,?,?,?)"
-    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date,statutVol))
+    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol,heureDecollage,statutVol) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date,heureDecollage,statutVol))
 
     conn.commit()
 
