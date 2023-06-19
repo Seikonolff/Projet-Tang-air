@@ -27,8 +27,9 @@
     margin: 20px;
   }
   .reservation-card {
-    width:400px; /* Anciennement 400px */
+    width:400px;
     margin-bottom: 20px;
+    
   }
   .reservation-card .passenger-img {
     width: 45px;
@@ -44,6 +45,13 @@
     border : 4px solid orange;
     margin-right: 20px;
   }
+  .reservation-card .passenger-img-pilot {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border : 4px solid rgb(211, 208, 55);
+    margin-right: 20px;
+  }
   .reservation-card .settings-icon {
     position: absolute;
     top: 10px;
@@ -53,15 +61,45 @@
   .management-actions {
     padding: 20px;
   }
+
+hr {
+      border: none; /* Supprime la bordure par défaut */
+      height: 2px; /* Définit la hauteur de la ligne */
+      background-color: black; /* Définit la couleur de la ligne */
+      margin: 20px 0; /* Marge supérieure et inférieure pour espacement */
+      width: 80%; /* Définit la longueur de la ligne */
+    }
+h3 {
+  padding: 20px;
+}
 </style>
 
+
+
 <div class="container">
+  {% if note_alreadyexists == True %}
+    <div class="alert alert-warning" role="alert">
+      Vous essayez de noter quelqu'un pour la deuxième fois. Nous aussi on aime les copains mais quand même !
+    </div>
+  {% endif %}
+
+  {% if vol_ajoute == True %}
+    <div class="alert alert-success" role="alert">
+      Votre réservation a été ajoutée ! Elle sera validée sous peu par votre pilote.
+    </div>
+  {% endif %}
+
+  {% if pilotTriesToBeisOwnFriend == True %}
+    <div class="alert alert-warning" role="alert">
+      Vous ne pouvez pas être votre seul ami ! Continuez. Vous en trouverez d'autres...
+    </div>
+  {% endif %}
   <div class="profile-card">
     <div class="card">
       <div class="card-body">
         <span class="settings-icon">
           <a type="button" data-bs-toggle="modal" data-bs-target="#modifierprofil">
-            <i class="fas fa-cog"></i> <!-- Remplacez par l'icône d'engrenage souhaitée -->
+            <i class="fas fa-cog"></i> 
           </a>
         </span>
         <div class="user-info">
@@ -80,70 +118,129 @@
   </div>
 
   <div class="reservations">
+    <hr>
     <h5>Flights Reservations</h5>
-    {% for flight in session['flights'] %}
+    <hr>
     <div class="row">
-      <div class="col-md-2">
-        <div class="card reservation-card">
-          <div class="card-body">
-            <span class="settings-icon">
-              <a type="button" data-bs-toggle="modal" data-bs-target="#infovol-{{flight[13]}}">
-                <i class="fas fa-circle-info"></i>
-              </a>
-            </span>
-            <h6 class="card-title">Vol n°{{flight[13]}}</h6>
-            <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p class="card-text"><strong>Pilot:</strong> {{flight[0]}} {{flight[1]}}</p>
-            <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
-            <p class="card-text"><strong>Date:</strong> {{flight[12]}}</p>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpassager-{{flight[13]}}">
-              Annuler
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-
-    {%  if session['isPilot'] %}
-    <h5> Flights Management</h5>
-    {% for flightPilot in session['flightsPilot'] %}
-    <div class="row">
-      <div class="col-md-2">
-        <div class="card reservation-card">
-          <div class="card-body">
-            <h6 class="card-title">Vol n°{{flightPilot[13]}}</h6>
-            <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flightPilot[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flightPilot[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p class="card-text"><strong>Pilot:</strong> {{flightPilot[0]}} {{flightPilot[1]}}</p>
-            <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
-            <p class="card-text"><strong>Date:</strong> {{flightPilot[12]}}</p>
-              <div class="container text-center">
-                <div class="row">
-                  {% for passager in session['passengersPilot'] %}
-                    {% if passager[4] == flightPilot[13] %}
-                      <div class="col">
-                        <a data-bs-toggle="modal" data-bs-target="#confirmerpassager-{{flightPilot[13]}}-{{passager[0]}}"><img src="{{passager[3]}}" {% if passager[6] =='pending' %} class = "passenger-img-pending" {% else %} class = "passenger-img" {% endif %}></img></a>
-                      </div>
-                    {% endif %}
-                  {% endfor %}
-                </div>
+      {% for flight in session['flights'] %}
+        {% if flight[15] != 'archived' %}
+          <div class="col-md-6">
+            <div class="card reservation-card">
+              <div class="card-body">
+                <span class="settings-icon">
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#infovol-{{flight[13]}}">
+                    <i class="fas fa-circle-info"></i>
+                  </a>
+                </span>
+                <h6 class="card-title">Vol n°{{flight[13]}}</h6>
+                <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p class="card-text"><strong>Pilot:</strong> {{flight[0]}} {{flight[1]}}</p>
+                <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+                <p class="card-text"><strong>Date:</strong> {{flight[12]}}</p>
+                <p class ="card-text"><strong>Statut de la réservation : </strong>{% for subpassager in session['passengers'] %}{% for passager in subpassager %} {% if passager[0] == session['idUser'] and passager[4] == flight[13] %} {% if passager[6] == 'confirmed' %}<span style="color: darkgreen;">Confirmée </span> {%else%} <span style="color: rgb(255, 166, 0);">En attente</span>{%endif%}{%endif%}{%endfor%}{%endfor%}</p>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpassager-{{flight[13]}}">
+                  Annuler
+                </button>
               </div>
-            <div class = "management-actions">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifiervol-{{flightPilot[13]}}">
-                Modifier
-              </button>
-              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpilote-{{flightPilot[13]}}">
-                Annuler
-              </button>
             </div>
           </div>
-        </div>
-      </div>
+        {% endif %}
+      {% endfor %}
+      {% if not session['flights'] %}
+        <h3><span style = "color:  rgb(59, 129, 250);"> Vous n'êtes enregistré sur aucun vols...</span></h3>  <!-- le dico flight n'est plus vide avec les vols archivés... A voir comment je pourrais le faire revenir-->
+      {% endif %}
     </div>
-    {% endfor %}
+    
+    {%  if session['isPilot'] %}
+    <hr>
+    <h5> Flights Management</h5>
+    <hr>
+    <div class="row">
+      {% for flightPilot in session['flightsPilot'] %}
+        {% if flightPilot[15] != 'archived' %}
+          <div class="col-md-6">
+            <div class="card reservation-card">
+              <div class="card-body">
+                <h6 class="card-title">Vol n°{{flightPilot[13]}}</h6>
+                <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flightPilot[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flightPilot[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p class="card-text"><strong>Pilot:</strong> {{flightPilot[0]}} {{flightPilot[1]}}</p>
+                <p class="card-text"><strong>Aircraft:</strong> DR-400</p><!-- A remplacer en dynamique-->
+                <p class="card-text"><strong>Date:</strong> {{flightPilot[12]}}</p>
+                  <div class="container text-center">
+                    <div class="row passenger-images">
+                      {% for subpassager in session['passengersPilot'] %}
+                        {% for passager in subpassager %}
+                          {% if passager[4] == flightPilot[13] %}
+                            <div class="col">
+                              <a data-bs-toggle="modal" data-bs-target="#confirmerpassager-{{flightPilot[13]}}-{{passager[0]}}"><img src="{{passager[3]}}" {% if passager[6] =='pending' %} class = "passenger-img-pending" {% else %} class = "passenger-img" {% endif %}></img></a>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                <div class = "management-actions">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifiervol-{{flightPilot[13]}}">
+                    Modifier
+                  </button>
+                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#annulervolpilote-{{flightPilot[13]}}">
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
     {% endif %}
+
+    <hr>
+    <h5> Archived flights</h5>
+    <hr>
+    <!-- Ici sont créées les cartes des vols archivés ou le user était passager et/ou pilote-->
+    <div class="row">
+      {% for flight in session['flights'] %}
+        {% if flight[15] == 'archived' %}
+          <div class="col-md-6">
+            <div class="card reservation-card">
+              <div class="card-body">
+                <span class="settings-icon">
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#infovol-{{flight[13]}}">
+                    <i class="fas fa-circle-info"></i>
+                  </a>
+                </span>
+                <h6 class="card-title">Vol n°{{flight[13]}}</h6>
+                <p class="card-text"><strong>Departure:</strong> {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p class="card-text"><strong>Destination:</strong> {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p class="card-text"><strong>Pilot:</strong> {{flight[0]}} {{flight[1]}}</p>
+                <p class="card-text"><strong>Aircraft:</strong> DR-400</p>
+                <p class="card-text"><strong>Date:</strong> {{flight[12]}}</p>
+                <div class="container text-center">
+                  <div class="row passenger-images">
+                    {% for subpassager in session['passengers'] %}
+                      {% for passager in subpassager %}
+                        {% if passager[4] == flight[13] %}
+                          <div class="col">
+                            <a data-bs-toggle="modal" data-bs-target="#noter-{{passager[0]}}"><img src="{{passager[3]}}" class = "passenger-img"></img></a>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                    <div class="col">
+                      <a data-bs-toggle="modal" data-bs-target="#noter-{{flight[14]}}"><img src="{{flight[2]}}" class = "passenger-img-pilot"></img></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
   </div>
 </div>
 
@@ -277,7 +374,7 @@
       
               <div class="form-group">
                 <label for="date">Date :</label>
-                <input type="date" name="date" class="form-control" id="date" value="{{flight[12]}}">
+                <input type="date" name="date" class="form-control" id="date-input" value="{{flight[12]}}">
               </div>
       
               <div class="form-group">
@@ -287,7 +384,7 @@
       
               <div class="form-group">
                 <label for="duree">Flight duration :</label>
-                <input type="time" name="dureeVol" class="form-control" id="duree" value = "{{flight[11]}}">
+                <input type="time" name="dureeVol" class="form-control" id="duree" value = "{{flight[11]}}" step="900">
               </div>
       
               <div class="form-group">
@@ -325,51 +422,98 @@
       </div>
     </div>
 
-    {% for passager in session['passengersPilot'] %}
-      {% if passager[4] == flight[13] %}
-        {%if passager[6] == 'pending' %}
-          <!--confirmer passager Modal -->
-          <div class="modal fade" id="confirmerpassager-{{flight[13]}}-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Confirmation du passager <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>Confirmer ce passager ?</p>
-                </div>
-                <div class="modal-footer">
-                  <a href=".//resaconfirm/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-success">Confirmer</button></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% else %}
-          <!--confirmer passager Modal -->
-          <div class="modal fade" id="confirmerpassager-{{flight[13]}}-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">gestion du passager <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>Annuler la réservation de ce passager ?</p>
-                </div>
-                <div class="modal-footer">
-                  <a href="cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
+    {% for subpassager in session['passengersPilot'] %}
+      {% for passager in subpassager %}
+        {% if passager[4] == flight[13] %}
+          {%if passager[6] == 'pending' %}
+            <!--confirmer passager Modal -->
+            <div class="modal fade" id="confirmerpassager-{{flight[13]}}-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Confirmation du passager <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Confirmer ce passager ?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href=".//resaconfirm/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-success">Confirmer</button></a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          {% else %}
+            <!--confirmer passager Modal -->
+            <div class="modal fade" id="confirmerpassager-{{flight[13]}}-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">gestion du passager <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Annuler la réservation de ce passager ?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
         {% endif %}
-      {% endif %}
+      {% endfor %}
     {% endfor %}
   {% endfor %}
 {% endif %}
 
+{% for flight in session['flights'] %}
+  {% if flight[15] == 'archived' %}
+  <!-- On créer le modal pour noter les passagers-->
+    {% for subpassager in session['passengers'] %}
+      {% for passager in subpassager %}
+          <div class="modal fade" id="noter-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Notation du copain <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form method="POST" action="/note">
+                    <div class="mb-3">
+                      <label for="note" class="form-label">Note :</label>
+                      <input type="number" class="form-control" min="0" max = "5" name="note">
+                    </div>
+                    <div class="form-group">
+                      <label for=commentaire>Commentaire : </label>
+                      <textarea class="form-control form-control-lg" id="description" name ="commentaire" rows="2"></textarea>
+                    </div>
+                    <input type="hidden" value="{{passager[0]}}" name="noté">
+                    <input type="hidden" value="{{flight[13]}}" name="idVol">
+                </div>
+                <div class="modal-footer">
+                  {% if passager[0] == session['idUser'] %}<h4> Désolé... Vous ne pouvez pas voter pour vous même. Mais c'est tentant.</h4>{% endif %}
+                  <button type="submit" class = "btn btn-primary" {% if passager[0] == session['idUser'] %} disabled {% endif %}</button> Envoyer </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- Importation de la bibliothèque Font Awesome -->
+<script>
+  // Récupérer la date d'aujourd'hui
+  var today = new Date().toISOString().split('T')[0];
+
+  // Définir la valeur de l'attribut min de l'élément input
+  document.getElementById('date-input').setAttribute('min', today);
+</script>
 
 {% endblock %}

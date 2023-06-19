@@ -10,6 +10,11 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
+            margin-right: 10px;
+        }
+        .nav-item.nav-link.notifications.addflight {
+            margin-top: 11px;
+            margin-right: 10px;
         }
     </style>
     <body>
@@ -27,7 +32,7 @@
                         <ul class="navbar-nav">
                             {% if session['adresseMail'] is defined %}
 					        {% if session['isPilot'] == True %}
-						        <li><a href="./addflight" class="nav-item nav-link notifications"><i class="fas fa-light fa-circle-plus"></i> Add flight</a></li>
+						        <li><a href="./addflight" class="nav-item nav-link notifications addflight"><i class="fas fa-light fa-circle-plus"></i> Add flight</a></li>
 					        {% endif %}
                             <!--<a href="#" class="nav-item nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">1</span></a>-->
                             <!--<a href="#" class="nav-item nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">1</span></a></a>-->

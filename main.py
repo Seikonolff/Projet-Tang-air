@@ -1,10 +1,14 @@
 from flask import Flask, g, render_template, request, redirect, url_for, abort,session
+from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime, timedelta
 import sqlite3
 import os
 
 UPLOAD_FOLDER = "C:\Projet-Tang-air\static\images\profil"
 
 app = Flask(__name__)
+scheduler = BackgroundScheduler()
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -21,6 +25,23 @@ def close_db(e=None):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
+def archive_flights():
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    one_day = timedelta(days=1)
+
+    # On récupère la date actuelle
+    current_date = datetime.now().date()
+    previous_day = current_date - one_day
+
+    query = "UPDATE Vol SET statutVol = 'archived' WHERE dateDuVol < ?"
+    cursor.execute(query,(previous_day,))
+
+    conn.commit()
+
+    return
 
 def check_user_exists(eMail):
     conn = get_db()
@@ -122,7 +143,7 @@ def open_session(eMail):
         session['isPilot'] = True
         session['numeroLicense'] = result2[1]
         session['nbHeureTotal'] = result2[2]
-        session['moyNotePilote'] = calcul_note(idUser, "pilote")
+        session['moyNotePilote'] = calcul_note(idUser, "pilote") #il faut aussi mettre la note dans la db qql part. au moment ou le user se logout ? 
         session['flightsPilot'] = get_user_flights(idUser, pilot = True)
     
     return session
@@ -186,6 +207,11 @@ def get_flights(request):
     if date :
         flights_query += " AND dateDuVol = ?"
         params.append(date)
+    
+    else :
+        # On prend par défaut la date d'aujourd'hui
+        flights_query += " AND dateDuVol > ?"
+        params.append(datetime.now().date())
 
     if placesRestantes :
         flights_query += " AND placesRestantes >= ?"
@@ -193,7 +219,7 @@ def get_flights(request):
 
     flights = cursor.execute(flights_query,tuple(params)).fetchall()
 
-    #print(flights)
+    print(flights)
 
     return flights
 
@@ -248,10 +274,13 @@ def get_user_fellowpassenger(flights):
     cursor = conn.cursor()
     passagers = []
 
-    for flight in flights :
+    print(flights)
 
+    for flight in flights :
         query = "SELECT * FROM Passagers WHERE idVol = ? "
-        passagers = cursor.execute(query,(flight[13],)).fetchall()
+        temp = cursor.execute(query,(flight[13],)).fetchall()
+        passagers.append(temp)
+        print(passagers)
     
     return passagers
         
@@ -356,6 +385,10 @@ def user_cancelflight(idUser,idVol) :
         query = "DELETE FROM Vol Where idUser = ? AND idVol = ?"
         cursor.execute(query,(idUser,idVol))
 
+        #on supprime les passagers du vol
+        query = "DELETE FROM EtrePassager Where idVol = ?"
+        cursor.execute(query,(idVol,))
+
     else :
         query = "DELETE FROM EtrePassager WHERE idUser = ? AND idVol = ?"
         cursor.execute(query,(idUser,idVol))
@@ -391,6 +424,23 @@ def user_notflying(idUser,idVol) :
         #l'utilisateur est le pilote du vol qu'il tente de réserver. Bizarre non ? 
         return False
     
+def note_alreadyexists(request) :
+    conn = get_db()
+    cursor = conn.cursor()
+
+    noteur = session['idUser']
+    noté = request.form['noté']
+    idVol = request.form['idVol']
+
+    query = "SELECT * FROM Notation WHERE noteur = ? AND noté = ? AND idVol = ?"
+    result = cursor.execute(query,(noteur,noté,idVol)).fetchall()
+
+    if not result :
+        return False
+    else :
+        return True
+
+    
 def confirm_passenger(idVol,idPassager) :
     conn = get_db()
     cursor = conn.cursor()
@@ -412,6 +462,29 @@ def cancel_passenger(idVol,idPassager) :
     conn.commit()
 
     return
+
+def fill_db_newnote(request) :
+    conn = get_db()
+    cursor = conn.cursor()
+
+    noteur = session['idUser']
+    noté = request.form['noté']
+    note = request.form['note']
+    commentaire = request.form['commentaire']
+    idVol = request.form['idVol']
+
+    if( user_notflying(noté,idVol) ) :
+        statutDuNoté = 'passager'
+    else :
+        statutDuNoté = 'pilote'
+
+    query = "INSERT INTO Notation (noteur,noté,idVol,note,commentaire,statutDuNoté) VALUES (?,?,?,?,?,?)"
+    cursor.execute(query,(noteur,noté,note,commentaire,statutDuNoté))
+
+    conn.commit()
+
+    return
+
 
 '''
 Fin définition des fonctions 
@@ -487,9 +560,8 @@ def profile():
     session['flightsPilot'] = get_user_flights(session['idUser'],pilot=True)
 
     #A l'aide des infos on récupère les Passagers avec qui on voyage
-    session['Passengers'] = get_user_fellowpassenger(session['flights'])
+    session['passengers'] = get_user_fellowpassenger(session['flights'])
     session['passengersPilot'] = get_user_fellowpassenger(session['flightsPilot'])
-
 
     return render_template("ViewProfilePage.html", session = session, airports = get_airports())
     
@@ -521,14 +593,20 @@ def reserveflight(idVol):
     if request.method == "POST" :
         if user_not_listed(session['idUser'],idVol) :
             #l'utilisateur n'est pas déjà listé sur le vol
+
             if user_notflying(session['idUser'],idVol) :
-                #l'utilisateur n'est pas le pilote non plus.
+                #l'utilisateur n'est pas le pilote non plus
                 fill_db_reserveflight(request)
+
+                return render_template("ViewProfilePage.html", vol_ajoute = True) #Le mieux serait un redirect en passant des paramètres si c'est possible
+            else :
+                #l'utilisateur tente de réserver son vol
+
+                return render_template("ViewProfilePage.html", pilotTriesToBeisOwnFriend = True)
         else :
             #l'utilisateur est déjà listé sur le vol
-            return render_template("Viewflights.html", userListedAlready = True)
+            return render_template("LandingPage.html", userListedAlready = True)
 
-        return redirect(url_for("profile"))
     else :
         return render_template("ReserveFlightPage.html", session = session, flight = get_flight_info(idVol), airports = get_airports() )
     
@@ -556,11 +634,37 @@ def cancelflight(idVol,idUser):
 
     return redirect(url_for("profile"))
 
+@app.route('/archiveflight')
+def archive() :
+    archive_flights()
+
+    return render_template('LandingPage.html')
+
+@app.route('/note', methods = ['POST'])
+def note() :
+    if note_alreadyexists(request) :
+        #La note a déjà été atribuée
+
+        return render_template("ViewProfilePage.html", note_alreadyexists = True)
+    fill_db_newnote(request)
+
+    return redirect(url_for('profile'))
+
+@app.route('/clafete')
+def clafete() :
+
+    return render_template('clafete.html')
+
 '''
 Fin de la gestion des routes
 '''
 
 if __name__ == '__main__':
+    '''scheduler.add_job(archive_flights, 'interval', minutes=1)  # Exécution toutes les 30 minutes
+    with app.app_context():
+        get_db()
+        scheduler.start()'''
+    
     app.run(debug=True)
 
 app.teardown_appcontext(close_db)

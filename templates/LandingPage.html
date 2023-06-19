@@ -111,6 +111,12 @@
     }
 </style>
 
+{% if userListedAlready == True %}
+    <div class="alert alert-warning" role="alert">
+      Vous êtes déjà listé sur ce vol.
+    </div>
+{% endif %}
+
 <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-photo">
     <div class="col-md-5 p-lg-5 mx-auto my-5">
         <h1 class="display-4 font-weight-normal"><span style="color: rgb(255, 255, 255);"><b>Volez entre copains</b></h1>
@@ -120,7 +126,7 @@
                 <form method="POST" action="./search">
                     <div class="input-group">
                         <input type="text" class="form-control form-control-sm" placeholder="Recherchez un aérodrome" id="searchInput" name="inputUser">
-                        <input type="date" class="form-control form-control-sm" name="date-input" id="date-input">
+                        <input type="date" class="form-control form-control-sm" name="date" id="date-input">
                         <div class="input-group-append">
                           <button class="btn btn-primary btn-sm" type="submit">Rechercher</button>
                         </div>
