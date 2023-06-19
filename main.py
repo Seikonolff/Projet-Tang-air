@@ -304,6 +304,15 @@ def get_airports():
 
     return airports
 
+def get_aircrafts():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM Avion"
+    airports = cursor.execute(query).fetchall()
+
+    return airports
+
 def fill_db_newflight(request) :
     conn = get_db()
     cursor = conn.cursor()
@@ -311,6 +320,7 @@ def fill_db_newflight(request) :
     idAerodromeDepart = request.form["aerodromeDepart"]
     idAerodromeArrive = request.form["aerodromeArrive"]
     idUser = request.form["idUser"]
+    typeAvion = request.form['typeaircraft']
     passagerMax = request.form["passagerMax"]
     placesRestantes = passagerMax
     prixTotalIndicatif = request.form["prixTotalIndicatif"]
@@ -320,8 +330,8 @@ def fill_db_newflight(request) :
     date = request.form["date"]
     statutVol = "planing"
 
-    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol,heureDecollage,statutVol) VALUES (?,?,?,?,?,?,?,?,?,?,?)"
-    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date,heureDecollage,statutVol))
+    query = "INSERT INTO Vol (idUser,idAerodromeDepart,idAerodromeArrive,idAvion,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,dateDuVol,heureDecollage,statutVol) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    cursor.execute(query,(idUser,idAerodromeDepart,idAerodromeArrive,typeAvion,placesRestantes,passagerMax,prixTotalIndicatif,prixParPassagers,dureeVol,date,heureDecollage,statutVol))
 
     conn.commit()
 
@@ -553,7 +563,8 @@ def search():
     if request.method == "POST" :
         airports = get_airports()
         flights = get_flights(request)
-        return render_template("ViewFlights.html", flights = flights, airports = airports)
+        aircrafts = get_aircrafts()
+        return render_template("ViewFlights.html", flights = flights, airports = airports, aircrafts = aircrafts)
     else :
 
         return render_template("LandingPage.html")
@@ -562,7 +573,8 @@ def search():
 def searchmap(airport):
         airports = get_airports()
         flights = get_flights_frommap(airport)
-        return render_template("ViewFlights.html", flights = flights, airports = airports)
+        aircrafts = get_aircrafts()
+        return render_template("ViewFlights.html", flights = flights, airports = airports, aircrafts = aircrafts)
     
 @app.route('/profile', methods = ["GET"])
 def profile():
@@ -574,7 +586,7 @@ def profile():
     session['passengers'] = get_user_fellowpassenger(session['flights'])
     session['passengersPilot'] = get_user_fellowpassenger(session['flightsPilot'])
 
-    return render_template("ViewProfilePage.html", session = session, airports = get_airports())
+    return render_template("ViewProfilePage.html", session = session, airports = get_airports(), aircrafts = get_aircrafts())
     
 @app.route('/edit_profile', methods=["POST"])
 def edit_profile():
@@ -597,7 +609,8 @@ def addflight():
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
         airports = get_airports()
-        return render_template("AddFlightPage.html", session = session, airports = airports)
+        aircrafts = get_aircrafts()
+        return render_template("AddFlightPage.html", session = session, airports = airports, aircrafts=aircrafts)
     
 @app.route('/reserveflight/<idVol>', methods = ["GET", "POST"])
 def reserveflight(idVol):

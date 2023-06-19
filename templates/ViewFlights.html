@@ -141,6 +141,11 @@
               {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}
             </div>
           </div>
+          <div class = "row text-center">
+            <div class = "col">
+              <p class="card-text"><strong>Aircraft : </strong> {% for aircraft in aircrafts %}{% if aircraft[0] == flight[6] %} {{aircraft[1]}} {% endif %}{% endfor %}</p>
+            </div>
+          </div>
       </div>
       <div class = "modal-footer">
         <form method="POST" action="/reserveflight/{{flight[13]}}">
