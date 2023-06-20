@@ -107,9 +107,11 @@
   </div>
 </div>
 {% if not flights %}
-<h1><span style = "color:  rgb(59, 129, 250);">  Oups... Aucun vols ne correspond à votre recherche.</span></h1>
+<div style="text-align: center;">
+  <h1><span style = "color:  rgb(0, 57, 155);">  Oups... Aucun vols ne correspond à votre recherche.</span></h1>
+  <img src="/static/images/pasvoler.png" width="600" height="400">
+</div>
 {% endif %}
-
 
 <div class="modal fade" id="login-request" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -122,7 +124,7 @@
         <p>Vous devez vous login pour pouvoir réserver un vol !</h2></p> <!-- Mettre des infos sur le pilote, l'avion et l'aérodrome de départ-->
       </div>
       <div class="modal-footer">
-        <a href ="./login"><button class="btn btn-primary">Log-in</button></a>
+        <a href ="/login"><button class="btn btn-primary">Log-in</button></a>
       </div>
     </div>
   </div>

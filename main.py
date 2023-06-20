@@ -1,5 +1,4 @@
 from flask import Flask, g, render_template, request, redirect, url_for, abort,session
-from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 import sqlite3
 import os
@@ -7,7 +6,6 @@ import os
 UPLOAD_FOLDER = "C:\Projet-Tang-air\static\images\profil"
 
 app = Flask(__name__)
-scheduler = BackgroundScheduler()
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -81,7 +79,8 @@ def fill_db_signup(request):
     motDePasse = request.form["motdepasse"]
     description = request.form ["description"]
     imageProfil = request.files['profilePicture']
-    idpromotion = request.form["promo"] 
+    idpromotion = request.form["promo"]
+    numeroTelephone = request.form['numeroTelephone']
 
     if 'isPilot' in request.form :
         #L'user se déclare comme étant pilote
@@ -91,8 +90,8 @@ def fill_db_signup(request):
         imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
         lienImage = "/static/images/profil/" + adresseMail
     
-        query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
-        cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
+        query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile,numeroTelephone) VALUES (?,?,?,?,?,?,?,?,?)"
+        cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage,numeroTelephone))
 
         query = "SELECT idUser FROM User WHERE adresseMail = ?"
         result = cursor.execute(query,(adresseMail,)).fetchone()
@@ -108,8 +107,8 @@ def fill_db_signup(request):
     imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
     lienImage = '/static/images/profil/'+ adresseMail
 
-    query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
-    cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
+    query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile,numeroTelephone) VALUES (?,?,?,?,?,?,?,?,?)"
+    cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage,numeroTelephone))
 
     conn.commit()
 
@@ -194,11 +193,6 @@ def get_flights(request):
 
     inputUser = request.form["inputUser"]
     date = request.form["date"]
-    #placesRestantes = request.form["passager"]
-    placesRestantes = 0
-
-    airport_query = "SELECT idAerodrome,nom FROM Aerodrome WHERE nom = ?" #On regarde dans la table ce qui a été rentré
-    airport = cursor.execute(airport_query,(inputUser,)).fetchone()
 
     flights_query = "SELECT * FROM User_Pilote_Vol WHERE"
     params = []
@@ -225,10 +219,6 @@ def get_flights(request):
         # On prend par défaut la date d'aujourd'hui
         flights_query += " AND dateDuVol >= ?"
         params.append(datetime.now().date())
-
-    if placesRestantes :
-        flights_query += " AND placesRestantes >= ?"
-        params.append(placesRestantes)
 
     flights_query += " AND statutVol != 'archived' ORDER BY dateDuVol"
     flights = cursor.execute(flights_query,tuple(params)).fetchall()
@@ -300,7 +290,7 @@ def get_airports():
     conn = get_db()
     cursor = conn.cursor()
 
-    query = "SELECT * FROM Aerodrome"
+    query = "SELECT * FROM Aerodrome ORDER BY nom ASC"
     airports = cursor.execute(query).fetchall()
 
     return airports
@@ -371,9 +361,11 @@ def user_infos_changes(request):
 
     imageProfil = request.files['profilePicture']
 
-    imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],str(session['idUser'])))
-    lienImage = '/static/images/profil/'+ str(session['idUser'])
-
+    if(imageProfil) :
+        imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],str(session['idUser'])))
+        lienImage = '/static/images/profil/'+ str(session['idUser'])
+    else :
+        lienImage = session['photoDeProfil']
     query = "UPDATE User SET nom = ?, prenom = ?, adresseMail = ?, dateNaissance = ?, imageProfile = ?, numerotelephone = ? WHERE idUser = ?"
     cursor.execute(query,(request.form['nom'],request.form['prenom'],request.form['adresseMail'],request.form['dateDeNaissance'],lienImage,request.form['numeroTelephone'],request.form['idUser']))
 
@@ -431,6 +423,9 @@ def user_cancelflight(idUser,idVol) :
     else :
         query = "DELETE FROM EtrePassager WHERE idUser = ? AND idVol = ?"
         cursor.execute(query,(idUser,idVol))
+
+        query = "UPDATE Vol SET placesRestantes = placesRestantes + 1"
+        cursor.execute(query)
 
     conn.commit()
 
@@ -562,7 +557,7 @@ def Login():
 
         if check_credentials(eMail,password) :
             session = open_session(eMail)
-            return render_template("LandingPage.html",session=session) #name n'est pas l'identifiant, à changer
+            return render_template("LandingPage.html",session=session,airports=get_airports()) #name n'est pas l'identifiant, à changer
         
         else :
             return render_template("Login.html",wrongcredentials = True)
@@ -604,7 +599,7 @@ def profile():
 @app.route('/edit_profile', methods=["POST"])
 def edit_profile():
     user_infos_changes(request)
-    return redirect(url_for("profile"))
+    return render_template("ViewProfilePage.html", ProfilOk = True,airports = get_airports(), aircrafts = get_aircrafts())
     
 @app.route('/chat')
 def chat() :
@@ -618,12 +613,12 @@ def addflight():
         #le pilote propose un vol, on récupère les données du formulaire
         fill_db_newflight(request)
         refresh_user_flights()
-        return render_template("ViewProfilePage.html", flightHasBeenAdded = True)
+        return render_template("ViewProfilePage.html", flightHasBeenAdded = True,airports = get_airports(), aircrafts = get_aircrafts())
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
         airports = get_airports()
         aircrafts = get_aircrafts()
-        return render_template("AddFlightPage.html", session = session, airports = airports, aircrafts=aircrafts)
+        return render_template("AddFlightPage.html", session = session, airports = get_airports(), aircrafts= get_aircrafts())
     
 @app.route('/reserveflight/<idVol>', methods = ["GET", "POST"])
 def reserveflight(idVol):
@@ -636,7 +631,7 @@ def reserveflight(idVol):
                 fill_db_reserveflight(request)
                 refresh_user_flights()
 
-                return render_template("ViewProfilePage.html", vol_ajoute = True)
+                return render_template("ViewProfilePage.html", vol_ajoute = True, airports = get_airports(), aircrafts = get_aircrafts())
             else :
                 #l'utilisateur tente de réserver son vol
                 refresh_user_flights()
@@ -644,7 +639,7 @@ def reserveflight(idVol):
         else :
             #l'utilisateur est déjà listé sur le vol
             refresh_user_flights()
-            return render_template("ViewProfilePage.html", userListedAlready = True)
+            return render_template("ViewProfilePage.html", userListedAlready = True, airports = get_airports(), aircrafts = get_aircrafts())
 
     else :
         return render_template("ReserveFlightPage.html", session = session, flight = get_flight_info(idVol), airports = get_airports() )
@@ -701,10 +696,6 @@ Fin de la gestion des routes
 '''
 
 if __name__ == '__main__':
-    '''scheduler.add_job(archive_flights, 'interval', minutes=1)  # Exécution toutes les 30 minutes
-    with app.app_context():
-        get_db()
-        scheduler.start()'''
     
     app.run(debug=True)
 

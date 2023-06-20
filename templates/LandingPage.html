@@ -280,12 +280,11 @@
     var marker = L.marker(markers[{{ loop.index0 }}].coordinates);
     var popupContent = `
       <div class="card" style="width: 18rem;">
-        <img src="./static/images/profil/pilote@pilote.com" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{ airport[1] }}</h5>
           <p class="card-text">Coucou {{ airport[1] }} !!</p>
             <input type = "hidden" value = {{airport[1]}}>
-            <a href="./searchmap/{{airport[0]}}" class="btn btn-primary"><span style="color: rgb(255, 255, 255);"> Voir les vols</a>
+            <a href="/searchmap/{{airport[0]}}" class="btn btn-primary"><span style="color: rgb(255, 255, 255);"> Voir les vols</a>
         </div>
       </div>
     `;

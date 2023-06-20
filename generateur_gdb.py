@@ -65,7 +65,8 @@ cursor.execute('''
         nom TEXT,
         nbPiste INTEGER,
         latitude INTEGER,
-        longitude INTEGER
+        longitude INTEGER,
+        codeOACI TEXT
     )
 ''')
 

@@ -117,6 +117,11 @@ h3 {
       Le vol a été ajouté avec succès !
     </div>
   {% endif %}
+  {% if ProfilOk == True %}
+    <div class="alert alert-primary" role="alert" style="text-align: center;">
+      Le profil a bien été modifié.
+    </div>
+  {% endif %}
 
 
   <div class="profile-card">
@@ -132,7 +137,7 @@ h3 {
           <div>
             <p><strong>Last name : </strong>{{session['nom']}}</p>
             <p><strong>First Name : </strong>{{session['prenom']}}</p>
-            <p><strong>Date of birth : </strong>{{session['dateNaissance']}}</p>
+            <p><strong>Date of birth : </strong>{{session['dateDeNaissance']}}</p>
             <p><strong>Mail adresse : </strong>{{session['adresseMail']}}</p>
             <p><strong>Phone number : </strong>{{session['numeroTelephone']}}</p>
             <p><strong>Description : </strong>{{session['description']}}</p>
@@ -562,7 +567,7 @@ h3 {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form method="POST" action="./editflight">
+            <form method="POST" action="/editflight">
               <input type="hidden" name="idUser" value="{{session['idUser']}}">
               <div class="mb-3" style="padding-top: 30px;">
                 <label for="idAirport" class="form-label">Departure : </label>
@@ -590,18 +595,19 @@ h3 {
               <div class="mb-3">
                 <label for="idAircraft" class="form-label">Aircraft : </label>
                 <select id="idAircraft" name="typeaircraft" class="form-control form-control-sm">
-                  <option selected></option>
+                  <option selected value="{{flight[6]}}">{% for aircraft in aircrafts %} {% if flight[6] == aircraft[0] %} {{aircraft[1]}} {% endif %} {% endfor %}</option>
                   {% for aircraft in aircrafts %}
+                    {% if flight[6] != aircraft[0] %}
                     <option value ="{{aircraft[0]}}">{{aircraft[1]}}</option>
+                    {% endif %}
                   {% endfor %}
                 </select>
               </div>
       
               <div class="form-group">
                 <label for="Pax">Number of passagers, excluding pilot :</label>
-                <input type="number" name="passagerMax" class="form-control" id="Pax" value="{{flight[8]}}" min = 1 max = 3>
+                  <input type="number" name="passagerMax" class="form-control" id="Pax" value="{{flight[8]}}" min="{{ flight[8] - flight[7] }}" max="3">
               </div>
-      
               <div class="form-group">
                 <label for="date">Date :</label>
                 <input type="date" name="date" class="form-control" id="date-input" value="{{flight[12]}}">
@@ -609,7 +615,7 @@ h3 {
       
               <div class="form-group">
                 <label for="destination">Departure time :</label>
-                <input type="time" name = "heureDecollage" class="form-control" id="time">
+                <input type="time" name = "heureDecollage" class="form-control" id="time" value ="{{flight[16]}}">
               </div>
       
               <div class="form-group">
@@ -651,7 +657,6 @@ h3 {
         </div>
       </div>
     </div>
-
     {% for subpassager in session['passengersPilot'] %}
       {% for passager in subpassager %}
         {% if passager[4] == flight[13] %}
@@ -693,7 +698,7 @@ h3 {
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <a href=".//resaconfirm/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-success">Confirmer</button></a>
+                    <a href="/resaconfirm/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-success">Confirmer</button></a>
                   </div>
                 </div>
               </div>
@@ -711,7 +716,7 @@ h3 {
                     <p>Annuler la réservation de <strong>{{passager[1]}} {{passager[2]}}</strong> ?</p>
                   </div>
                   <div class="modal-footer">
-                    <a href="cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
+                    <a href="/cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
                   </div>
                 </div>
               </div>
