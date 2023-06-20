@@ -685,6 +685,11 @@ def clafete() :
 
     return render_template('clafete.html')
 
+@app.route('/forgotpassword')
+def forgotpassword() :
+
+    return render_template('forgotpassword.html')
+
 '''
 Fin de la gestion des routes
 '''
