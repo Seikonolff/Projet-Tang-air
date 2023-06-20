@@ -76,9 +76,9 @@ h3 {
 
 
 
-<div class="container">
+<div class="container mt-3">
   {% if note_alreadyexists == True %}
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-warning" role="alert" style="text-align: center;">
       Vous essayez de noter quelqu'un pour la deuxième fois. Nous aussi on aime les copains mais quand même !
     </div>
   {% endif %}
@@ -184,7 +184,7 @@ h3 {
                   </div>
                 </div>
                 <button type="button" class="btn btn-danger mt-3" data-bs-toggle="modal" data-bs-target="#annulervolpassager-{{flight[13]}}">
-                  Annuler
+                  <i class="fa-solid fa-xmark"></i> Annuler la réservation
                 </button>
               </div>
             </div>
@@ -460,11 +460,24 @@ h3 {
           </div>
           <div class="mb-3">
             <label for="dateDeNaissance" class="form-label">Date de naissance :</label>
-            <input type="date" class="form-control" name="dateDeNaissance" value="{{session['dateDeNaissance']}}">
+            <input type="date" class="form-control" name="dateDeNaissance" id="dateDeNaissance" value="{{session['dateDeNaissance']}}">
           </div>
           <div class="mb-3">
             <label for="dateDeNaissance" class="form-label">Numéro de téléphone :</label>
-            <input type="text" class="form-control" name="numeroTelephone" value="faut le faire">
+            <input type="text" class="form-control" name="numeroTelephone" value="{{session['numeroTelephone']}}">
+          </div>
+          <div class="mb-3">
+            <div class="form-group col-md-4">
+              <label class="form-label" for="customFile">Photo de profil :</label>
+              <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" />
+              <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="form-group">
+              <label for=description>Profile Description</label>
+              <textarea class="form-control form-control-lg" id="description" name ="description" value="{{session['description']}}" rows="3"></textarea>
+            </div>
           </div>
           <input type="hidden" value="{{session['idUser']}}" name="idUser">
       </div>
@@ -743,6 +756,19 @@ h3 {
 
   // Définir la valeur de l'attribut min de l'élément input
   document.getElementById('date-input').setAttribute('min', today);
+</script>
+<script>
+  // Récupérer la date d'aujourd'hui
+  var today = new Date();
+
+  // Soustraire 18 ans à la date d'aujourd'hui
+  var minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+  // Formater la date dans le format ISO
+  var minDateISO = minDate.toISOString().split('T')[0];
+
+  // Définir la valeur de l'attribut min de l'élément input
+  document.getElementById('dateDeNaissance').setAttribute('max', minDateISO);
 </script>
 
 {% endblock %}

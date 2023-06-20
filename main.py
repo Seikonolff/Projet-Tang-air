@@ -132,6 +132,7 @@ def open_session(eMail):
     session['promo'] =result1[7]
     session['moyenneNotePassager'] = calcul_note(idUser, "passager")
     session['photoDeProfil'] = result1[9]
+    session['numeroTelephone'] = result1[10]
     session['flights'] = get_user_flights(idUser, pilot = False)
     session['isPilot'] = False
 
@@ -357,8 +358,13 @@ def user_infos_changes(request):
     conn = get_db()
     cursor = conn.cursor()
 
-    query = "UPDATE User SET nom = ?, prenom = ?, adresseMail = ?, dateNaissance = ?, numerotelephone = ? WHERE idUser = ?"
-    cursor.execute(query,(request.form['nom'],request.form['prenom'],request.form['adresseMail'],request.form['dateDeNaissance'],request.form['numeroTelephone'],request.form['idUser']))
+    imageProfil = request.files['profilePicture']
+
+    imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],session['idUser']))
+    lienImage = '/static/images/profil/'+ session['idUser']
+
+    query = "UPDATE User SET nom = ?, prenom = ?, adresseMail = ?, dateNaissance = ?, imageProfile = ? numerotelephone = ? WHERE idUser = ?"
+    cursor.execute(query,(request.form['nom'],request.form['prenom'],request.form['adresseMail'],request.form['dateDeNaissance'],lienImage,request.form['numeroTelephone'],request.form['idUser']))
 
     conn.commit()
 
@@ -500,7 +506,7 @@ def fill_db_newnote(request) :
         statutDuNoté = 'pilote'
 
     query = "INSERT INTO Notation (noteur,noté,idVol,note,commentaire,statutDuNoté) VALUES (?,?,?,?,?,?)"
-    cursor.execute(query,(noteur,noté,note,commentaire,statutDuNoté))
+    cursor.execute(query,(noteur,noté,idVol,note,commentaire,statutDuNoté))
 
     conn.commit()
 
