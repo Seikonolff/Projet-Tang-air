@@ -89,7 +89,7 @@ def fill_db_signup(request):
         nbHeureVolTotal = request.form["nbHeureVolTotal"]
 
         imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
-        lienImage = "/static/images/profil/'+ adresseMail"
+        lienImage = "/static/images/profil/" + adresseMail
     
         query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
         cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
@@ -654,7 +654,7 @@ def resaconfirm(idVol,idPassager):
     confirm_passenger(idVol,idPassager)
     refresh_user_flights()
 
-    return render_template("ViewProfilePage.html",resaIsConfirmed = True)
+    return render_template("ViewProfilePage.html",resaIsConfirmed = True, airports = get_airports(), aircrafts = get_aircrafts())
 
 @app.route('/cancelresa/<idVol>/<idPassager>', methods = ["GET"])
 def resacancel(idVol,idPassager):

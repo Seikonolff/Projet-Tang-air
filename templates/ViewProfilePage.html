@@ -667,17 +667,18 @@ h3 {
                   <div class="modal-body">
                     <div class="row">
                       <div class="col">
-                        <p><img src="{{passager[3]}}" style = "width: 70px; height: 70px; border-radius: 50%; border : 4px solid rgb(0, 0, 0); margin-right: 20px;">{{passager[1]}} {{passager[2]}}</p>
+                        <p><img src="{{passager[3]}}" style = "width: 70px; height: 70px; border-radius: 50%; border : 4px solid rgb(0, 0, 0); margin-right: 20px;"></p>
                       </div>
+                    </div>
+                    <div class="row"></div>
+                    <div class = "row">
                       <div class="col">
-                        {{passager[1]}}
+                        <p><strong>{{passager[1]}} {{passager[2]}}</strong></p>
                       </div>
-                      <div class="col">
-                        {{passager[2]}}
-                      </div>
+                    </div>
                     <div class="row">
                       <div class="col">
-                        moyenne en temps que passager : {% if passager[8] == None %} Ce copain n'a pas été encore noté ! {% else %} {{passager[8]}} {% endif %}
+                        note : {% if passager[8] == None %} Ce copain n'a pas été encore noté ! {% else %} {{passager[8]}} {% endif %}
                       </div>
                     </div>
                     <div class="row">
@@ -703,11 +704,11 @@ h3 {
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">gestion du passager <strong>{{passager[1]}} {{passager[2]}}</strong></h5>
+                    <h5 class="modal-title">gestion du passager</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <p>Annuler la réservation de ce passager ?</p>
+                    <p>Annuler la réservation de <strong>{{passager[1]}} {{passager[2]}}</strong> ?</p>
                   </div>
                   <div class="modal-footer">
                     <a href="cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
