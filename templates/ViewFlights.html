@@ -90,7 +90,12 @@
                 <h2 class="price">{{flight[10]}}€/pax</h2>
               </div>
               {% if session['adresseMail'] is defined %}
-                <button class="btn btn-primary reservation-btn" data-bs-toggle="modal" data-bs-target="#reservervol-{{flight[13]}}"> Réserver </button>
+                <form method="POST" action="/reserveflight/{{flight[13]}}">
+                  <input type="hidden" name="idUser" value = "{{session['idUser']}}">
+                  <input type="hidden" name="idVol" value = "{{flight[13]}}">
+                  <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
+                  <button type="submit" class="btn btn-primary reservation-btn"> Réserver </button>
+                </form>
               {% else %}
                 <button class="btn btn-primary reservation-btn" data-bs-toggle="modal" data-bs-target="#login-request"> Réserver </button>
               {% endif %}
@@ -105,65 +110,6 @@
 <h1><span style = "color:  rgb(59, 129, 250);">  Oups... Aucun vols ne correspond à votre recherche.</span></h1>
 {% endif %}
 
-{% for flight in flights %}
-  <!-- voir info vol Modal -->
-  <div class="modal fade" id="reservervol-{{flight[13]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Reserver le vol n°{{flight[13]}}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class = "row text-center">
-            <div class = "col">
-              <i class="fa-sharp fa-solid fa-circle"></i>
-            </div>
-            <div class = "col">
-              <i class="fa-solid fa-plane-departure"></i>
-            </div>
-            <div class = "col">
-              <i class="fa-solid fa-plane"></i>
-            </div>
-            <div class = "col">
-              <i class="fa-solid fa-plane-arrival"></i>
-            </div>
-            <div class = "col">
-              <i class="fa-sharp fa-solid fa-circle"></i>
-            </div>
-          </div>
-          <div class="row text-center">
-            <div class = "col">
-              {% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}
-            </div>
-            <div class = "col"></div>
-            <div class = "col">
-              {{flight[11]}}
-            </div>
-            <div class = "col"></div>
-            <div class = "col">
-              {% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}
-            </div>
-          </div>
-          <div class = "row text-center">
-            <div class = "col">
-              <p class="card-text"><strong>Aircraft : </strong> {% for aircraft in aircrafts %}{% if aircraft[0] == flight[6] %} {{aircraft[1]}} {% endif %}{% endfor %}</p>
-            </div>
-          </div>
-      </div>
-      <div class = "modal-footer">
-        <form method="POST" action="/reserveflight/{{flight[13]}}">
-          <input type="hidden" name="idUser" value = "{{session['idUser']}}">
-          <input type="hidden" name="idVol" value = "{{flight[13]}}">
-          <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
-          <button type="submit" class="btn btn-primary"> Réserver </button>
-        </form>
-      </div>
-      </div>
-    </div>
-  </div>
-{% endfor %}
-
 
 <div class="modal fade" id="login-request" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -173,7 +119,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Vous devez vous login pour pouvoir réserver un vol !</p> <!-- Mettre des infos sur le pilote, l'avion et l'aérodrome de départ-->
+        <p>Vous devez vous login pour pouvoir réserver un vol !</h2></p> <!-- Mettre des infos sur le pilote, l'avion et l'aérodrome de départ-->
       </div>
       <div class="modal-footer">
         <a href ="./login"><button class="btn btn-primary">Log-in</button></a>

@@ -166,7 +166,7 @@ cursor.execute('''
 # Création de la vue "Passagers" entre User et Vol grâce à la table EtrePassager
 cursor.execute('''
     CREATE VIEW Passagers AS
-    SELECT User.idUser, User.nom, User.prenom, User.imageProfile, Vol.idVol, EtrePassager.prixPayé, EtrePassager.statutReservation
+    SELECT User.idUser, User.nom, User.prenom, User.imageProfile, Vol.idVol, EtrePassager.prixPayé, EtrePassager.statutReservation, User.description, User.moyNotePassager,User.numeroTelephone
     FROM EtrePassager
     JOIN User ON User.idUser = EtrePassager.idUser
     JOIN Vol ON EtrePassager.idVol = Vol.idVol
