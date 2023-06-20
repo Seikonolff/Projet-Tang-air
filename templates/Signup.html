@@ -15,34 +15,42 @@
         }
       </style>
     <h1><span style="color: rgb(59, 129, 250);"><b>Sign-up</b></span></h1>
+    
 
     <form method="POST" enctype="multipart/form-data">
-      <div class="form-row">
-        <div class="form-group col-md-6">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
           <label for="nom">Last name</label>
           <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory" required>
         </div>
+      </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
+        <div class="form-group">
           <label for="prenom">First Name</label>
           <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric" required>
         </div>
-      </div>  
+      </div>
+    </div>  
 
-      <div class="form-row">
-        <div class="form-group col-md-6">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
           <label for="dateNaissance">Date of birth</label>
           <input type="date" class="form-control form-control-lg" id="dateDeNaissance" name= "dateNaissance" placeholder="25/02/2001" required>
         </div>
+      </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
+          <div class="form-group">
           <label for="adresse">Mail adress</label>
           <input type="email" class="form-control form-control-lg" id="adresseMail" name="adresseMail" placeholder="loveTanguy@gmail.com" required>
         </div>
       </div>
 
       <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group ">
           <label for="numeroTelephone">Phone Number</label>
           <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69" required>
         </div>
@@ -89,16 +97,22 @@
             {% endfor %}
           </select>
         </div>
-        <div class="form-group col-md-4">
+
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group">
           <label class="form-label" for="customFile">Profile Picture</label>
           <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" required />
           <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
         </div>
+      </div>
 
-        <div class="form-group col-md-4">
+      <div class="col-md-6">
+        <div class="form-group">
           <label class="form-label" for="customFile">School certificate</label>
           <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" required />
           <small id="fileError" class="text-danger" style="display: none;">Please choose a .pdf file.</small>
+        </div>
         </div>
         <div class="form-group">
           <label for=description>Profile Description</label>
