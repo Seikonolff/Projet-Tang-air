@@ -89,7 +89,7 @@ def fill_db_signup(request):
         nbHeureVolTotal = request.form["nbHeureVolTotal"]
 
         imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],adresseMail))
-        lienImage = './static/images/profil/'+ adresseMail
+        lienImage = "/static/images/profil/" + adresseMail
     
         query = "INSERT INTO User (nom,prenom,dateNaissance,adresseMail,motDePasse,description,idPromo,imageProfile) VALUES (?,?,?,?,?,?,?,?)"
         cursor.execute(query,(nom,prenom,dateNaissance,adresseMail,motDePasse,description,idpromotion,lienImage))
@@ -354,16 +354,27 @@ def fill_db_reserveflight(request):
 
     return
 
+def refresh_user_flights() :
+    #On (re)récupère les vols qui sont liés à l'utilisateur.
+    session['flights'] = get_user_flights(session['idUser'],pilot=False)
+    session['flightsPilot'] = get_user_flights(session['idUser'],pilot=True)
+
+    #A l'aide des infos on récupère les Passagers avec qui on voyage
+    session['passengers'] = get_user_fellowpassenger(session['flights'])
+    session['passengersPilot'] = get_user_fellowpassenger(session['flightsPilot'])
+
+    return
+
 def user_infos_changes(request):
     conn = get_db()
     cursor = conn.cursor()
 
     imageProfil = request.files['profilePicture']
 
-    imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],session['idUser']))
-    lienImage = '/static/images/profil/'+ session['idUser']
+    imageProfil.save(os.path.join(app.config['UPLOAD_FOLDER'],str(session['idUser'])))
+    lienImage = '/static/images/profil/'+ str(session['idUser'])
 
-    query = "UPDATE User SET nom = ?, prenom = ?, adresseMail = ?, dateNaissance = ?, imageProfile = ? numerotelephone = ? WHERE idUser = ?"
+    query = "UPDATE User SET nom = ?, prenom = ?, adresseMail = ?, dateNaissance = ?, imageProfile = ?, numerotelephone = ? WHERE idUser = ?"
     cursor.execute(query,(request.form['nom'],request.form['prenom'],request.form['adresseMail'],request.form['dateDeNaissance'],lienImage,request.form['numeroTelephone'],request.form['idUser']))
 
     conn.commit()
@@ -372,6 +383,7 @@ def user_infos_changes(request):
     session['prenom'] = request.form['prenom']
     session['adresseMail'] = request.form['adresseMail']
     session['dateDeNaissance'] = request.form['dateDeNaissance']
+    session['photoDeProfil'] = lienImage
     session['numeroTelephone'] = request.form['numeroTelephone']
     session['flights'] = get_user_flights(session['idUser'], pilot = False)
 
@@ -585,12 +597,7 @@ def searchmap(airport):
 @app.route('/profile', methods = ["GET"])
 def profile():
     #On (re)récupère les vols qui sont liés à l'utilisateur.
-    session['flights'] = get_user_flights(session['idUser'],pilot=False)
-    session['flightsPilot'] = get_user_flights(session['idUser'],pilot=True)
-
-    #A l'aide des infos on récupère les Passagers avec qui on voyage
-    session['passengers'] = get_user_fellowpassenger(session['flights'])
-    session['passengersPilot'] = get_user_fellowpassenger(session['flightsPilot'])
+    refresh_user_flights()
 
     return render_template("ViewProfilePage.html", session = session, airports = get_airports(), aircrafts = get_aircrafts())
     
@@ -610,8 +617,8 @@ def addflight():
     if request.method == "POST" :
         #le pilote propose un vol, on récupère les données du formulaire
         fill_db_newflight(request)
-
-        return redirect(url_for("LandingPage"))
+        refresh_user_flights()
+        return render_template("ViewProfilePage.html", flightHasBeenAdded = True)
     else :
         #le pilote a cliqué sur le btn, on retourne l'html
         airports = get_airports()
@@ -627,15 +634,17 @@ def reserveflight(idVol):
             if user_notflying(session['idUser'],idVol) :
                 #l'utilisateur n'est pas le pilote non plus
                 fill_db_reserveflight(request)
+                refresh_user_flights()
 
-                return render_template("ViewProfilePage.html", vol_ajoute = True) #Le mieux serait un redirect en passant des paramètres si c'est possible
+                return render_template("ViewProfilePage.html", vol_ajoute = True)
             else :
                 #l'utilisateur tente de réserver son vol
-
-                return render_template("ViewProfilePage.html", pilotTriesToBeisOwnFriend = True)
+                refresh_user_flights()
+                return render_template("ViewProfilePage.html", pilotTriesToBeisOwnFriend = True, airports = get_airports(), aircrafts = get_aircrafts())
         else :
             #l'utilisateur est déjà listé sur le vol
-            return render_template("LandingPage.html", userListedAlready = True)
+            refresh_user_flights()
+            return render_template("ViewProfilePage.html", userListedAlready = True)
 
     else :
         return render_template("ReserveFlightPage.html", session = session, flight = get_flight_info(idVol), airports = get_airports() )
@@ -643,26 +652,28 @@ def reserveflight(idVol):
 @app.route('/resaconfirm/<idVol>/<idPassager>', methods = ["GET"])
 def resaconfirm(idVol,idPassager):
     confirm_passenger(idVol,idPassager)
+    refresh_user_flights()
 
-    return redirect(url_for('profile'))
+    return render_template("ViewProfilePage.html",resaIsConfirmed = True, airports = get_airports(), aircrafts = get_aircrafts())
 
 @app.route('/cancelresa/<idVol>/<idPassager>', methods = ["GET"])
 def resacancel(idVol,idPassager):
     cancel_passenger(idVol,idPassager)
-
-    return redirect(url_for('profile'))
+    refresh_user_flights()
+    return render_template("ViewProfilePage.html",resaIsCanceled = True, airports = get_airports(), aircrafts = get_aircrafts())
 
 @app.route('/editflight', methods = ["POST"])
 def editflight():
     user_editflight(request)
-
-    return redirect(url_for("profile"))
+    refresh_user_flights()
+    return render_template("ViewProfilePage.html",flightHasBeenEdited = True, airports = get_airports(), aircrafts = get_aircrafts())
 
 @app.route('/cancelflight/<idVol>/<idUser>')
 def cancelflight(idVol,idUser):
     user_cancelflight(idUser,idVol)
+    refresh_user_flights()
 
-    return redirect(url_for("profile"))
+    return render_template("ViewProfilePage.html",flightHasBeenCanceled = True, airports = get_airports(), aircrafts = get_aircrafts())
 
 @app.route('/archiveflight')
 def archive() :
@@ -675,7 +686,7 @@ def note() :
     if note_alreadyexists(request) :
         #La note a déjà été atribuée
 
-        return render_template("ViewProfilePage.html", note_alreadyexists = True)
+        return render_template("ViewProfilePage.html", note_alreadyexists = True, airports = get_airports(), aircrafts = get_aircrafts())
     fill_db_newnote(request)
 
     return redirect(url_for('profile'))
