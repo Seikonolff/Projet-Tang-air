@@ -122,6 +122,11 @@ h3 {
       Le profil a bien été modifié.
     </div>
   {% endif %}
+  {% if userListedAlready == True %}
+    <div class="alert alert-warning" role="alert" style="text-align: center;">
+      Vous ne pouvez pas réserver deux fois le même vol.
+    </div>
+  {% endif %}
 
 
   <div class="profile-card">

@@ -192,45 +192,39 @@ def get_flights(request):
     cursor = conn.cursor()
 
     inputUser = request.form["inputUser"]
-    date = request.form["date"]
+    flights_query = "SELECT * FROM User_Pilote_Vol WHERE idAerodromeDepart = ?"
 
-    flights_query = "SELECT * FROM User_Pilote_Vol WHERE"
-    params = []
+    airport_query = "SELECT idAerodrome,nom FROM Aerodrome WHERE nom LIKE ?" #On regarde dans la table ce qui a été rentré
+    airports = cursor.execute(airport_query,('%' + inputUser + '%',)).fetchall()
+    print(airports)
 
-    if inputUser :
-        #Il faut déterminer si un aéroport à été rentré, un nom ou prénom de pilote
-        airport_query = "SELECT idAerodrome,nom FROM Aerodrome WHERE nom = ?" #On regarde dans la table ce qui a été rentré
-        airport = cursor.execute(airport_query,(inputUser,)).fetchone()
+    flights = []
 
-        if airport :
-            flights_query += " idAerodromeDepart = ?"
-            params.append(airport[0])
-        else :
-            #Il faut déterminer si un prénom ou un nom de pilote a été rentré
-            #mais c'est dur zebi
-
-            return []
-                    
-    if date :
+    if request.form["date"] :
+        date = request.form["date"]
         flights_query += " AND dateDuVol = ?"
-        params.append(date)
-    
+
+        for airport in airports :
+            flight = cursor.execute(flights_query,(airport[0],date)).fetchall()
+            flights.append(flight)
+        
+        print(flight)
+        return flights
+
     else :
-        # On prend par défaut la date d'aujourd'hui
-        flights_query += " AND dateDuVol >= ?"
-        params.append(datetime.now().date())
-
-    flights_query += " AND statutVol != 'archived' ORDER BY dateDuVol"
-    flights = cursor.execute(flights_query,tuple(params)).fetchall()
-
-    print(flights)
-    return flights
+        for airport in airports :
+            flights_query += " AND statutVol != 'archived'"
+            flight = cursor.execute(flights_query,(airport[0],)).fetchall()
+            flights.append(flight)
+        
+        print(flight)
+        return flights
 
 def get_flights_frommap(airport):
     conn = get_db()
     cursor = conn.cursor()
 
-    flights_query = "SELECT * FROM User_Pilote_Vol WHERE idAerodromeDepart = ?"
+    flights_query = "SELECT * FROM User_Pilote_Vol WHERE idAerodromeDepart = ? AND statutVol != 'archived'"
     flights = cursor.execute(flights_query,(airport,)).fetchall()
 
     return flights
@@ -557,7 +551,7 @@ def Login():
 
         if check_credentials(eMail,password) :
             session = open_session(eMail)
-            return render_template("LandingPage.html",session=session,airports=get_airports()) #name n'est pas l'identifiant, à changer
+            return render_template("LandingPage.html",session=session,airports=get_airports())
         
         else :
             return render_template("Login.html",wrongcredentials = True)
@@ -569,14 +563,14 @@ def Login():
 def logout():
     #remove the username from the session if it's there
     session.clear()
-    return redirect(url_for('LandingPage'))
+    return render_template("LandingPage.html", airports=get_airports())
 
 @app.route('/search', methods=["GET", "POST"])
 def search():
     if request.method == "POST" :
         airports = get_airports()
-        flights = get_flights(request)
         aircrafts = get_aircrafts()
+        flights = get_flights(request)
         return render_template("ViewFlights.html", flights = flights, airports = airports, aircrafts = aircrafts)
     else :
 
@@ -587,7 +581,7 @@ def searchmap(airport):
         airports = get_airports()
         flights = get_flights_frommap(airport)
         aircrafts = get_aircrafts()
-        return render_template("ViewFlights.html", flights = flights, airports = airports, aircrafts = aircrafts)
+        return render_template("ViewFlights.html", map = True, flights = flights, airports = airports, aircrafts = aircrafts)
     
 @app.route('/profile', methods = ["GET"])
 def profile():
