@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border-color: blue;
+        }
+</style>
+<div class="container align-items-center">
+    <img src="/static/images/team.png" >
+    <div class="row">
+        <div class="col">
+            <img src="/static/images/le T.jpg" class="avatar">
+        </div>
+        <div class="col">
+            <img src="/static/images/le M.jpg" class="avatar">
+        </div>
+        <div class="col">
+            <img src="/static/images/gueric.jpg" class="avatar">
+        </div>
+        <div class="col">
+            <img src="/static/images/bap.jpg" class="avatar">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p> Tanguy Guais </p>
+        </div>
+        <div class="col">
+            <p> Mathis Labory </p>
+        </div>
+        <div class="col">
+            <p> Guéric Gauthier </p>
+        </div>
+        <div class="col">
+            <p> Baptiste De Maria </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

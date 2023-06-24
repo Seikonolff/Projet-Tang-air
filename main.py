@@ -601,7 +601,7 @@ def edit_profile():
 def chat() :
     # C'est possible ?
 
-    return
+    return render_template("clafete.html")
 
 @app.route('/addflight', methods = ["GET", "POST"])
 def addflight():
@@ -686,6 +686,11 @@ def note() :
 def clafete() :
 
     return render_template('clafete.html')
+
+@app.route('/team')
+def team() :
+
+    return render_template('TeamPage.html')
 
 @app.route('/forgotpassword')
 def forgotpassword() :
