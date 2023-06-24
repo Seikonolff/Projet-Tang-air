@@ -11,11 +11,11 @@
             text-align: center;
           }
         </style>
-      <h1><span style="color: rgb(59, 129, 250);"><b>Add your Flight</b></span></h1>
+      <h1><span style="color: rgb(59, 129, 250);"><b>Ajoutez votre vol</b></span></h1>
         <form method="POST">
           <input type="hidden" name="idUser" value="{{session['idUser']}}">
           <div class="mb-3" style="padding-top: 30px;">
-            <label for="idAirport" class="form-label">Departure</label>
+            <label for="idAirport" class="form-label">Aéroport de départ : </label>
             <select id="idAirport" name="aerodromeDepart" class="form-control form-control-sm" required>
               <option selected></option>
               {% for airport in airports %}
@@ -26,7 +26,7 @@
   
   
           <div class="mb-3">
-            <label for="idAirport" class="form-label">Destination</label>
+            <label for="idAirport" class="form-label">Aéroport d'arrivée :</label>
             <select id="idAirport" name="aerodromeArrive" class="form-control form-control-sm" required> 
               <option selected></option>
               {% for airport in airports %}
@@ -36,7 +36,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="idAircraft" class="form-label">Aircraft</label>
+            <label for="idAircraft" class="form-label">Avion :</label>
             <select id="idAircraft" name="typeaircraft" class="form-control form-control-sm" required>
               <option selected></option>
               {% for aircraft in aircrafts %}
@@ -46,32 +46,32 @@
           </div>
   
           <div class="form-group">
-            <label for="Pax">Number of passagers, excluding pilot :</label>
+            <label for="Pax">Nombre de passagers possible, sans vous compter :</label>
             <input type="number" name="passagerMax" class="form-control" id="Pax" min = 1 max = 3 required>
           </div>
   
           <div class="form-group">
-            <label for="date">Date :</label>
+            <label for="date">Date du vol :</label>
             <input type="date" name="date" class="form-control" id="date-input" placeholder="JJ/MM/AAAA" required>
             
           </div>
   
           <div class="form-group">
-            <label for="destination">Departure time :</label>
+            <label for="destination">Heure de décollage  :</label>
             <input type="time" name="heureDecollage" class="form-control" id="takeoffTime" required>
           </div>
   
           <div class="form-group">
-            <label for="duree">Flight duration :</label>
+            <label for="duree">Durée du vol :</label>
             <input type="time" name="dureeVol" class="form-control" id="duree">
           </div>
   
           <div class="form-group">
-            <label for="price">Price :</label>
-            <input type="number" name="prixTotalIndicatif" class="form-control" id="price" placeholder="Flight price" min= 0 required>
+            <label for="price">Prix total estimé :</label>
+            <input type="number" name="prixTotalIndicatif" class="form-control" id="price" placeholder="€" min= 0 required>
           </div>
           <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Create your flight</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Ajouter ce vol</button>
           </div>
         </form>
         

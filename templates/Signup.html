@@ -4,7 +4,7 @@
 
   {% if userAlreadyExists == True %}
     <div class="alert alert-warning" role="alert" style="text-align: center;">
-      This email is already used. Are you trying to login ? <a href="./login" class="mr-2"> login here</a>
+      This email is already used. Are you trying to login ? <a href="./login" class="mr-2"> log-in here</a>
     </div>
   {% endif %}
 <div class="container" >
@@ -25,14 +25,14 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-          <label for="nom">Last name</label>
+          <label for="nom">Nom : </label>
           <input type="text" class="form-control form-control-lg" id="nom" name="nom" placeholder="Labory" required>
         </div>
       </div>
 
         <div class="col-md-6">
         <div class="form-group">
-          <label for="prenom">First Name</label>
+          <label for="prenom">Prénom :</label>
           <input type="text" class="form-control form-control-lg" id="prenom" name="prenom" placeholder="Guéric" required>
         </div>
       </div>
@@ -41,39 +41,39 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-          <label for="dateNaissance">Date of birth</label>
+          <label for="dateNaissance">Date de naissance :</label>
           <input type="date" class="form-control form-control-lg" id="dateDeNaissance" name= "dateNaissance" placeholder="25/02/2001" required>
         </div>
       </div>
 
         <div class="col-md-6">
           <div class="form-group">
-          <label for="adresse">Mail adress</label>
+          <label for="adresse">Adresse mail : </label>
           <input type="email" class="form-control form-control-lg" id="adresseMail" name="adresseMail" placeholder="loveTanguy@gmail.com" required>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group ">
-          <label for="numeroTelephone">Phone Number</label>
+          <label for="numeroTelephone">Numéro de téléphone : </label>
           <input type="text" class="form-control form-control-lg" id="numeroTelephone" name= "numeroTelephone" placeholder="06 66 66 76 69" required>
         </div>
       </div>
 
       <!-- I am a pilot -->
       <div class="form-group">
-        <label for="showAdditionalFields">I am a pilot</label>
+        <label for="showAdditionalFields">Je suis un copain pilote</label>
         <input type="checkbox" id="showAdditionalFields" name="isPilot">
       </div>
     
       <div id="additionalFields" style="display: none;">
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="numeroLicense">License Number</label>
+            <label for="numeroLicense">N° de license : </label>
             <input type="text" class="form-control form-control-lg" id="numeroLicense" name="numeroLicense">
           </div>
           <div class="form-group col-md-6">
-            <label for="nbHeureVolTotals">Total flying hours</label>
+            <label for="nbHeureVolTotals">Nombre d'heure de vol</label>
             <input type="number" class="form-control form-control-lg" id="nbHeureVolTotal" name="nbHeureVolTotal" placeholder="145 h" min=0>
           </div>
         </div>
@@ -81,21 +81,21 @@
       <!-- I am a pilot -->
     
       <div class="form-group">
-        <label for="motdepasse">Password</label>
+        <label for="motdepasse">Mot de passe : </label>
         <input type="password" class="form-control form-control-lg" id="motdepasse" name="motdepasse" placeholder="Lacatapulte-Irlandaise3" required>
       </div>
 
       <div class="form-group">
-        <label for="motdepasse2">Confirm Password</label>
+        <label for="motdepasse2">Confirmation du mot de passe : </label>
         <input type="password" class="form-control form-control-lg" id="motdepasse2" placeholder="Lacatapulte-Irlandaise3" required>
-        <small class="text-danger" id="passwordError" style="display: none;">Different password, please try again.</small>
+        <small class="text-danger" id="passwordError" style="display: none;">Les mots de passes entrés sont différents. Aller, il faut retenter !</small>
       </div>
       
       <div class="form-row">
         <div class="form-group col-md-4">
           <label for="idPromo">Promotion</label>
           <select id="idPromo" name="promo" class="form-control form-control-lg">
-            <option selected>Choose...</option>
+            <option selected></option>
             {% for promo in promos %}
               <option value ="{{promo[0]}}">{{promo[1]}} - {{promo[2]}}</option>
             {% endfor %}
@@ -105,27 +105,27 @@
         <div class="row">
         <div class="col-md-6">
         <div class="form-group">
-          <label class="form-label" for="customFile">Profile Picture</label>
+          <label class="form-label" for="customFile">Photo de profil : </label>
           <input type="file" class="form-control form-control-lg" id="profilePicture" name="profilePicture" accept=".jpg, .png" required />
-          <small id="fileError" class="text-danger" style="display: none;">Please choose a .jpg or .png file.</small>
+          <small id="fileError" class="text-danger" style="display: none;">Merci de choisir un fichier jpg ou png</small>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="form-group">
-          <label class="form-label" for="customFile">School certificate</label>
+          <label class="form-label" for="customFile">Certificat de scolarité : </label>
           <input type="file" class="form-control form-control-lg" id="certificat" name="certificat" accept=".pdf" required />
-          <small id="fileError" class="text-danger" style="display: none;">Please choose a .pdf file.</small>
+          <small id="fileError" class="text-danger" style="display: none;">Merci de choisir un fichier pdf</small>
         </div>
         </div>
         <div class="form-group">
-          <label for=description>Profile Description</label>
+          <label for=description>Description</label>
           <textarea class="form-control form-control-lg" id="description" name ="description" rows="3"></textarea>
         </div>
         <div class ="form-group col-mb-3">
           <input class="form-check-input" type="checkbox" value="" id="agreeConditions" required>
           <label class="form-check-label" for="flexCheckDefault">
-            Agree to conditions <a href="/clafete">read here</a>
+            Accepter les conditions <a href="/clafete">les lire ici</a>
           </label>
         </div>
 

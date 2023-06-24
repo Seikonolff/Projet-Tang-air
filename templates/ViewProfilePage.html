@@ -140,11 +140,11 @@ h3 {
         <div class="user-info">
           <img src="{{session['photoDeProfil']}}" alt="Profile Picture"> <!-- Remplacez par le chemin vers la photo de profil de l'utilisateur -->
           <div>
-            <p><strong>Last name : </strong>{{session['nom']}}</p>
-            <p><strong>First Name : </strong>{{session['prenom']}}</p>
-            <p><strong>Date of birth : </strong>{{session['dateDeNaissance']}}</p>
-            <p><strong>Mail adresse : </strong>{{session['adresseMail']}}</p>
-            <p><strong>Phone number : </strong>{{session['numeroTelephone']}}</p>
+            <p><strong>Nom : </strong>{{session['nom']}}</p>
+            <p><strong>Prénom : </strong>{{session['prenom']}}</p>
+            <p><strong>Date de naissance : </strong>{{session['dateDeNaissance']}}</p>
+            <p><strong>Adresse mail : </strong>{{session['adresseMail']}}</p>
+            <p><strong>Numéro de téléphone : </strong>{{session['numeroTelephone']}}</p>
             <p><strong>Description : </strong>{{session['description']}}</p>
           </div>
         </div>
@@ -154,7 +154,7 @@ h3 {
 
   <div class="reservations">
     <hr>
-    <h5>Flights Reservations</h5>
+    <h5>Réservations</h5>
     <hr>
     <div class="row">
       {% for flight in session['flights'] %}
@@ -233,7 +233,7 @@ h3 {
     
     {%  if session['isPilot'] %}
     <hr>
-    <h5> Flights Management</h5>
+    <h5> Gestion des vols </h5>
     <hr>
     <div class="row">
       {% for flight in session['flightsPilot'] %}
@@ -317,7 +317,7 @@ h3 {
     {% endif %}
 
     <hr>
-    <h5> Archived flights</h5>
+    <h5> Vols Archivés </h5>
     <hr>
     <!-- Ici sont créées les cartes des vols archivés ou le user était passager-->
     <div class="row">
@@ -688,28 +688,29 @@ h3 {
                     </div>
                     <div class="row">
                       <div class="col">
-                        note : {% if passager[8] == None %} Ce copain n'a pas été encore noté ! {% else %} {{passager[8]}} {% endif %}
+                        <strong>Note : </strong> {% if passager[8] == None %} <p>Ce copain n'a pas été encore noté !</p> {% else %} <p> {% set note = passager[8] %} {% set max_rating = 5 %} {% set full_stars = note | int %} {% set half_star = (note % 1) > 0.25 %} {% for i in range(1, max_rating + 1) %} {% if i <= full_stars %} <i class="fas fa-star" style="color: #ffe234;"></i> {% elif i == (full_stars + 1) and half_star %} <i class="fas fa-star-half-alt" style="color: #ffe234;"></i> {% else %} <i class="far fa-star" style="color: #ffe234;"></i> {% endif %} {% endfor %}</p> {% endif %}
                       </div>
                     </div>
                     <div class="row">
                       <div class="col">
-                        Téléphone : {{passager[9]}}
+                        <p><strong>Téléphone :</strong> {{passager[9]}}</p> 
                       </div>
                     </div>
                     <div class="row">
                       <div class="col">
-                        description : {{passager[7]}}
+                        <p><strong>description : </strong> {{passager[7]}}</p> 
                       </div>
                     </div>
                   </div>
                   <div class="modal-footer">
+                    <a href="/cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
                     <a href="/resaconfirm/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-success">Confirmer</button></a>
                   </div>
                 </div>
               </div>
             </div>
           {% else %}
-            <!--confirmer passager Modal -->
+            <!--annuler passager Modal -->
             <div class="modal fade" id="confirmerpassager-{{flight[13]}}-{{passager[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -718,7 +719,32 @@ h3 {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <p>Annuler la réservation de <strong>{{passager[1]}} {{passager[2]}}</strong> ?</p>
+                    <div class="row">
+                      <div class="col">
+                        <p><img src="{{passager[3]}}" style = "width: 70px; height: 70px; border-radius: 50%; border : 4px solid rgb(0, 0, 0); margin-right: 20px;"></p>
+                      </div>
+                    </div>
+                    <div class="row"></div>
+                    <div class = "row">
+                      <div class="col">
+                        <p> <span color="text-danger">Annuler la réservation de</span> <strong>{{passager[1]}} {{passager[2]}}</strong> ?</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <strong>Note : </strong> {% if passager[8] == None %} <p>Ce copain n'a pas encore été noté !</p> {% else %} <p> {% set note = passager[8] %} {% set max_rating = 5 %} {% set full_stars = note | int %} {% set half_star = (note % 1) > 0.25 %} {% for i in range(1, max_rating + 1) %} {% if i <= full_stars %} <i class="fas fa-star" style="color: #ffe234;"></i> {% elif i == (full_stars + 1) and half_star %} <i class="fas fa-star-half-alt" style="color: #ffe234;"></i> {% else %} <i class="far fa-star" style="color: #ffe234;"></i> {% endif %} {% endfor %}</p> {% endif %}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p><strong>Téléphone :</strong> {{passager[9]}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p><strong>description : </strong> {{passager[7]}}</p> 
+                      </div>
+                    </div>
                   </div>
                   <div class="modal-footer">
                     <a href="/cancelresa/{{flight[13]}}/{{passager[0]}}"> <button type="button" class="btn btn-danger">Annuler</button></a>
@@ -856,6 +882,27 @@ h3 {
 
   // Définir la valeur de l'attribut min de l'élément input
   document.getElementById('dateDeNaissance').setAttribute('max', minDateISO);
+</script>
+
+<script>
+  const stars = document.querySelectorAll('.rating-input i');
+  const ratingInput = document.getElementById('selected_rating');
+  
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const rating = star.getAttribute('data-rating');
+      ratingInput.value = rating;
+      
+      // Remplit les étoiles jusqu'à la note sélectionnée
+      stars.forEach((s, index) => {
+        if (index < rating) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+    });
+  });
 </script>
 
 {% endblock %}

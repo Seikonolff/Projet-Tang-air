@@ -48,133 +48,211 @@
 /*Flight Card End*/
 </style>
 <div class="container mt-3">
-{%if map != True %}
-  <div class = "row">
-    {% for subflight in flights %}
-      {% for flight in subflight %}
-        {% if flight[7] == 0 %}
-          <div class="col-md-6">
-            <div class="flight-card">
-              <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-              <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-              <p><strong>Date :</strong> {{flight[12]}}</p>
-              <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
-              <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
-              <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
-              <div class="pilot-info">
-                <img src="{{flight[2]}}" alt="Photo de profil du pilote">
-                <div>
-                  <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
-                  <p><strong>Note :</strong> {{flight[3]}}</p>
+  {% if flights is not none %}
+    {%if map != True %}
+      <div class = "row">
+        {% for subflight in flights %}
+          {% for flight in subflight %}
+            {% if flight[7] == 0 %}
+              <div class="col-md-6">
+                <div class="flight-card">
+                  <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                  <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                  <p><strong>Date :</strong> {{flight[12]}}</p>
+                  <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
+                  <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+                  <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+                  <div class="pilot-info">
+                    <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+                    <div>
+                      <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+                      {% if flight[3] is none %}
+                      <p> <strong>Note : </strong>Pas encore noté !</p>
+                      {% else %}
+                        <p>
+                          <strong>Note :</strong>
+                          {% set note = flight[3] %}
+                          {% set max_rating = 5 %}
+                          {% set full_stars = note | int %}
+                          {% set half_star = (note % 1) > 0.25 %}
+                          
+                          {% for i in range(1, max_rating + 1) %}
+                            {% if i <= full_stars %}
+                              <i class="fas fa-star" style="color: #ffe234;"></i>
+                            {% elif i == (full_stars + 1) and half_star %}
+                              <i class="fas fa-star-half-alt" style="color: #ffe234;"></i>
+                            {% else %}
+                              <i class="far fa-star" style="color: #ffe234;"></i>
+                            {% endif %}
+                          {% endfor %}
+                        </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div style="clear: both;">
+                    <h2 class="price">Complet</h2>
+                  </div>
                 </div>
               </div>
-              <div style="clear: both;">
-                <h2 class="price">Complet</h2>
-              </div>
-            </div>
-          </div>
-        {% else %}
-        <div class="col-md-6">
-          <div class="flight-card">
-            <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p><strong>Date :</strong> {{flight[12]}}</p>
-            <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
-            <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
-            <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
-            <div class="pilot-info">
-              <img src="{{flight[2]}}" alt="Photo de profil du pilote">
-              <div>
-                <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
-                <p><strong>Note :</strong> {{flight[3]}}</p>
-              </div>
-            </div>
-            <div style="clear: both;">
-              <h2 class="price">{{flight[10]}}€/pax</h2>
-            </div>
-            {% if session['adresseMail'] is defined %}
-              <form method="POST" action="/reserveflight/{{flight[13]}}">
-                <input type="hidden" name="idUser" value = "{{session['idUser']}}">
-                <input type="hidden" name="idVol" value = "{{flight[13]}}">
-                <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
-                <button type="submit" class="btn btn-primary reservation-btn"> Réserver </button>
-              </form>
             {% else %}
-              <button class="btn btn-primary reservation-btn" data-bs-toggle="modal" data-bs-target="#login-request"> Réserver </button>
+            <div class="col-md-6">
+              <div class="flight-card">
+                <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p><strong>Date :</strong> {{flight[12]}}</p>
+                <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
+                <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+                <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+                <div class="pilot-info">
+                  <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+                  <div>
+                    <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+                    {% if flight[3] is none %}
+                      <p> <strong>Note : </strong>Pas encore noté !</p>
+                    {% else %}
+                      <p>
+                        <strong>Note :</strong>
+                        {% set note = flight[3] %}
+                        {% set max_rating = 5 %}
+                        {% set full_stars = note | int %}
+                        {% set half_star = (note % 1) > 0.25 %}
+                        
+                        {% for i in range(1, max_rating + 1) %}
+                          {% if i <= full_stars %}
+                            <i class="fas fa-star" style="color: #ffe234;"></i>
+                          {% elif i == (full_stars + 1) and half_star %}
+                            <i class="fas fa-star-half-alt" style="color: #ffe234;"></i>
+                          {% else %}
+                            <i class="far fa-star" style="color: #ffe234;"></i>
+                          {% endif %}
+                        {% endfor %}
+                      </p>
+                    {% endif %}
+                  </div>
+                </div>
+                <div style="clear: both;">
+                  <h2 class="price">{{flight[10]}}€/pax</h2>
+                </div>
+                {% if session['adresseMail'] is defined %}
+                  <form method="POST" action="/reserveflight/{{flight[13]}}">
+                    <input type="hidden" name="idUser" value = "{{session['idUser']}}">
+                    <input type="hidden" name="idVol" value = "{{flight[13]}}">
+                    <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
+                    <button type="submit" class="btn btn-primary reservation-btn"> Réserver </button>
+                  </form>
+                {% else %}
+                  <button class="btn btn-primary reservation-btn" data-bs-toggle="modal" data-bs-target="#login-request"> Réserver </button>
+                {% endif %}
+              </div>
+            </div>
             {% endif %}
-          </div>
-        </div>
-        {% endif %}
-      {% endfor %}
-    {% endfor %}
-  </div>
-{% else %}
-  <div class = "row">
-    {% for flight in flights %}
-        {% if flight[7] == 0 %}
-          <div class="col-md-6">
-            <div class="flight-card">
-              <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-              <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-              <p><strong>Date :</strong> {{flight[12]}}</p>
-              <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
-              <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
-              <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
-              <div class="pilot-info">
-                <img src="{{flight[2]}}" alt="Photo de profil du pilote">
-                <div>
-                  <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
-                  <p><strong>Note :</strong> {{flight[3]}}</p>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class = "row">
+        {% for flight in flights %}
+            {% if flight[7] == 0 %}
+              <div class="col-md-6">
+                <div class="flight-card">
+                  <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                  <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                  <p><strong>Date :</strong> {{flight[12]}}</p>
+                  <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
+                  <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+                  <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+                  <div class="pilot-info">
+                    <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+                    <div>
+                      <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+                      {% if flight[3] is none %}
+                      <p> <strong>Note : </strong>Pas encore noté !</p>
+                      {% else %}
+                        <p>
+                          <strong>Note :</strong>
+                          {% set note = flight[3] %}
+                          {% set max_rating = 5 %}
+                          {% set full_stars = note | int %}
+                          {% set half_star = (note % 1) > 0.25 %}
+                          
+                          {% for i in range(1, max_rating + 1) %}
+                            {% if i <= full_stars %}
+                              <i class="fas fa-star" style="color: #ffe234;"></i>
+                            {% elif i == (full_stars + 1) and half_star %}
+                              <i class="fas fa-star-half-alt" style="color: #ffe234;"></i>
+                            {% else %}
+                              <i class="far fa-star" style="color: #ffe234;"></i>
+                            {% endif %}
+                          {% endfor %}
+                        </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div style="clear: both;">
+                    <h2 class="price">Complet</h2>
+                  </div>
                 </div>
               </div>
-              <div style="clear: both;">
-                <h2 class="price">Complet</h2>
-              </div>
-            </div>
-          </div>
-        {% else %}
-        <div class="col-md-6">
-          <div class="flight-card">
-            <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
-            <p><strong>Date :</strong> {{flight[12]}}</p>
-            <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
-            <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
-            <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
-            <div class="pilot-info">
-              <img src="{{flight[2]}}" alt="Photo de profil du pilote">
-              <div>
-                <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
-                <p><strong>Note :</strong> {{flight[3]}}</p>
-              </div>
-            </div>
-            <div style="clear: both;">
-              <h2 class="price">{{flight[10]}}€/pax</h2>
-            </div>
-            {% if session['adresseMail'] is defined %}
-              <form method="POST" action="/reserveflight/{{flight[13]}}">
-                <input type="hidden" name="idUser" value = "{{session['idUser']}}">
-                <input type="hidden" name="idVol" value = "{{flight[13]}}">
-                <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
-                <button type="submit" class="btn btn-primary reservation-btn"> Réserver </button>
-              </form>
             {% else %}
-              <button class="btn btn-primary reservation-btn" data-bs-toggle="modal" data-bs-target="#login-request"> Réserver </button>
+            <div class="col-md-6">
+              <div class="flight-card">
+                <p><strong>Aéroport de départ :</strong>{% for airport in airports %} {% if airport[0] == flight[4] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p><strong>Aéroport d'arrivée :</strong>{% for airport in airports %} {% if airport[0] == flight[5] %} {{airport[1]}} {% endif %}{% endfor %}</p>
+                <p><strong>Date :</strong> {{flight[12]}}</p>
+                <p><strong>Heure de décollage :</strong> {{flight[16]}}</p>
+                <p><strong>Temps de vol :</strong> {{flight[11]}}</p>
+                <p><strong>Place(s) restante(s) :</strong> {{flight[7]}}</p>
+                <div class="pilot-info">
+                  <img src="{{flight[2]}}" alt="Photo de profil du pilote">
+                  <div>
+                    <p><strong>Pilote:</strong> {{flight[0]}} {{flight[1]}}</p>
+                    {% if flight[3] is none %}
+                      <p> <strong>Note : </strong>Pas encore noté !</p>
+                      {% else %}
+                        <p>
+                          <strong>Note :</strong>
+                          {% set note = flight[3] %}
+                          {% set max_rating = 5 %}
+                          {% set full_stars = note | int %}
+                          {% set half_star = (note % 1) > 0.25 %}
+                          
+                          {% for i in range(1, max_rating + 1) %}
+                            {% if i <= full_stars %}
+                              <i class="fas fa-star" style="color: #ffe234;"></i>
+                            {% elif i == (full_stars + 1) and half_star %}
+                              <i class="fas fa-star-half-alt" style="color: #ffe234;"></i>
+                            {% else %}
+                              <i class="far fa-star" style="color: #ffe234;"></i>
+                            {% endif %}
+                          {% endfor %}
+                        </p>
+                      {% endif %}
+                  </div>
+                </div>
+                <div style="clear: both;">
+                  <h2 class="price">{{flight[10]}}€/pax</h2>
+                </div>
+                {% if session['adresseMail'] is defined %}
+                  <form method="POST" action="/reserveflight/{{flight[13]}}">
+                    <input type="hidden" name="idUser" value = "{{session['idUser']}}">
+                    <input type="hidden" name="idVol" value = "{{flight[13]}}">
+                    <input type="hidden" name="prixPayé" value = "{{flight[10]}}">
+                    <button type="submit" class="btn btn-primary reservation-btn"> Réserver </button>
+                  </form>
+                {% else %}
+                  <button class="btn btn-primary reservation-btn" data-bs-toggle="modal" data-bs-target="#login-request"> Réserver </button>
+                {% endif %}
+              </div>
+            </div>
             {% endif %}
-          </div>
-        </div>
-        {% endif %}
-    {% endfor %}
-  </div>
-{% endif %}
-
-
-
-  {% if not flights %}
-  <div style="text-align: center;">
-    <h1><span style = "color:  rgb(0, 57, 155);">  Oups... Aucun vols ne correspond à votre recherche.</span></h1>
-    <img src="/static/images/pasvoler.png" width="600" height="400">
-  </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <div style="text-align: center;">
+      <h1><span style = "color:  rgb(0, 57, 155);">  Oups... Aucun vols ne correspond à votre recherche.</span></h1>
+      <img src="/static/images/pasvoler.png" width="600" height="400">
+    </div>
   {% endif %}
 </div>
 

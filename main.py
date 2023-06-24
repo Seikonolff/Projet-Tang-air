@@ -197,7 +197,6 @@ def get_flights(request):
     airport_query = "SELECT idAerodrome,nom FROM Aerodrome WHERE nom LIKE ?" #On regarde dans la table ce qui a été rentré
     airports = cursor.execute(airport_query,('%' + inputUser + '%',)).fetchall()
     print(airports)
-
     flights = []
 
     if request.form["date"] :
@@ -208,7 +207,6 @@ def get_flights(request):
             flight = cursor.execute(flights_query,(airport[0],date)).fetchall()
             flights.append(flight)
         
-        print(flight)
         return flights
 
     else :
@@ -216,8 +214,9 @@ def get_flights(request):
             flights_query += " AND statutVol != 'archived'"
             flight = cursor.execute(flights_query,(airport[0],)).fetchall()
             flights.append(flight)
-        
-        print(flight)
+
+        if not flights or all(not sublist for sublist in flights) :
+            flights = None
         return flights
 
 def get_flights_frommap(airport):
@@ -226,6 +225,9 @@ def get_flights_frommap(airport):
 
     flights_query = "SELECT * FROM User_Pilote_Vol WHERE idAerodromeDepart = ? AND statutVol != 'archived'"
     flights = cursor.execute(flights_query,(airport,)).fetchall()
+
+    if not flights or all(not sublist for sublist in flights) :
+        flights = None
 
     return flights
 

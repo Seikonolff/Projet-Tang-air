@@ -4,7 +4,7 @@ This project is a web application developed as part of a flight management and p
 
 ## Features
 
-- Flight search by departure and arrival airports.
+- Flight search by departure airports and dates.
 - Seat reservation on available flights.
 - Passenger rating after the flight.
 - Detailed information about flights, including airports, pilots, and aircraft.
@@ -25,15 +25,7 @@ This project is a web application developed as part of a flight management and p
 3. Install the required dependencies by running the following command: `pip install -r requirements.txt`
 4. Run the application using the command: `python app.py`
 5. Access the application in your browser by entering the URL: `http://localhost:5000`
-
-## Project Structure
-
-- `app.py`: Entry point of the application, containing Flask configuration and main routes.
-- `templates/`: Directory containing HTML files for different application pages.
-- `static/`: Directory containing static files such as CSS styles and images.
-- `database/`: Directory containing the SQLite database file and table creation scripts.
-- `controllers/`: Directory containing Flask controllers for route handling and functionality.
-- `models/`: Directory containing data models used by the application.
+6. Make sure to have a stable internet connection to enjoy the site
 
 ## Contributing
 
@@ -41,10 +33,10 @@ Contributions to this project are welcome. If you would like to propose improvem
 
 ## Authors
 
-- Mathis Labory / mathis.labory@gmail.com
 - Tanguy Guais / guaistanguy@gmail.com
 - Baptiste De Maria / demaria.baptiste@gmail.com
 - Gueric Gauthier / gueric.gauthier@gmail.com
+- Mathis Labory / mathis.labory@gmail.com
 
 ---
 
