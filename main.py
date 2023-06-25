@@ -231,15 +231,6 @@ def get_flights_frommap(airport):
 
     return flights
 
-def get_flight_info(idVol):
-    conn = get_db()
-    cursor = conn.cursor()
-
-    query = "SELECT * FROM User_Pilote_Vol WHERE idVol = ?"
-    flight = cursor.execute(query,(idVol,)).fetchone()
-
-    return flight
-
 def get_user_flights(idUser,pilot):
     conn = get_db()
     cursor = conn.cursor()
@@ -333,7 +324,7 @@ def fill_db_reserveflight(request):
     cursor.execute(query,(request.form['idUser'],request.form['idVol'],request.form['prixPayé'],'pending'))
 
     #on décrémente les place restantes dans la table Vol
-    query = "UPDATE Vol SET placesRestantes =  passagerMax - 1"
+    query = "UPDATE Vol SET placesRestantes =  placesRestantes - 1"
     cursor.execute(query)
 
     conn.commit()
@@ -539,7 +530,7 @@ def signup():
             return render_template("signup.html",userAlreadyExists = True)
         else :
             #on rempli la base de donnée avec les infos données par l'utilisateur
-            fill_db_signup(request) #peut-être passer juste request en paramètre ?
+            fill_db_signup(request)
             return redirect(url_for("Login"))
     else :
         promos = get_promo()
@@ -548,8 +539,8 @@ def signup():
 @app.route('/login', methods=["GET","POST"])
 def Login():
     if(request.method == "POST") :
-        eMail = request.form["email"] # à modifier en fonction de l'attribut name du formulaire
-        password = request.form["password"]    #idem
+        eMail = request.form["email"]
+        password = request.form["password"]
 
         if check_credentials(eMail,password) :
             session = open_session(eMail)
@@ -599,7 +590,7 @@ def edit_profile():
     
 @app.route('/chat')
 def chat() :
-    # C'est possible ?
+    # C'est possible ? (beh non)
 
     return render_template("clafete.html")
 
@@ -637,8 +628,6 @@ def reserveflight(idVol):
             refresh_user_flights()
             return render_template("ViewProfilePage.html", userListedAlready = True, airports = get_airports(), aircrafts = get_aircrafts())
 
-    else :
-        return render_template("ReserveFlightPage.html", session = session, flight = get_flight_info(idVol), airports = get_airports() )
     
 @app.route('/resaconfirm/<idVol>/<idPassager>', methods = ["GET"])
 def resaconfirm(idVol,idPassager):

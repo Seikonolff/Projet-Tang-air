@@ -4,7 +4,7 @@
 
 - L'affichage graphique de la note des pilotes et des passagers pour une meilleure visibilité. Des icônnes sont désormais utilisées.
 
-- Le pilote peut désormais annuler ou confirmer une réservation lors d'une demande sur un de ses vols.
+- Le pilote peut désormais annuler (et non juste confirmer) une réservation lors d'une demande sur un de ses vols.
 
 - Le footer du site a été modifié pour refleter les services du site.
 
